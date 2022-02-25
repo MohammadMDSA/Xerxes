@@ -99,7 +99,7 @@
     <ClInclude Include="Libs\imgui\imstb_rectpack.h" />
     <ClInclude Include="Libs\imgui\imstb_textedit.h" />
     <ClInclude Include="Libs\imgui\imstb_truetype.h" />
-    <ClInclude Include="Source\Game.h" />
+    <ClInclude Include="Source\Editor.h" />
     <ClInclude Include="Source\pch.h" />
     <ClInclude Include="Source\StepTimer.h" />
   </ItemGroup>
@@ -111,7 +111,7 @@
     <ClCompile Include="Libs\imgui\imgui_impl_win32.cpp" />
     <ClCompile Include="Libs\imgui\imgui_tables.cpp" />
     <ClCompile Include="Libs\imgui\imgui_widgets.cpp" />
-    <ClCompile Include="Source\Game.cpp" />
+    <ClCompile Include="Source\Editor.cpp" />
     <ClCompile Include="Source\Main.cpp" />
     <ClCompile Include="Source\pch.cpp" />
   </ItemGroup>
@@ -124,7 +124,17 @@
   <ItemGroup>
     <Manifest Include="settings.manifest" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
+    <Import Project="..\packages\directxtk_desktop_win10.2021.11.8.1\build\native\directxtk_desktop_win10.targets" Condition="Exists('..\packages\directxtk_desktop_win10.2021.11.8.1\build\native\directxtk_desktop_win10.targets')" />
   </ImportGroup>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\directxtk_desktop_win10.2021.11.8.1\build\native\directxtk_desktop_win10.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\directxtk_desktop_win10.2021.11.8.1\build\native\directxtk_desktop_win10.targets'))" />
+  </Target>
 </Project>

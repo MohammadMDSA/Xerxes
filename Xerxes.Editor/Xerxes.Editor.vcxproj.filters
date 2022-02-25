@@ -40,7 +40,7 @@
     <ClInclude Include="Libs\imgui\imstb_truetype.h">
       <Filter>Libs\imgui</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Game.h">
+    <ClInclude Include="Source\Editor.h">
       <Filter>Source\Public</Filter>
     </ClInclude>
     <ClInclude Include="Source\pch.h">
@@ -72,10 +72,7 @@
     <ClCompile Include="Libs\imgui\imgui_widgets.cpp">
       <Filter>Libs\imgui</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Game.cpp">
-      <Filter>Source\Private</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Main.cpp">
+    <ClCompile Include="Source\Editor.cpp">
       <Filter>Source\Private</Filter>
     </ClCompile>
     <ClCompile Include="Source\pch.cpp">
@@ -87,6 +84,7 @@
     <ClCompile Include="Libs\imgui\imgui_impl_win32.cpp">
       <Filter>Libs\imgui</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resource.rc" />
@@ -100,5 +98,8 @@
     <Manifest Include="settings.manifest">
       <Filter>Assets</Filter>
     </Manifest>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
 </Project>
