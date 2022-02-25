@@ -48,6 +48,7 @@ private:
 
     void CreateDevice();
     void CreateResources();
+    void PostResourceCreation();
 
     void OnDeviceLost();
 
@@ -68,6 +69,7 @@ private:
 
     // Rendering loop timer.
     DX::StepTimer                                   m_timer;
+    bool                                            m_imguiActive;
 
     bool                                            show_demo_window;
     bool                                            show_another_window;
@@ -80,4 +82,9 @@ private:
     DirectX::SimpleMath::Vector3 position;
 
     std::unique_ptr<DirectX::GeometricPrimitive> m_shape;
+
+    float*                                          sceneWindowSize;
+    float*                                          sceneWindowPos;
+    bool                                            sceneParamsValid;
+    std::string             msg;
 };
