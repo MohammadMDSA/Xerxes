@@ -9,18 +9,18 @@
 
 // A basic game implementation that creates a D3D11 device and
 // provides a game loop.
-class Game
+class Editor
 {
 public:
 
-    Game() noexcept;
-    ~Game() = default;
+    Editor() noexcept;
+    ~Editor() = default;
 
-    Game(Game&&) = default;
-    Game& operator= (Game&&) = default;
+    Editor(Editor&&) = default;
+    Editor& operator= (Editor&&) = default;
 
-    Game(Game const&) = delete;
-    Game& operator= (Game const&) = delete;
+    Editor(Editor const&) = delete;
+    Editor& operator= (Editor const&) = delete;
 
     // Initialization and management
     void Initialize(HWND window, int width, int height);
@@ -72,4 +72,12 @@ private:
     bool                                            show_demo_window;
     bool                                            show_another_window;
     float                                           clear_color[3];
+
+    DirectX::SimpleMath::Matrix m_world;
+    DirectX::SimpleMath::Matrix m_view;
+    DirectX::SimpleMath::Matrix m_proj;
+
+    DirectX::SimpleMath::Vector3 position;
+
+    std::unique_ptr<DirectX::GeometricPrimitive> m_shape;
 };

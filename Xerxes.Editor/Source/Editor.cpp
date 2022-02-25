@@ -3,7 +3,7 @@
 //
 
 #include "pch.h"
-#include "Game.h"
+#include "Editor.h"
 
 #include "Libs/imgui/imgui.h"
 #include "Libs/imgui/imgui_impl_win32.h"
@@ -12,10 +12,11 @@
 extern void ExitGame() noexcept;
 
 using namespace DirectX;
+using namespace DirectX::SimpleMath;
 
 using Microsoft::WRL::ComPtr;
 
-Game::Game() noexcept :
+Editor::Editor() noexcept :
     m_window(nullptr),
     m_outputWidth(800),
     m_outputHeight(600),
@@ -24,7 +25,7 @@ Game::Game() noexcept :
 }
 
 // Initialize the Direct3D resources required to run.
-void Game::Initialize(HWND window, int width, int height)
+void Editor::Initialize(HWND window, int width, int height)
 {
     m_window = window;
     m_outputWidth = std::max(width, 1);
@@ -44,7 +45,7 @@ void Game::Initialize(HWND window, int width, int height)
 }
 
 // Executes the basic game loop.
-void Game::Tick()
+void Editor::Tick()
 {
     m_timer.Tick([&]()
     {
@@ -55,16 +56,18 @@ void Game::Tick()
 }
 
 // Updates the world.
-void Game::Update(DX::StepTimer const& timer)
+void Editor::Update(DX::StepTimer const& timer)
 {
     float elapsedTime = float(timer.GetElapsedSeconds());
+
+    m_world = Matrix::CreateTranslation(position);
 
     // TODO: Add your game logic here.
     elapsedTime;
 }
 
 // Draws the scene.
-void Game::Render()
+void Editor::Render()
 {
     // Don't try to render anything before the first Update.
     if (m_timer.GetFrameCount() == 0)
@@ -94,6 +97,9 @@ void Game::Render()
         ImGui::Checkbox("Another Window", &show_another_window);
 
         ImGui::SliderFloat("float", &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
+        float pos[3] = { position.x, position.y, position.z };
+        ImGui::DragFloat3("Position", pos, 0.01f);
+        position = (XMFLOAT3)pos;
         ImGui::ColorEdit3("clear color", clear_color); // Edit 3 floats representing a color
 
         if (ImGui::Button("Button"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
@@ -120,15 +126,15 @@ void Game::Render()
 
     Clear();
     
+    m_shape->Draw(m_world, m_view, m_proj);
     ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
-
     // TODO: Add your rendering code here.
 
     Present();
 }
 
 // Helper method to clear the back buffers.
-void Game::Clear()
+void Editor::Clear()
 {
     // Clear the views.
     m_d3dContext->ClearRenderTargetView(m_renderTargetView.Get(), Colors::CornflowerBlue);
@@ -142,7 +148,7 @@ void Game::Clear()
 }
 
 // Presents the back buffer contents to the screen.
-void Game::Present()
+void Editor::Present()
 {
     // The first argument instructs DXGI to block until VSync, putting the application
     // to sleep until the next VSync. This ensures we don't waste any cycles rendering
@@ -161,40 +167,44 @@ void Game::Present()
 }
 
 // Message handlers
-void Game::OnActivated()
+void Editor::OnActivated()
 {
     // TODO: Game is becoming active window.
 }
 
-void Game::OnDeactivated()
+void Editor::OnDeactivated()
 {
     // TODO: Game is becoming background window.
 }
 
-void Game::OnSuspending()
+void Editor::OnSuspending()
 {
     // TODO: Game is being power-suspended (or minimized).
 }
 
-void Game::OnResuming()
+void Editor::OnResuming()
 {
     m_timer.ResetElapsedTime();
 
     // TODO: Game is being power-resumed (or returning from minimize).
 }
 
-void Game::OnWindowSizeChanged(int width, int height)
+void Editor::OnWindowSizeChanged(int width, int height)
 {
     m_outputWidth = std::max(width, 1);
     m_outputHeight = std::max(height, 1);
 
     CreateResources();
 
+    m_view = Matrix::CreateLookAt(Vector3(2.f, 2.f, 2.f),
+        Vector3::Zero, Vector3::UnitY);
+    m_proj = Matrix::CreatePerspectiveFieldOfView(XM_PI / 4.f,
+        float(m_outputWidth) / float(m_outputHeight), 0.1f, 10.f);
     // TODO: Game window is being resized.
 }
 
 // Properties
-void Game::GetDefaultSize(int& width, int& height) const noexcept
+void Editor::GetDefaultSize(int& width, int& height) const noexcept
 {
     // TODO: Change to desired default window size (note minimum size is 320x200).
     width = 800;
@@ -202,7 +212,7 @@ void Game::GetDefaultSize(int& width, int& height) const noexcept
 }
 
 // These are the resources that depend on the device.
-void Game::CreateDevice()
+void Editor::CreateDevice()
 {
     UINT creationFlags = 0;
 
@@ -268,7 +278,7 @@ void Game::CreateDevice()
 }
 
 // Allocate all memory resources that change on a window SizeChanged event.
-void Game::CreateResources()
+void Editor::CreateResources()
 {
     // Clear the previous window size specific context.
     m_d3dContext->OMSetRenderTargets(0, nullptr, nullptr);
@@ -361,15 +371,21 @@ void Game::CreateResources()
 
     // TODO: Initialize windows-size dependent objects here.
     InitializeImgui();
+
+    auto context = m_d3dContext.Get();
+    m_shape = GeometricPrimitive::CreateSphere(context);
+
+    m_world = DirectX::SimpleMath::Matrix::Identity;
 }
 
-void Game::OnDeviceLost()
+void Editor::OnDeviceLost()
 {
     // Cleaning up imgui
     ImGui_ImplDX11_Shutdown();
     ImGui_ImplWin32_Shutdown();
     ImGui::DestroyContext();
 
+    m_shape.reset();
 
     m_depthStencilView.Reset();
     m_renderTargetView.Reset();
@@ -382,7 +398,7 @@ void Game::OnDeviceLost()
     CreateResources();
 }
 
-void Game::InitializeImgui()
+void Editor::InitializeImgui()
 {
     // Setup Dear ImGui context
     IMGUI_CHECKVERSION();
