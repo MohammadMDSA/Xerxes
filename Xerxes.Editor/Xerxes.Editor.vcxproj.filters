@@ -55,6 +55,12 @@
     <ClInclude Include="Libs\imgui\imgui_impl_win32.h">
       <Filter>Libs\imgui</Filter>
     </ClInclude>
+    <ClInclude Include="EditorWindow.h">
+      <Filter>Source\Public</Filter>
+    </ClInclude>
+    <ClInclude Include="EditorWindowManager.h">
+      <Filter>Source\Public</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Libs\imgui\imgui.cpp">
@@ -85,6 +91,12 @@
       <Filter>Libs\imgui</Filter>
     </ClCompile>
     <ClCompile Include="Source\Main.cpp" />
+    <ClCompile Include="EditorWindow.cpp">
+      <Filter>Source\Private</Filter>
+    </ClCompile>
+    <ClCompile Include="EditorWindowManager.cpp">
+      <Filter>Source\Private</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resource.rc" />

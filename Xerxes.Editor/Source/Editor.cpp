@@ -9,6 +9,7 @@
 #include "Libs/imgui/imgui.h"
 #include "Libs/imgui/imgui_impl_win32.h"
 #include "Libs/imgui/imgui_impl_dx11.h"
+#include "EditorWindow.h"
 
 extern void ExitGame() noexcept;
 
@@ -24,8 +25,10 @@ Editor::Editor() noexcept :
 	m_featureLevel(D3D_FEATURE_LEVEL_9_1),
 	m_imguiActive(false),
 	sceneWindowSize(nullptr),
-	sceneParamsValid(false)
+	sceneParamsValid(false),
+	sceneWindowPos(new float[2])
 {
+	this->someWindow = new EditorWindow(1, "new");
 }
 
 // Initialize the Direct3D resources required to run.
@@ -41,10 +44,10 @@ void Editor::Initialize(HWND window, int width, int height)
 
 	// TODO: Change the timer settings if you want something other than the default variable timestep mode.
 	// e.g. for 60 FPS fixed timestep update logic, call:
-	
+
 	m_timer.SetFixedTimeStep(true);
 	m_timer.SetTargetElapsedSeconds(1.0 / 60);
-	
+
 
 }
 
@@ -71,12 +74,12 @@ void Editor::Update(DX::StepTimer const& timer)
 	m_view = Matrix::CreateLookAt(Vector3(2.f, 2.f, 2.f),
 		Vector3::Zero, Vector3::UnitY);
 	try {
-	if (sceneParamsValid && sceneWindowSize[0] > 0 && sceneWindowSize[1] > 0)
-		m_proj = Matrix::CreatePerspectiveFieldOfView(XM_PI / 4.f,
-			float(sceneWindowSize[0]) / float(sceneWindowSize[1]), 0.1f, 10.f);
-	msg = "foo";
+		if (sceneParamsValid && sceneWindowSize[0] > 0 && sceneWindowSize[1] > 0)
+			m_proj = Matrix::CreatePerspectiveFieldOfView(XM_PI / 4.f,
+				float(sceneWindowSize[0]) / float(sceneWindowSize[1]), 0.1f, 10.f);
+		msg = "foo";
 	}
-	catch (std::exception & e) {
+	catch (std::exception& e) {
 		m_view = Matrix::CreateLookAt(Vector3(2.f, 2.f, 2.f),
 			Vector3::Zero, Vector3::UnitY);
 		msg = e.what();
@@ -144,13 +147,15 @@ void Editor::Render()
 	ImGui::Begin("Scene");
 	sceneWindowSize[0] = ImGui::GetWindowWidth();
 	sceneWindowSize[1] = ImGui::GetWindowHeight();
-	sceneWindowPos = (float*)&ImGui::GetWindowPos();
+	auto pos = ImGui::GetWindowPos();
+	sceneWindowPos[0] = pos.x;
+	sceneWindowPos[1] = pos.y;
 	sceneParamsValid = true;
 	ImGui::InputFloat2("Size", sceneWindowSize);
 	ImGui::Text(msg.c_str());
 
 	ImGui::End();
-
+	someWindow->DrawWindow();
 	// Rendering
 	ImGui::Render();
 
@@ -448,10 +453,10 @@ void Editor::InitializeImgui()
 	//io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
 
 	// Setup Dear ImGui style
-	ImGui::StyleColorsDark(); \
+	ImGui::StyleColorsDark();
 
-		// Setup Platform/Renderer backends
-		ImGui_ImplWin32_Init(m_window);
+	// Setup Platform/Renderer backends
+	ImGui_ImplWin32_Init(m_window);
 	ImGui_ImplDX11_Init(m_d3dDevice.Get(), m_d3dContext.Get());
 
 	clear_color[0] = 0.45f;

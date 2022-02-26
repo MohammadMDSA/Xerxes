@@ -6,6 +6,7 @@
 
 #include "StepTimer.h"
 
+class EditorWindow;
 
 // A basic game implementation that creates a D3D11 device and
 // provides a game loop.
@@ -87,4 +88,5 @@ private:
     float*                                          sceneWindowPos;
     bool                                            sceneParamsValid;
     std::string             msg;
+    EditorWindow*                                   someWindow;
 };
