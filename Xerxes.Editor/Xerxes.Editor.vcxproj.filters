@@ -20,6 +20,12 @@
     <Filter Include="Libs\imgui">
       <UniqueIdentifier>{46101057-90f8-42ed-befc-47122f0894c7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Private\EditorWindow">
+      <UniqueIdentifier>{3b964ab8-41de-4de0-903b-951254cbbf27}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Public\EditorWindow">
+      <UniqueIdentifier>{891bd398-006b-4517-ad99-a97b95578716}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Libs\imgui\imconfig.h">
@@ -56,10 +62,10 @@
       <Filter>Libs\imgui</Filter>
     </ClInclude>
     <ClInclude Include="EditorWindow.h">
-      <Filter>Source\Public</Filter>
+      <Filter>Source\Public\EditorWindow</Filter>
     </ClInclude>
-    <ClInclude Include="EditorWindowManager.h">
-      <Filter>Source\Public</Filter>
+    <ClInclude Include="SceneWindow.h">
+      <Filter>Source\Public\EditorWindow</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -90,12 +96,14 @@
     <ClCompile Include="Libs\imgui\imgui_impl_win32.cpp">
       <Filter>Libs\imgui</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Main.cpp" />
     <ClCompile Include="EditorWindow.cpp">
-      <Filter>Source\Private</Filter>
+      <Filter>Source\Private\EditorWindow</Filter>
     </ClCompile>
-    <ClCompile Include="EditorWindowManager.cpp">
-      <Filter>Source\Private</Filter>
+    <ClCompile Include="SceneWindow.cpp">
+      <Filter>Source\Private\EditorWindow</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Main.cpp">
+      <Filter>Source\Public</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -21,7 +21,7 @@ namespace
     std::unique_ptr<Editor> g_game;
 }
 
-LPCWSTR g_szAppName = L"Xerxes.Editor";
+LPCWSTR g_szAppName = L"Xerxes";
 
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 void ExitGame() noexcept;

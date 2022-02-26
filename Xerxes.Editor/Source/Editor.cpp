@@ -9,7 +9,7 @@
 #include "Libs/imgui/imgui.h"
 #include "Libs/imgui/imgui_impl_win32.h"
 #include "Libs/imgui/imgui_impl_dx11.h"
-#include "EditorWindow.h"
+#include "SceneWindow.h"
 
 extern void ExitGame() noexcept;
 
@@ -23,12 +23,9 @@ Editor::Editor() noexcept :
 	m_outputWidth(800),
 	m_outputHeight(600),
 	m_featureLevel(D3D_FEATURE_LEVEL_9_1),
-	m_imguiActive(false),
-	sceneWindowSize(nullptr),
-	sceneParamsValid(false),
-	sceneWindowPos(new float[2])
+	m_imguiActive(false)
 {
-	this->someWindow = new EditorWindow(1, "new");
+	this->sceneWindow = new SceneWindow(1);
 }
 
 // Initialize the Direct3D resources required to run.
@@ -48,7 +45,7 @@ void Editor::Initialize(HWND window, int width, int height)
 	m_timer.SetFixedTimeStep(true);
 	m_timer.SetTargetElapsedSeconds(1.0 / 60);
 
-
+	sceneWindow->SetFullscreen(true);
 }
 
 // Executes the basic game loop.
@@ -73,17 +70,8 @@ void Editor::Update(DX::StepTimer const& timer)
 	// TODO: Game window is being resized.
 	m_view = Matrix::CreateLookAt(Vector3(2.f, 2.f, 2.f),
 		Vector3::Zero, Vector3::UnitY);
-	try {
-		if (sceneParamsValid && sceneWindowSize[0] > 0 && sceneWindowSize[1] > 0)
-			m_proj = Matrix::CreatePerspectiveFieldOfView(XM_PI / 4.f,
-				float(sceneWindowSize[0]) / float(sceneWindowSize[1]), 0.1f, 10.f);
-		msg = "foo";
-	}
-	catch (std::exception& e) {
-		m_view = Matrix::CreateLookAt(Vector3(2.f, 2.f, 2.f),
-			Vector3::Zero, Vector3::UnitY);
-		msg = e.what();
-	}
+	m_proj = Matrix::CreatePerspectiveFieldOfView(XM_PI / 4.f,
+		float(sceneWindow->GetWidth()) / float(sceneWindow->GetHeight()), 0.1f, 10.f);
 	// TODO: Add your game logic here.
 	elapsedTime;
 }
@@ -107,62 +95,52 @@ void Editor::Render()
 	if (show_demo_window)
 		ImGui::ShowDemoWindow(&show_demo_window);
 
-	// 2. Show a simple window that we create ourselves. We use a Begin/End pair to created a named window.
-	{
-		static float f = 0.0f;
-		static int counter = 0;
+		//// 2. Show a simple window that we create ourselves. We use a Begin/End pair to created a named window.
+		//{
+		//	static float f = 0.0f;
+		//	static int counter = 0;
 
-		ImGui::Begin("Hello, world!");                          // Create a window called "Hello, world!" and append into it.
+		//	ImGui::Begin("Hello, world!");                          // Create a window called "Hello, world!" and append into it.
 
-		ImGui::Text("This is some useful text.");               // Display some text (you can use a format strings too)
-		ImGui::Checkbox("Demo Window", &show_demo_window);      // Edit bools storing our window open/close state
-		ImGui::Checkbox("Another Window", &show_another_window);
+		//	ImGui::Text("This is some useful text.");               // Display some text (you can use a format strings too)
+		//	ImGui::Checkbox("Demo Window", &show_demo_window);      // Edit bools storing our window open/close state
+		//	ImGui::Checkbox("Another Window", &show_another_window);
 
-		ImGui::SliderFloat("float", &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
-		float pos[3] = { position.x, position.y, position.z };
-		ImGui::DragFloat3("Position", pos, 0.01f);
-		position = (XMFLOAT3)pos;
-		ImGui::ColorEdit3("clear color", clear_color); // Edit 3 floats representing a color
+		//	ImGui::SliderFloat("float", &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
+		//	float pos[3] = { position.x, position.y, position.z };
+		//	ImGui::DragFloat3("Position", pos, 0.01f);
+		//	position = (XMFLOAT3)pos;
+		//	ImGui::ColorEdit3("clear color", clear_color); // Edit 3 floats representing a color
 
-		if (ImGui::Button("Button"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
-			counter++;
-		ImGui::SameLine();
-		ImGui::Text("counter = %d", counter);
+		//	if (ImGui::Button("Button"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
+		//		counter++;
+		//	ImGui::SameLine();
+		//	ImGui::Text("counter = %d", counter);
 
-		ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-		ImGui::End();
-	}
+		//	ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+		//	ImGui::End();
+		//}
 
-	// 3. Show another simple window.
-	if (show_another_window)
-	{
-		ImGui::Begin("Another Window", &show_another_window);   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
-		ImGui::Text("Hello from another window!");
-		if (ImGui::Button("Close Me"))
-			show_another_window = false;
-		ImGui::End();
-	}
+		//// 3. Show another simple window.
+		//if (show_another_window)
+		//{
+		//	ImGui::Begin("Another Window", &show_another_window);   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
+		//	ImGui::Text("Hello from another window!");
+		//	if (ImGui::Button("Close Me"))
+		//		show_another_window = false;
+		//	ImGui::End();
+		//}
 
-	ImGui::SetNextWindowBgAlpha(1);
-	ImGui::Begin("Scene");
-	sceneWindowSize[0] = ImGui::GetWindowWidth();
-	sceneWindowSize[1] = ImGui::GetWindowHeight();
-	auto pos = ImGui::GetWindowPos();
-	sceneWindowPos[0] = pos.x;
-	sceneWindowPos[1] = pos.y;
-	sceneParamsValid = true;
-	ImGui::InputFloat2("Size", sceneWindowSize);
-	ImGui::Text(msg.c_str());
-
-	ImGui::End();
-	someWindow->DrawWindow();
+	sceneWindow->BeginWindow();
+	sceneWindow->EndWindow();
+	// 
 	// Rendering
 	ImGui::Render();
 
 	Clear();
 
-	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 	m_shape->Draw(m_world, m_view, m_proj);
+	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 	// TODO: Add your rendering code here.
 
 	Present();
@@ -178,9 +156,17 @@ void Editor::Clear()
 	m_d3dContext->OMSetRenderTargets(1, m_renderTargetView.GetAddressOf(), m_depthStencilView.Get());
 
 	// Set the viewport.
-	CD3D11_VIEWPORT viewport(sceneWindowPos[0], sceneWindowPos[1], static_cast<float>(sceneWindowSize[0]), static_cast<float>(sceneWindowSize[1]));
-	//CD3D11_VIEWPORT viewport(0.0f, 0.0f, static_cast<float>(m_outputWidth), static_cast<float>(m_outputHeight));
-	m_d3dContext->RSSetViewports(1, &viewport);
+	float width = sceneWindow->GetWidth(), height = sceneWindow->GetHeight();
+	if (width > 0 && height > 0)
+	{
+		CD3D11_VIEWPORT viewport(sceneWindow->GetPosX(), sceneWindow->GetPosY(), static_cast<float>(width), static_cast<float>(height));
+		m_d3dContext->RSSetViewports(1, &viewport);
+	}
+	else
+	{
+		CD3D11_VIEWPORT viewport(0.0f, 0.0f, static_cast<float>(m_outputWidth), static_cast<float>(m_outputHeight));
+		m_d3dContext->RSSetViewports(1, &viewport);
+	}
 }
 
 // Presents the back buffer contents to the screen.
@@ -410,11 +396,6 @@ void Editor::PostResourceCreation()
 	m_shape = GeometricPrimitive::CreateSphere(context);
 
 	m_world = DirectX::SimpleMath::Matrix::Identity;
-	if (!sceneWindowSize)
-	{
-		sceneWindowSize = new float[2];
-		sceneWindowSize[0] = sceneWindowSize[1] = 1.f;
-	}
 }
 
 void Editor::OnDeviceLost()

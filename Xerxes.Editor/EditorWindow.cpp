@@ -1,8 +1,13 @@
 #include "EditorWindow.h"
-#include "EditorWindowManager.h"
 #include "Libs/imgui/imgui.h"
 
-EditorWindow::EditorWindow(int id, std::string title)
+void EditorWindow::SetFullscreen(bool fullscreen)
+{
+	this->fullscreen = fullscreen;
+}
+
+EditorWindow::EditorWindow(int id, std::string title) :
+	firstFrame(true)
 {
 	this->id = id;
 	this->title = title;
@@ -10,22 +15,47 @@ EditorWindow::EditorWindow(int id, std::string title)
 
 void EditorWindow::BeginWindow()
 {
-	ImGui::Begin(title.c_str());
+	ImGuiWindowFlags flags = 0;
+
+	if (alwaysFullscreen) {
+		flags |= GetForcedFullScreenFlags();
+	}
+	if (alwaysFullscreen || fullscreen)
+	{
+		flags |= GetFullScreenFlags();
+		const ImGuiViewport* viewport = ImGui::GetMainViewport();
+		ImGui::SetNextWindowPos(viewport->Pos);
+		ImGui::SetNextWindowSize(viewport->Size);
+	}
+	flags |= GetCustomWindowFlags();
+	ImGui::SetNextWindowBgAlpha(backgroundAlpha);
+	ImGui::Begin(title.c_str(), &isOpen, flags);
+
+	if (firstFrame)
+		firstFrame = false;
+	else
+	{
+		auto pos = ImGui::GetWindowPos();
+		positionX = pos.x;
+		positionY = pos.y;
+		width = ImGui::GetWindowWidth();
+		height = ImGui::GetWindowHeight();
+	}
+	OnGUI();
 }
 
 void EditorWindow::EndWindow()
 {
 	ImGui::End();
 }
-
-void EditorWindow::DrawWindow()
+int EditorWindow::GetForcedFullScreenFlags()
 {
-	BeginWindow();
-	OnGUI();
-	EndWindow();
+	int flags = ImGuiWindowFlags_NoCollapse;
+	return flags;
 }
 
-void EditorWindow::OnGUI()
+int EditorWindow::GetFullScreenFlags()
 {
-	ImGui::Text("foooooooooooo");
+	int flags = ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoSavedSettings;
+	return flags;
 }

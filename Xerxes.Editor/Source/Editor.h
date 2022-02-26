@@ -5,8 +5,9 @@
 #pragma once
 
 #include "StepTimer.h"
+#include "EditorWindow.h"
 
-class EditorWindow;
+//class EditorWindow;
 
 // A basic game implementation that creates a D3D11 device and
 // provides a game loop.
@@ -82,11 +83,7 @@ private:
 
     DirectX::SimpleMath::Vector3 position;
 
-    std::unique_ptr<DirectX::GeometricPrimitive> m_shape;
+    std::unique_ptr<DirectX::GeometricPrimitive>    m_shape;
 
-    float*                                          sceneWindowSize;
-    float*                                          sceneWindowPos;
-    bool                                            sceneParamsValid;
-    std::string             msg;
-    EditorWindow*                                   someWindow;
+    EditorWindow*                                   sceneWindow;
 };

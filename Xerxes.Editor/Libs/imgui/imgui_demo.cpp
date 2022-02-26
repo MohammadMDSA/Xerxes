@@ -282,7 +282,7 @@ void ImGui::ShowDemoWindow(bool* p_open)
     IM_ASSERT(ImGui::GetCurrentContext() != NULL && "Missing dear imgui context. Refer to examples app!");
 
     // Examples Apps (accessible from the "Examples" menu)
-    static bool show_app_main_menu_bar = false;
+    static bool show_app_main_menu_bar = true;
     static bool show_app_dockspace = false;
     static bool show_app_documents = false;
 
