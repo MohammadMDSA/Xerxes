@@ -26,6 +26,7 @@ Editor::Editor() noexcept :
 	m_imguiActive(false)
 {
 	this->sceneWindow = new SceneWindow(1);
+	this->go = new GameObject();
 }
 
 // Initialize the Direct3D resources required to run.
@@ -64,9 +65,6 @@ void Editor::Update(DX::StepTimer const& timer)
 {
 	float elapsedTime = float(timer.GetElapsedSeconds());
 
-	m_world = Matrix::CreateTranslation(position);
-
-
 	// TODO: Game window is being resized.
 	m_view = Matrix::CreateLookAt(Vector3(2.f, 2.f, 2.f),
 		Vector3::Zero, Vector3::UnitY);
@@ -92,8 +90,8 @@ void Editor::Render()
 	ImGui::NewFrame();
 
 	// 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
-	if (show_demo_window)
-		ImGui::ShowDemoWindow(&show_demo_window);
+	if (showInspector)
+		ImGui::ShowDemoWindow(&showInspector);
 
 		//// 2. Show a simple window that we create ourselves. We use a Begin/End pair to created a named window.
 		//{
@@ -133,13 +131,16 @@ void Editor::Render()
 
 	sceneWindow->BeginWindow();
 	sceneWindow->EndWindow();
+	ImGui::Begin("Inspector", &showInspector);
+	go->OnInspectorBase();
+	ImGui::End();
 	// 
 	// Rendering
 	ImGui::Render();
 
 	Clear();
 
-	m_shape->Draw(m_world, m_view, m_proj);
+	go->OnRender(m_view, m_proj);
 	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 	// TODO: Add your rendering code here.
 
@@ -393,9 +394,7 @@ void Editor::PostResourceCreation()
 {
 	InitializeImgui();
 	auto context = m_d3dContext.Get();
-	m_shape = GeometricPrimitive::CreateSphere(context);
-
-	m_world = DirectX::SimpleMath::Matrix::Identity;
+	go->OnStart(m_d3dContext);
 }
 
 void Editor::OnDeviceLost()
@@ -405,8 +404,7 @@ void Editor::OnDeviceLost()
 	ImGui_ImplWin32_Shutdown();
 	ImGui::DestroyContext();
 	m_imguiActive = false;
-
-	m_shape.reset();
+	
 
 	m_depthStencilView.Reset();
 	m_renderTargetView.Reset();

@@ -6,6 +6,7 @@
 
 #include "StepTimer.h"
 #include "EditorWindow.h"
+#include "GameObject.h"
 
 //class EditorWindow;
 
@@ -73,17 +74,12 @@ private:
     DX::StepTimer                                   m_timer;
     bool                                            m_imguiActive;
 
-    bool                                            show_demo_window;
+    bool                                            showInspector;
     bool                                            show_another_window;
     float                                           clear_color[3];
 
-    DirectX::SimpleMath::Matrix m_world;
+    EditorWindow*                                   sceneWindow;
     DirectX::SimpleMath::Matrix m_view;
     DirectX::SimpleMath::Matrix m_proj;
-
-    DirectX::SimpleMath::Vector3 position;
-
-    std::unique_ptr<DirectX::GeometricPrimitive>    m_shape;
-
-    EditorWindow*                                   sceneWindow;
+    GameObject* go;
 };
