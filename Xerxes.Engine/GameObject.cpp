@@ -36,15 +36,27 @@ void GameObject::OnInspectorBase()
 	{
 
 		auto pos = transform.GetPosition();
-		if (ImGui::DragFloat3("Position", (float*)&(pos), 0.1f))
+		if (ImGui::DragFloat3("Position", (float*)&(pos), 0.01f))
 			transform.SetPositionV(pos);
 
-		auto rot = transform.GetRotation();
-		if (ImGui::DragFloat3("Rotation", (float*)&(rot), 0.1f))
-			transform.SetRotationV(rot);
+		auto rotx = transform.GetRotationX();
+		if (ImGui::DragFloat("Rotation X", &rotx, 0.1f))
+		{
+			transform.SetRotationX(rotx);
+		}
+		auto roty = transform.GetRotationY();
+		if (ImGui::DragFloat("Rotation Y", &roty, 0.1f))
+		{
+			transform.SetRotationY(roty);
+		}
+		auto rotz = transform.GetRotationZ();
+		if (ImGui::DragFloat("Rotation Z", &rotz, 0.1f))
+		{
+			transform.SetRotationZ(rotz);
+		}
 
 		auto scl = transform.GetScale();
-		if (ImGui::DragFloat3("Scale", (float*)&(scl), 0.1f))
+		if (ImGui::DragFloat3("Scale", (float*)&(scl), 0.01f))
 			transform.SetScaleV(scl);
 	}
 

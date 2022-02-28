@@ -22,6 +22,18 @@
     <Filter Include="Libs\imgui">
       <UniqueIdentifier>{ab250aed-519e-4c72-b558-842bda3bb050}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Private\Utils">
+      <UniqueIdentifier>{947d491b-6265-402f-ae43-40fc745dfb8e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Public\Utils">
+      <UniqueIdentifier>{90abb588-4e72-4775-b802-5979c5f414a9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Private\SubsystemManager">
+      <UniqueIdentifier>{6391b841-3474-4da0-87de-bb0ab94ff31a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Public\SubsystemManager">
+      <UniqueIdentifier>{fcbedd7d-09f6-444a-b241-fc35ccf7ec61}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -54,6 +66,18 @@
     <ClInclude Include="Libs\imgui\imstb_truetype.h">
       <Filter>Libs\imgui</Filter>
     </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Source\Public</Filter>
+    </ClInclude>
+    <ClInclude Include="CameraManager.h">
+      <Filter>Source\Public\SubsystemManager</Filter>
+    </ClInclude>
+    <ClInclude Include="RootManager.h">
+      <Filter>Source\Public\SubsystemManager</Filter>
+    </ClInclude>
+    <ClInclude Include="InputManager.h">
+      <Filter>Source\Public\SubsystemManager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Xerxes.Engine.cpp">
@@ -82,6 +106,18 @@
     </ClCompile>
     <ClCompile Include="Libs\imgui\imgui_widgets.cpp">
       <Filter>Libs\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Source\Private</Filter>
+    </ClCompile>
+    <ClCompile Include="CameraManager.cpp">
+      <Filter>Source\Private\SubsystemManager</Filter>
+    </ClCompile>
+    <ClCompile Include="RootManager.cpp">
+      <Filter>Source\Private\SubsystemManager</Filter>
+    </ClCompile>
+    <ClCompile Include="InputManager.cpp">
+      <Filter>Source\Private\SubsystemManager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

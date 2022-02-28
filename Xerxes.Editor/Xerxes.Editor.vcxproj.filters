@@ -102,9 +102,7 @@
     <ClCompile Include="SceneWindow.cpp">
       <Filter>Source\Private\EditorWindow</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Main.cpp">
-      <Filter>Source\Public</Filter>
-    </ClCompile>
+    <ClCompile Include="Source\Main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resource.rc" />

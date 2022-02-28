@@ -10,6 +10,7 @@
 #include "Libs/imgui/imgui_impl_win32.h"
 #include "Libs/imgui/imgui_impl_dx11.h"
 #include "SceneWindow.h"
+#include "RootManager.h"
 
 extern void ExitGame() noexcept;
 
@@ -20,13 +21,11 @@ using Microsoft::WRL::ComPtr;
 
 Editor::Editor() noexcept :
 	m_window(nullptr),
-	m_outputWidth(800),
-	m_outputHeight(600),
+	m_outputWidth(1500),
+	m_outputHeight(900),
 	m_featureLevel(D3D_FEATURE_LEVEL_9_1),
 	m_imguiActive(false)
 {
-	this->sceneWindow = new SceneWindow(1);
-	this->go = new GameObject();
 }
 
 // Initialize the Direct3D resources required to run.
@@ -36,17 +35,26 @@ void Editor::Initialize(HWND window, int width, int height)
 	m_outputWidth = std::max(width, 1);
 	m_outputHeight = std::max(height, 1);
 
-	CreateDevice();
-
-	CreateResources();
-
 	// TODO: Change the timer settings if you want something other than the default variable timestep mode.
 	// e.g. for 60 FPS fixed timestep update logic, call:
 
 	m_timer.SetFixedTimeStep(true);
 	m_timer.SetTargetElapsedSeconds(1.0 / 60);
 
+	this->sceneWindow = new SceneWindow(1);
 	sceneWindow->SetFullscreen(true);
+	this->go = new GameObject();
+	RootManager* p = RootManager::GetInstance();
+
+	p->GetInputManager()->GetMouse()->SetWindow(window);
+
+	p->GetCameraManager()->CraeteCamera();
+
+
+	CreateDevice();
+
+	CreateResources();
+	camera = RootManager::GetInstance()->GetCameraManager()->GetActiveCamera();
 }
 
 // Executes the basic game loop.
@@ -65,9 +73,6 @@ void Editor::Update(DX::StepTimer const& timer)
 {
 	float elapsedTime = float(timer.GetElapsedSeconds());
 
-	// TODO: Game window is being resized.
-	m_view = Matrix::CreateLookAt(Vector3(2.f, 2.f, 2.f),
-		Vector3::Zero, Vector3::UnitY);
 	m_proj = Matrix::CreatePerspectiveFieldOfView(XM_PI / 4.f,
 		float(sceneWindow->GetWidth()) / float(sceneWindow->GetHeight()), 0.1f, 10.f);
 	// TODO: Add your game logic here.
@@ -131,16 +136,25 @@ void Editor::Render()
 
 	sceneWindow->BeginWindow();
 	sceneWindow->EndWindow();
+
 	ImGui::Begin("Inspector", &showInspector);
 	go->OnInspectorBase();
 	ImGui::End();
+
+	ImGui::Begin("Camera Inspector", &showCameraInspector);
+	camera->OnGui();
+	ImGui::End();
+
 	// 
 	// Rendering
 	ImGui::Render();
 
 	Clear();
 
-	go->OnRender(m_view, m_proj);
+
+	go->OnRender(camera->GetView(), camera->GetProjection());
+	//go->OnRender(camera->GetView(), Matrix::CreatePerspectiveFieldOfView(XM_PI / 4.f,
+		//float(m_outputWidth) / float(m_outputHeight), 0.1f, 10.f));
 	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 	// TODO: Add your rendering code here.
 
@@ -218,15 +232,15 @@ void Editor::OnWindowSizeChanged(int width, int height)
 	m_outputHeight = std::max(height, 1);
 
 	CreateResources();
-
+	RootManager::GetInstance()->GetCameraManager()->SetOutputSize(width, height);
 }
 
 // Properties
 void Editor::GetDefaultSize(int& width, int& height) const noexcept
 {
 	// TODO: Change to desired default window size (note minimum size is 320x200).
-	width = 800;
-	height = 600;
+	width = 1500;
+	height = 900;
 }
 
 // These are the resources that depend on the device.

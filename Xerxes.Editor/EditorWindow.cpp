@@ -13,6 +13,10 @@ EditorWindow::EditorWindow(int id, std::string title) :
 	this->title = title;
 }
 
+EditorWindow::~EditorWindow()
+{
+}
+
 void EditorWindow::BeginWindow()
 {
 	ImGuiWindowFlags flags = 0;

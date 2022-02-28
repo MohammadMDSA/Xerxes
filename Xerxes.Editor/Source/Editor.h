@@ -7,6 +7,7 @@
 #include "StepTimer.h"
 #include "EditorWindow.h"
 #include "GameObject.h"
+#include "Camera.h"
 
 //class EditorWindow;
 
@@ -75,11 +76,12 @@ private:
     bool                                            m_imguiActive;
 
     bool                                            showInspector;
-    bool                                            show_another_window;
+    bool                                            showCameraInspector;
+
     float                                           clear_color[3];
 
     EditorWindow*                                   sceneWindow;
-    DirectX::SimpleMath::Matrix m_view;
     DirectX::SimpleMath::Matrix m_proj;
     GameObject* go;
+    Camera* camera;
 };
