@@ -6,7 +6,6 @@ SceneWindow::SceneWindow(int id) :
 {
 	
 	backgroundAlpha = 0.f;
-	alwaysFullscreen = true;
 }
 
 void SceneWindow::OnGUI()
@@ -15,5 +14,5 @@ void SceneWindow::OnGUI()
 
 int SceneWindow::GetCustomWindowFlags()
 {
-	return ImGuiWindowFlags_NoBringToFrontOnFocus || ImGuiWindowFlags_NoDocking;
+	return ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoDocking;
 }

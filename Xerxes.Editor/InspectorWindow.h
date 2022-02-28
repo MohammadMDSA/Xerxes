@@ -1,16 +1,16 @@
 #pragma once
 #include "EditorWindow.h"
 
-
-class SceneWindow : public EditorWindow
+class InspectorWindow : public EditorWindow
 {
 public:
-	SceneWindow(int id);
-protected:
+	InspectorWindow(int id);
+
+
 
 	// Inherited via EditorWindow
 	virtual void OnGUI() override;
-	// Inherited via EditorWindow
 	virtual int GetCustomWindowFlags() override;
+
 };
 

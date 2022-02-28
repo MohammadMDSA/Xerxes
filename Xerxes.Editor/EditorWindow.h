@@ -15,6 +15,9 @@ public:
 
 	std::string				GetTitle() const { return title; }
 	void					SetTitle(std::string title) { this->title = title; }
+	void					SetPosition(float x, float y);
+	void					SetDimansion(float width, float height);
+
 	int						GetId() { return id; }
 	bool					GetAlwaysFullscreen() { return alwaysFullscreen; }
 	void					SetAlwaysFullScreen(bool afs) { this->alwaysFullscreen = afs; }
@@ -27,6 +30,7 @@ public:
 protected:
 
 	virtual void			OnGUI() = 0;
+	virtual void			OnGUIInit() { }
 	virtual int				GetCustomWindowFlags() = 0;
 
 	bool					firstFrame;
@@ -42,6 +46,9 @@ protected:
 	float					positionX;
 	float					positionY;
 	bool					isOpen;
+
+	bool					shouldUpdatePosition;
+	bool					shouldUpdateDimansion;
 
 private:
 	int						GetForcedFullScreenFlags();

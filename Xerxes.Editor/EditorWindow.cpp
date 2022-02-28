@@ -1,16 +1,32 @@
 #include "EditorWindow.h"
 #include "Libs/imgui/imgui.h"
 
+EditorWindow::EditorWindow(int id, std::string title) :
+	firstFrame(true),
+	alwaysFullscreen(false),
+	fullscreen(false)
+{
+	this->id = id;
+	this->title = title;
+}
+
 void EditorWindow::SetFullscreen(bool fullscreen)
 {
 	this->fullscreen = fullscreen;
 }
 
-EditorWindow::EditorWindow(int id, std::string title) :
-	firstFrame(true)
+void EditorWindow::SetPosition(float x, float y)
 {
-	this->id = id;
-	this->title = title;
+	this->positionX = x;
+	this->positionY = y;
+	shouldUpdatePosition = true;
+}
+
+void EditorWindow::SetDimansion(float width, float height)
+{
+	this->width = width;
+	this->height = height;
+	shouldUpdateDimansion = true;
 }
 
 EditorWindow::~EditorWindow()
@@ -28,11 +44,28 @@ void EditorWindow::BeginWindow()
 	{
 		flags |= GetFullScreenFlags();
 		const ImGuiViewport* viewport = ImGui::GetMainViewport();
-		ImGui::SetNextWindowPos(viewport->Pos);
-		ImGui::SetNextWindowSize(viewport->Size);
+		ImGui::SetNextWindowPos(viewport->WorkPos);
+		ImGui::SetNextWindowSize(viewport->WorkSize);
 	}
+	else
+	{
+		if (shouldUpdateDimansion)
+		{
+			ImGui::SetNextWindowSize(ImVec2(width, height));
+			shouldUpdateDimansion = false;
+		}
+		if (shouldUpdatePosition)
+		{
+			ImGui::SetNextWindowPos(ImVec2(positionX, positionY));
+			shouldUpdatePosition = false;
+		}
+	}
+
 	flags |= GetCustomWindowFlags();
 	ImGui::SetNextWindowBgAlpha(backgroundAlpha);
+
+	OnGUIInit();
+
 	ImGui::Begin(title.c_str(), &isOpen, flags);
 
 	if (firstFrame)
@@ -60,6 +93,5 @@ int EditorWindow::GetForcedFullScreenFlags()
 
 int EditorWindow::GetFullScreenFlags()
 {
-	int flags = ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoSavedSettings;
-	return flags;
+	return ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoCollapse;
 }

@@ -62,6 +62,8 @@ private:
     HWND                                            m_window;
     int                                             m_outputWidth;
     int                                             m_outputHeight;
+    int                                             sceneWidth;
+    int                                             sceneHeight;
 
     D3D_FEATURE_LEVEL                               m_featureLevel;
     Microsoft::WRL::ComPtr<ID3D11Device1>           m_d3dDevice;
@@ -81,6 +83,7 @@ private:
     float                                           clear_color[3];
 
     EditorWindow*                                   sceneWindow;
+    EditorWindow*                                   inspectorWindow;
     DirectX::SimpleMath::Matrix m_proj;
     GameObject* go;
     Camera* camera;

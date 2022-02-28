@@ -10,6 +10,7 @@
 #include "Libs/imgui/imgui_impl_win32.h"
 #include "Libs/imgui/imgui_impl_dx11.h"
 #include "SceneWindow.h"
+#include "InspectorWindow.h"
 #include "RootManager.h"
 
 extern void ExitGame() noexcept;
@@ -42,7 +43,7 @@ void Editor::Initialize(HWND window, int width, int height)
 	m_timer.SetTargetElapsedSeconds(1.0 / 60);
 
 	this->sceneWindow = new SceneWindow(1);
-	sceneWindow->SetFullscreen(true);
+	this->inspectorWindow = new InspectorWindow(2);
 	this->go = new GameObject();
 	RootManager* p = RootManager::GetInstance();
 
@@ -50,6 +51,7 @@ void Editor::Initialize(HWND window, int width, int height)
 
 	p->GetCameraManager()->CraeteCamera();
 
+	GetDefaultSize(sceneWidth, sceneHeight);
 
 	CreateDevice();
 
@@ -133,13 +135,24 @@ void Editor::Render()
 		//		show_another_window = false;
 		//	ImGui::End();
 		//}
-
+	int newSceneWidth = m_outputWidth - inspectorWindow->GetWidth();
+	int newSceneHeight = m_outputHeight;
+	if (newSceneWidth != sceneWidth || newSceneHeight != sceneHeight)
+	{
+		sceneHeight = newSceneHeight;
+		sceneWidth = newSceneWidth;
+		RootManager::GetInstance()->GetCameraManager()->SetOutputSize(sceneWidth, sceneHeight);
+	}
+	sceneWindow->SetPosition(0, 0);
+	sceneWindow->SetDimansion(sceneWidth, sceneHeight);
 	sceneWindow->BeginWindow();
 	sceneWindow->EndWindow();
-
-	ImGui::Begin("Inspector", &showInspector);
+	inspectorWindow->SetPosition(m_outputWidth - inspectorWindow->GetWidth(), 0.f);
+	inspectorWindow->SetDimansion(inspectorWindow->GetWidth(), m_outputHeight);
+	inspectorWindow->BeginWindow();
 	go->OnInspectorBase();
-	ImGui::End();
+	inspectorWindow->EndWindow();
+
 
 	ImGui::Begin("Camera Inspector", &showCameraInspector);
 	camera->OnGui();
@@ -232,7 +245,6 @@ void Editor::OnWindowSizeChanged(int width, int height)
 	m_outputHeight = std::max(height, 1);
 
 	CreateResources();
-	RootManager::GetInstance()->GetCameraManager()->SetOutputSize(width, height);
 }
 
 // Properties

@@ -67,6 +67,9 @@
     <ClInclude Include="SceneWindow.h">
       <Filter>Source\Public\EditorWindow</Filter>
     </ClInclude>
+    <ClInclude Include="InspectorWindow.h">
+      <Filter>Source\Public\EditorWindow</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Libs\imgui\imgui.cpp">
@@ -103,6 +106,9 @@
       <Filter>Source\Private\EditorWindow</Filter>
     </ClCompile>
     <ClCompile Include="Source\Main.cpp" />
+    <ClCompile Include="InspectorWindow.cpp">
+      <Filter>Source\Private\EditorWindow</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resource.rc" />
