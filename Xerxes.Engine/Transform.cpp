@@ -15,11 +15,6 @@ DirectX::SimpleMath::Matrix Transform::GetWorldMatrix() const
 	return world;
 }
 
-DirectX::SimpleMath::Vector3 Transform::GetRotation()
-{
-	return rotation;
-}
-
 DirectX::SimpleMath::Vector3 Transform::GetPosition()
 {
 	return position;
@@ -30,46 +25,81 @@ DirectX::SimpleMath::Vector3 Transform::GetScale()
 	return scale;
 }
 
-void Transform::SetRotationV(Vector3 angles)
+float Transform::GetRotationX()
 {
-	rotation = angles;
-	CreateWorld();
+	return rotationX;
 }
 
-void Transform::SetRotation(float x, float y, float z)
+float Transform::GetRotationY()
 {
-	rotation.x = x;
-	rotation.y = y;
-	rotation.z = z;
-	CreateWorld();
+	return rotationY;
 }
 
-void Transform::SetPositionV(Vector3 position)
+float Transform::GetRotationZ()
+{
+	return rotationZ;
+}
+
+void Transform::SetRotationX(float x, bool updateWorld)
+{
+	auto rot = Matrix::CreateFromQuaternion(rotation);
+	rot = DirectX::XMMatrixMultiply(rot, Matrix::CreateFromAxisAngle(rot.Right(), DirectX::XMConvertToRadians(x - rotationX)));
+	rotation = Quaternion::CreateFromRotationMatrix(rot);
+	rotationX = x;
+	if (updateWorld)
+		CreateWorld();
+}
+
+void Transform::SetRotationY(float y, bool updateWorld)
+{
+	auto rot = Matrix::CreateFromQuaternion(rotation);
+	rot = DirectX::XMMatrixMultiply(rot, Matrix::CreateFromAxisAngle(rot.Up(), DirectX::XMConvertToRadians(y - rotationY)));
+	rotation = Quaternion::CreateFromRotationMatrix(rot);
+	rotationY = y;
+	if (updateWorld)
+		CreateWorld();
+}
+
+void Transform::SetRotationZ(float z, bool updateWorld)
+{
+	auto rot = Matrix::CreateFromQuaternion(rotation);
+	rot = DirectX::XMMatrixMultiply(rot, Matrix::CreateFromAxisAngle(rot.Forward(), DirectX::XMConvertToRadians(z - rotationZ)));
+	rotation = Quaternion::CreateFromRotationMatrix(rot);
+	rotationZ = z;
+	if (updateWorld)
+		CreateWorld();
+}
+
+void Transform::SetPositionV(Vector3 position, bool updateWorld)
 {
 	this->position = position;
-	CreateWorld();
+	if (updateWorld)
+		CreateWorld();
 }
 
-void Transform::SetPosition(float x, float y, float z)
+void Transform::SetPosition(float x, float y, float z, bool updateWorld)
 {
 	position.x = x;
 	position.y = y;
 	position.z = z;
-	CreateWorld();
+	if (updateWorld)
+		CreateWorld();
 }
 
-void Transform::SetScaleV(Vector3 scale)
+void Transform::SetScaleV(Vector3 scale, bool updateWorld)
 {
 	this->scale = scale;
-	CreateWorld();
+	if (updateWorld)
+		CreateWorld();
 }
 
-void Transform::SetScale(float x, float y, float z)
+void Transform::SetScale(float x, float y, float z, bool updateWorld)
 {
 	scale.x = x;
 	scale.y = y;
 	scale.z = z;
-	CreateWorld();
+	if (updateWorld)
+		CreateWorld();
 }
 
 
@@ -90,8 +120,12 @@ inline DirectX::SimpleMath::Vector3 Transform::Up()
 
 void Transform::CreateWorld()
 {
-	auto ss = Matrix::CreateScale(scale);
-	auto rot = Matrix::CreateFromYawPitchRoll(DirectX::XMConvertToRadians(rotation.y), DirectX::XMConvertToRadians(rotation.x), DirectX::XMConvertToRadians(rotation.z));
+	
+	Matrix rot = Matrix::CreateFromQuaternion(rotation);
+
+	//auto rot = Matrix::CreateFromYawPitchRoll(DirectX::XMConvertToRadians(rotation.y), DirectX::XMConvertToRadians(rotation.x), DirectX::XMConvertToRadians(rotation.z));
+	
 	auto rest = Matrix::CreateWorld(position, rot.Forward(), rot.Up());
-	world = DirectX::XMMatrixMultiply(ss, rest);
+
+	world = DirectX::XMMatrixMultiply(Matrix::CreateScale(scale), rest);
 }
