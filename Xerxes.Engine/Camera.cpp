@@ -93,8 +93,8 @@ void Camera::CreateView()
 	auto target = transform.Forward();
 	auto pos = transform.GetPosition();
 	target += pos;
-	//view = Matrix::CreateLookAt(pos, target, transform.Up());
-	view = Matrix::CreateLookAt(pos, Vector3(0, 0, 0.001), Vector3::Up);
+	view = Matrix::CreateLookAt(pos, target, transform.Up());
+	//view = Matrix::CreateLookAt(pos, Vector3(0, 0, 0.001), Vector3::Up);
 
 }
 
@@ -128,6 +128,11 @@ DirectX::SimpleMath::Vector3 Camera::GetPosition()
 	return transform.GetPosition();
 }
 
+DirectX::SimpleMath::Quaternion Camera::GetRotation()
+{
+	return transform.GetRotation();
+}
+
 float Camera::GetRotationX()
 {
 	return transform.GetRotationX();
@@ -141,6 +146,27 @@ float Camera::GetRotationY()
 float Camera::GetRotationZ()
 {
 	return transform.GetRotationZ();
+	CreateView();
+}
+
+const DirectX::SimpleMath::Vector3& Camera::GetUp() const
+{
+	return transform.Up();
+}
+
+const DirectX::SimpleMath::Vector3& Camera::GetRight() const
+{
+	return transform.Right();
+}
+
+const DirectX::SimpleMath::Vector3& Camera::GetForward() const
+{
+	return transform.Forward();
+}
+
+void Camera::SetRotation(DirectX::SimpleMath::Quaternion quat)
+{
+	transform.SetRotation(quat);
 	CreateView();
 }
 

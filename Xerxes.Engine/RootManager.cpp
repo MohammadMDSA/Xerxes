@@ -19,14 +19,19 @@ void RootManager::Destroy()
 	instance = 0;
 }
 
-std::shared_ptr<CameraManager> RootManager::GetCameraManager()
+CameraManager* RootManager::GetCameraManager()
 {
-	return cameraManager;
+	return cameraManager.get();
 }
 
-std::shared_ptr<InputManager> RootManager::GetInputManager()
+InputManager* RootManager::GetInputManager()
 {
-	return inputManager;
+	return inputManager.get();
+}
+
+void RootManager::Update()
+{
+	inputManager->Update();
 }
 
 RootManager::RootManager()

@@ -44,6 +44,21 @@ float Transform::GetRotationZ()
 	return rotationZ;
 }
 
+const DirectX::SimpleMath::Quaternion& Transform::GetRotation() const
+{
+	return rotation;
+}
+
+void Transform::SetRotation(DirectX::SimpleMath::Quaternion quat, bool updateWorld)
+{
+	this->rotation = quat;
+	rotationX = DirectX::XMConvertToDegrees(rotation.x);
+	rotationY = DirectX::XMConvertToDegrees(rotation.y);
+	rotationZ = DirectX::XMConvertToDegrees(rotation.z);
+	if (updateWorld)
+		this->CreateWorld();
+}
+
 void Transform::SetRotationX(float x, bool updateWorld)
 {
 	auto rot = Matrix::CreateFromQuaternion(rotation);
@@ -105,17 +120,17 @@ void Transform::SetScale(float x, float y, float z, bool updateWorld)
 }
 
 
-DirectX::SimpleMath::Vector3 Transform::Forward()
+const DirectX::SimpleMath::Vector3& Transform::Forward() const
 {
 	return world.Forward();
 }
 
-DirectX::SimpleMath::Vector3 Transform::Right()
+const DirectX::SimpleMath::Vector3& Transform::Right() const
 {
 	return world.Right();
 }
 
-DirectX::SimpleMath::Vector3 Transform::Up()
+const DirectX::SimpleMath::Vector3& Transform::Up() const
 {
 	return world.Up();
 }

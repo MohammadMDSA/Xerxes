@@ -9,7 +9,6 @@
 #include "Libs/imgui/imgui.h"
 #include "Libs/imgui/imgui_impl_win32.h"
 #include "Libs/imgui/imgui_impl_dx11.h"
-#include "RootManager.h"
 #include "Camera.h"
 
 extern void ExitGame() noexcept;
@@ -25,12 +24,14 @@ Editor::Editor() noexcept :
 	m_outputHeight(900),
 	m_featureLevel(D3D_FEATURE_LEVEL_9_1),
 	m_imguiActive(false),
-	showDemo(true)
+	showDemo(true),
+	rootManager(nullptr)
 {
 }
 
 Editor::~Editor()
 {
+	rootManager->Destroy();
 	delete sceneWindow;
 	delete inspectorWindow;
 	delete go;
@@ -52,13 +53,24 @@ void Editor::Initialize(HWND window, int width, int height)
 	this->sceneWindow = new SceneWindow(1);
 	this->inspectorWindow = new InspectorWindow(2);
 	this->go = new GameObject();
-	RootManager* p = RootManager::GetInstance();
+	go->transform.SetPosition(0, 0, 2);
+	this->go1 = new GameObject();
+	go1->transform.SetPosition(0, 0, -2);
+	this->go2 = new GameObject();
+	go2->transform.SetPosition(2, 0, 0);
+	this->go3 = new GameObject();
+	go3->transform.SetPosition(-2, 0, 0);
+	this->go4 = new GameObject();
+	go4->transform.SetPosition(0, 2, 0);
+	this->go5 = new GameObject();
+	go5->transform.SetPosition(0, -2, 0);
+	this->rootManager = RootManager::GetInstance();
 
-	p->GetInputManager()->GetMouse()->SetWindow(window);
+	rootManager->GetInputManager()->GetMouse()->SetWindow(window);
 
-	p->GetCameraManager()->CraeteCamera();
-	p->GetCameraManager()->GetActiveCamera()->SetPosition(2, 2, 2);
-	sceneWindow->SetCamera(p->GetCameraManager()->GetActiveCamera());
+	rootManager->GetCameraManager()->CraeteCamera();
+	rootManager->GetCameraManager()->GetActiveCamera();
+	sceneWindow->SetCamera(rootManager->GetCameraManager()->GetActiveCamera());
 
 	GetDefaultSize(sceneWidth, sceneHeight);
 
@@ -86,6 +98,7 @@ void Editor::Update(DX::StepTimer const& timer)
 	m_proj = Matrix::CreatePerspectiveFieldOfView(XM_PI / 4.f,
 		float(sceneWindow->GetWidth()) / float(sceneWindow->GetHeight()), 0.1f, 10.f);
 
+	rootManager->Update();
 	sceneWindow->Update(elapsedTime);
 	inspectorWindow->Update(elapsedTime);
 	// TODO: Add your game logic here.
@@ -178,6 +191,11 @@ void Editor::Render()
 
 
 	go->OnRender(camera->GetView(), camera->GetProjection(), m_d3dContext.Get());
+	go1->OnRender(camera->GetView(), camera->GetProjection(), m_d3dContext.Get());
+	go2->OnRender(camera->GetView(), camera->GetProjection(), m_d3dContext.Get());
+	go3->OnRender(camera->GetView(), camera->GetProjection(), m_d3dContext.Get());
+	go4->OnRender(camera->GetView(), camera->GetProjection(), m_d3dContext.Get());
+	go5->OnRender(camera->GetView(), camera->GetProjection(), m_d3dContext.Get());
 	//go->OnRender(camera->GetView(), Matrix::CreatePerspectiveFieldOfView(XM_PI / 4.f,
 		//float(m_outputWidth) / float(m_outputHeight), 0.1f, 10.f));
 	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
@@ -432,6 +450,11 @@ void Editor::PostResourceCreation()
 {
 	InitializeImgui();
 	go->OnStart(m_d3dDevice.Get(), m_d3dContext.Get());
+	go1->OnStart(m_d3dDevice.Get(), m_d3dContext.Get());
+	go2->OnStart(m_d3dDevice.Get(), m_d3dContext.Get());
+	go3->OnStart(m_d3dDevice.Get(), m_d3dContext.Get());
+	go4->OnStart(m_d3dDevice.Get(), m_d3dContext.Get());
+	go5->OnStart(m_d3dDevice.Get(), m_d3dContext.Get());
 }
 
 void Editor::OnDeviceLost()
@@ -442,7 +465,6 @@ void Editor::OnDeviceLost()
 	ImGui::DestroyContext();
 	m_imguiActive = false;
 	
-
 	m_depthStencilView.Reset();
 	m_renderTargetView.Reset();
 	m_swapChain.Reset();

@@ -11,7 +11,7 @@ public:
 	~CameraManager();
 
 	int							CraeteCamera();
-	const Camera&				GetCameraById(int id) const;
+	Camera						GetCameraById(int id);
 	Camera*						GetActiveCamera();
 	void						SetOutputSize(float width, float height);
 	

@@ -8,6 +8,7 @@
 #include "GameObject.h"
 #include "SceneWindow.h"
 #include "InspectorWindow.h"
+#include "RootManager.h"
 
 //class EditorWindow;
 
@@ -82,8 +83,15 @@ private:
 
     float                                           clear_color[3];
 
+    RootManager*                                    rootManager;
+
     SceneWindow*                                    sceneWindow;
     InspectorWindow*                                inspectorWindow;
     DirectX::SimpleMath::Matrix m_proj;
     GameObject* go;
+    GameObject* go1;
+    GameObject* go2;
+    GameObject* go3;
+    GameObject* go4;
+    GameObject* go5;
 };

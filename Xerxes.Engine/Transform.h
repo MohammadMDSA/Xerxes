@@ -14,7 +14,9 @@ public:
 	float								GetRotationX();
 	float								GetRotationY();
 	float								GetRotationZ();
+	const DirectX::SimpleMath::Quaternion&	GetRotation() const;
 
+	void								SetRotation(DirectX::SimpleMath::Quaternion quat, bool updateWorld = true);
 	void								SetRotationX(float x, bool updateWorld = true);
 	void								SetRotationY(float y, bool updateWorld = true);
 	void								SetRotationZ(float z, bool updateWorld = true);
@@ -24,9 +26,9 @@ public:
 	void								SetScale(float x, float y, float z, bool updateWorld = true);
 
 
-	DirectX::SimpleMath::Vector3		Forward();
-	DirectX::SimpleMath::Vector3		Right();
-	DirectX::SimpleMath::Vector3		Up();
+	const DirectX::SimpleMath::Vector3&		Forward() const;
+	const DirectX::SimpleMath::Vector3&		Right() const;
+	const DirectX::SimpleMath::Vector3&		Up() const;
 
 
 private:

@@ -26,7 +26,7 @@ int CameraManager::CraeteCamera()
 	return lastId;
 }
 
-const Camera& CameraManager::GetCameraById(int id) const
+Camera CameraManager::GetCameraById(int id)
 {
 	if (!cameras->contains(id))
 		throw std::runtime_error("Key doesn\'t exists.");

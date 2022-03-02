@@ -21,5 +21,8 @@ protected:
 private:
 
 	Camera*					camera;
+	const float				ROTATION_GAIN = 0.004f;
+	float					cameraYaw;
+	float					cameraPitch;
 };
 

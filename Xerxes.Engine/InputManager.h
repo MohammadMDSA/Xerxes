@@ -21,11 +21,14 @@ public:
 	bool								GetLeftButtonDown();
 	bool								GetRightButtonDown();
 	bool								GetMiddleButtonDown();
+	
+	DirectX::Mouse::Mode				GetMouseMode();
+	void								SetMouseMode(DirectX::Mouse::Mode mode);
 
 	void								Update();
 
 private:
-	std::unique_ptr<DirectX::Mouse>		mouse;
+	std::shared_ptr<DirectX::Mouse>		mouse;
 	std::shared_ptr<DirectX::Keyboard>	keyboard;
 	DirectX::Mouse::ButtonStateTracker	mouseTracker;
 
@@ -43,6 +46,7 @@ private:
 	bool								middleButton;
 	bool								middleButtonUp;
 	bool								middleButtonDown;
-
+	DirectX::Mouse::Mode				mouseMode;
+	DirectX::Mouse::Mode				nextMouseMode;
 };
 

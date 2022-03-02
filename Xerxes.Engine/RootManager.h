@@ -10,8 +10,10 @@ public:
 	static RootManager*						GetInstance();
 	static void								Destroy();
 
-	std::shared_ptr<CameraManager>			GetCameraManager();
-	std::shared_ptr<InputManager>			GetInputManager();
+	CameraManager*							GetCameraManager();
+	InputManager*							GetInputManager();
+
+	void									Update();
 
 private:
 

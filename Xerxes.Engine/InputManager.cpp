@@ -10,7 +10,7 @@ InputManager::InputManager() :
 	mouseDeltaX(0.f),
 	mouseDeltaY(0.f)
 {
-	mouse = unique_ptr<Mouse>();
+	mouse = make_shared<Mouse>();
 	keyboard = make_shared<Keyboard>();
 }
 
@@ -89,8 +89,20 @@ bool InputManager::GetMiddleButtonDown()
 	return middleButtonDown;
 }
 
+DirectX::Mouse::Mode InputManager::GetMouseMode()
+{
+	return mouseMode;
+}
+
+void InputManager::SetMouseMode(DirectX::Mouse::Mode mode)
+{
+	nextMouseMode = mode;
+}
+
 void InputManager::Update()
 {
+	auto previousMode = mouseMode;
+	mouse->SetMode(nextMouseMode);
 	auto mouseState = mouse->GetState();
 	mouseTracker.Update(mouseState);
 	leftButton = mouseState.leftButton;
@@ -102,17 +114,20 @@ void InputManager::Update()
 	leftButtonDown = mouseTracker.leftButton == Mouse::ButtonStateTracker::PRESSED;
 	rightButtonDown = mouseTracker.rightButton == Mouse::ButtonStateTracker::PRESSED;
 	middleButtonDown = mouseTracker.middleButton == Mouse::ButtonStateTracker::PRESSED;
-	if (mouseState.positionMode == Mouse::MODE_ABSOLUTE)
+	auto newX = mouseState.x;
+	auto newY = mouseState.y;
+	if (previousMode != nextMouseMode)
 	{
-		mouse->SetMode(Mouse::MODE_RELATIVE);
+		mouseDeltaX = 0;
+		mouseDeltaY = 0;
 	}
 	else
 	{
-		auto newX = mouseState.x;
-		auto newY = mouseState.y;
 		mouseDeltaX = newX - mouseX;
 		mouseDeltaY = newY - mouseY;
-		mouseX = newX;
-		mouseY = newY;
+
 	}
+	mouseX = newX;
+	mouseY = newY;
+	mouseMode = nextMouseMode;
 }
