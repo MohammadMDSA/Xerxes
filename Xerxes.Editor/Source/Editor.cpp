@@ -9,9 +9,8 @@
 #include "Libs/imgui/imgui.h"
 #include "Libs/imgui/imgui_impl_win32.h"
 #include "Libs/imgui/imgui_impl_dx11.h"
-#include "SceneWindow.h"
-#include "InspectorWindow.h"
 #include "RootManager.h"
+#include "Camera.h"
 
 extern void ExitGame() noexcept;
 
@@ -25,8 +24,16 @@ Editor::Editor() noexcept :
 	m_outputWidth(1500),
 	m_outputHeight(900),
 	m_featureLevel(D3D_FEATURE_LEVEL_9_1),
-	m_imguiActive(false)
+	m_imguiActive(false),
+	showDemo(true)
 {
+}
+
+Editor::~Editor()
+{
+	delete sceneWindow;
+	delete inspectorWindow;
+	delete go;
 }
 
 // Initialize the Direct3D resources required to run.
@@ -50,13 +57,14 @@ void Editor::Initialize(HWND window, int width, int height)
 	p->GetInputManager()->GetMouse()->SetWindow(window);
 
 	p->GetCameraManager()->CraeteCamera();
+	p->GetCameraManager()->GetActiveCamera()->SetPosition(2, 2, 2);
+	sceneWindow->SetCamera(p->GetCameraManager()->GetActiveCamera());
 
 	GetDefaultSize(sceneWidth, sceneHeight);
 
 	CreateDevice();
 
 	CreateResources();
-	camera = RootManager::GetInstance()->GetCameraManager()->GetActiveCamera();
 }
 
 // Executes the basic game loop.
@@ -77,6 +85,9 @@ void Editor::Update(DX::StepTimer const& timer)
 
 	m_proj = Matrix::CreatePerspectiveFieldOfView(XM_PI / 4.f,
 		float(sceneWindow->GetWidth()) / float(sceneWindow->GetHeight()), 0.1f, 10.f);
+
+	sceneWindow->Update(elapsedTime);
+	inspectorWindow->Update(elapsedTime);
 	// TODO: Add your game logic here.
 	elapsedTime;
 }
@@ -97,8 +108,8 @@ void Editor::Render()
 	ImGui::NewFrame();
 
 	// 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
-	if (showInspector)
-		ImGui::ShowDemoWindow(&showInspector);
+	if (showDemo)
+		ImGui::ShowDemoWindow(&showDemo);
 
 		//// 2. Show a simple window that we create ourselves. We use a Begin/End pair to created a named window.
 		//{
@@ -155,6 +166,7 @@ void Editor::Render()
 
 
 	ImGui::Begin("Camera Inspector", &showCameraInspector);
+	auto camera = sceneWindow->GetCamera();
 	camera->OnGui();
 	ImGui::End();
 
@@ -165,7 +177,7 @@ void Editor::Render()
 	Clear();
 
 
-	go->OnRender(camera->GetView(), camera->GetProjection());
+	go->OnRender(camera->GetView(), camera->GetProjection(), m_d3dContext.Get());
 	//go->OnRender(camera->GetView(), Matrix::CreatePerspectiveFieldOfView(XM_PI / 4.f,
 		//float(m_outputWidth) / float(m_outputHeight), 0.1f, 10.f));
 	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
@@ -419,8 +431,7 @@ void Editor::CreateResources()
 void Editor::PostResourceCreation()
 {
 	InitializeImgui();
-	auto context = m_d3dContext.Get();
-	go->OnStart(m_d3dContext);
+	go->OnStart(m_d3dDevice.Get(), m_d3dContext.Get());
 }
 
 void Editor::OnDeviceLost()

@@ -4,7 +4,8 @@
 EditorWindow::EditorWindow(int id, std::string title) :
 	firstFrame(true),
 	alwaysFullscreen(false),
-	fullscreen(false)
+	fullscreen(false),
+	hasFocus(false)
 {
 	this->id = id;
 	this->title = title;
@@ -77,6 +78,7 @@ void EditorWindow::BeginWindow()
 		positionY = pos.y;
 		width = ImGui::GetWindowWidth();
 		height = ImGui::GetWindowHeight();
+		hasFocus = ImGui::IsWindowFocused();
 	}
 	OnGUI();
 }

@@ -2,9 +2,15 @@
 #include "GameObject.h"
 #include "Libs/imgui/imgui.h"
 
-void GameObject::OnStart(Microsoft::WRL::ComPtr<ID3D11DeviceContext1> context)
+using namespace DirectX;
+
+void GameObject::OnStart(ID3D11Device1* device, ID3D11DeviceContext1* context)
 {
-	m_shape = DirectX::GeometricPrimitive::CreateCube(context.Get());
+	m_states = std::make_unique<CommonStates>(device);
+
+	m_fxFactory = std::make_unique<EffectFactory>(device);
+
+	m_shape = DirectX::GeometricPrimitive::CreateCube(context);
 
 }
 
@@ -17,8 +23,9 @@ void GameObject::OnUpdate()
 
 }
 
-void GameObject::OnRender(DirectX::SimpleMath::Matrix view, DirectX::SimpleMath::Matrix proj)
+void GameObject::OnRender(DirectX::SimpleMath::Matrix view, DirectX::SimpleMath::Matrix proj, ID3D11DeviceContext1* context)
 {
+	//m_shape->Draw(context, *m_states, transform.GetWorldMatrix(), view, proj);
 	m_shape->Draw(transform.GetWorldMatrix(), view, proj);
 }
 

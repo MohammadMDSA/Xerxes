@@ -10,6 +10,8 @@ public:
 
 	void					BeginWindow();
 	void					EndWindow();
+	virtual void			Update(float deltaTime) = 0;
+	virtual void			OnGUI() = 0;
 
 	void					SetFullscreen(bool fullScreen);
 
@@ -25,11 +27,11 @@ public:
 	inline float			GetWidth() { return width; }
 	inline float			GetPosX() { return positionX; }
 	inline float			GetPosY() { return positionY; }
+	bool					HasFocus() { return hasFocus; }
 	EditorWindow(int id, std::string);
 
 protected:
 
-	virtual void			OnGUI() = 0;
 	virtual void			OnGUIInit() { }
 	virtual int				GetCustomWindowFlags() = 0;
 
@@ -46,6 +48,7 @@ protected:
 	float					positionX;
 	float					positionY;
 	bool					isOpen;
+	bool					hasFocus;
 
 	bool					shouldUpdatePosition;
 	bool					shouldUpdateDimansion;

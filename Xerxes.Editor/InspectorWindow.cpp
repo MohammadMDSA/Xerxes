@@ -16,3 +16,7 @@ int InspectorWindow::GetCustomWindowFlags()
 {
 	return ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoDocking;
 }
+
+void InspectorWindow::Update(float deltaTime)
+{
+}

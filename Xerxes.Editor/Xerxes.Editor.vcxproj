@@ -34,6 +34,9 @@
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
+    <Import Project="$(VCTargetsPath)\BuildCustomizations\ImageContentTask.props" />
+    <Import Project="$(VCTargetsPath)\BuildCustomizations\MeshContentTask.props" />
+    <Import Project="$(VCTargetsPath)\BuildCustomizations\ShaderGraphContentTask.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
@@ -99,14 +102,8 @@
   <ItemGroup>
     <ClInclude Include="EditorWindow.h" />
     <ClInclude Include="InspectorWindow.h" />
-    <ClInclude Include="Libs\imgui\imconfig.h" />
-    <ClInclude Include="Libs\imgui\imgui.h" />
     <ClInclude Include="Libs\imgui\imgui_impl_dx11.h" />
     <ClInclude Include="Libs\imgui\imgui_impl_win32.h" />
-    <ClInclude Include="Libs\imgui\imgui_internal.h" />
-    <ClInclude Include="Libs\imgui\imstb_rectpack.h" />
-    <ClInclude Include="Libs\imgui\imstb_textedit.h" />
-    <ClInclude Include="Libs\imgui\imstb_truetype.h" />
     <ClInclude Include="SceneWindow.h" />
     <ClInclude Include="Source\Editor.h" />
     <ClInclude Include="Source\pch.h" />
@@ -115,13 +112,8 @@
   <ItemGroup>
     <ClCompile Include="EditorWindow.cpp" />
     <ClCompile Include="InspectorWindow.cpp" />
-    <ClCompile Include="Libs\imgui\imgui.cpp" />
-    <ClCompile Include="Libs\imgui\imgui_demo.cpp" />
-    <ClCompile Include="Libs\imgui\imgui_draw.cpp" />
     <ClCompile Include="Libs\imgui\imgui_impl_dx11.cpp" />
     <ClCompile Include="Libs\imgui\imgui_impl_win32.cpp" />
-    <ClCompile Include="Libs\imgui\imgui_tables.cpp" />
-    <ClCompile Include="Libs\imgui\imgui_widgets.cpp" />
     <ClCompile Include="SceneWindow.cpp" />
     <ClCompile Include="Source\Editor.cpp" />
     <ClCompile Include="Source\Main.cpp" />
@@ -143,10 +135,18 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <MeshContentTask Include="Zombie Idle.fbx">
+      <FileType>Document</FileType>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
+    </MeshContentTask>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
     <Import Project="..\packages\directxtk_desktop_win10.2021.11.8.1\build\native\directxtk_desktop_win10.targets" Condition="Exists('..\packages\directxtk_desktop_win10.2021.11.8.1\build\native\directxtk_desktop_win10.targets')" />
+    <Import Project="$(VCTargetsPath)\BuildCustomizations\ImageContentTask.targets" />
+    <Import Project="$(VCTargetsPath)\BuildCustomizations\MeshContentTask.targets" />
+    <Import Project="$(VCTargetsPath)\BuildCustomizations\ShaderGraphContentTask.targets" />
   </ImportGroup>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

@@ -5,9 +5,9 @@
 #pragma once
 
 #include "StepTimer.h"
-#include "EditorWindow.h"
 #include "GameObject.h"
-#include "Camera.h"
+#include "SceneWindow.h"
+#include "InspectorWindow.h"
 
 //class EditorWindow;
 
@@ -18,7 +18,7 @@ class Editor
 public:
 
     Editor() noexcept;
-    ~Editor() = default;
+    ~Editor();
 
     Editor(Editor&&) = default;
     Editor& operator= (Editor&&) = default;
@@ -77,14 +77,13 @@ private:
     DX::StepTimer                                   m_timer;
     bool                                            m_imguiActive;
 
-    bool                                            showInspector;
+    bool                                            showDemo;
     bool                                            showCameraInspector;
 
     float                                           clear_color[3];
 
-    EditorWindow*                                   sceneWindow;
-    EditorWindow*                                   inspectorWindow;
+    SceneWindow*                                    sceneWindow;
+    InspectorWindow*                                inspectorWindow;
     DirectX::SimpleMath::Matrix m_proj;
     GameObject* go;
-    Camera* camera;
 };

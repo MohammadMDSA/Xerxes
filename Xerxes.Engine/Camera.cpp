@@ -13,9 +13,6 @@ Camera::Camera() :
 	outputHeight(900.f),
 	transform(Transform())
 {
-
-	CreateProjection();
-	CreateView();
 }
 
 void Camera::SetOutputSize(const float& width, const float& height)
@@ -65,24 +62,22 @@ void Camera::OnGui()
 	int currentItem = isPerspective ? 0 : 1;
 	if (ImGui::Combo("View Type", &currentItem, "Perspective\0Orthographic\0\0"))
 	{
-		isPerspective = currentItem ? true : false;
+		isPerspective = currentItem == 0 ? true : false;
+		CreateProjection();
 	}
 	if (ImGui::DragFloat("FoV", &fieldOfView, 0.1, 1.f, 179.9f, "%.2f"))
 	{
 		CreateProjection();
 	}
-	if (ImGui::DragFloat("Near Plane", &nearPlane, 0.1, 0.01))
+	if (ImGui::DragFloat("Near Plane", &nearPlane, 0.1, 0.01, farPlane - 0.001))
 	{
 		CreateProjection();
 	}
-	if (ImGui::DragFloat("Far Plane", &farPlane, 0.1, 0.01))
+	if (ImGui::DragFloat("Far Plane", &farPlane, 0.1, nearPlane + 0.001, 100000))
 	{
 		CreateProjection();
 	}
 
-	if (ImGui::Button("God pleasse")) {
-		SetPosition(2.f, 2.f, 2.f);
-	}
 }
 
 void Camera::CreateProjection()
@@ -99,7 +94,7 @@ void Camera::CreateView()
 	auto pos = transform.GetPosition();
 	target += pos;
 	//view = Matrix::CreateLookAt(pos, target, transform.Up());
-	view = Matrix::CreateLookAt(pos, Vector3::Zero, Vector3::Up);
+	view = Matrix::CreateLookAt(pos, Vector3(0, 0, 0.001), Vector3::Up);
 
 }
 

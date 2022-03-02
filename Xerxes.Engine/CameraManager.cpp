@@ -11,6 +11,13 @@ CameraManager::CameraManager() :
 	cameras = unique_ptr<std::unordered_map<int, Camera*>>(new unordered_map<int, Camera*>());
 }
 
+CameraManager::~CameraManager()
+{
+	for (auto& it : *cameras) {
+		delete it.second;
+	}
+}
+
 int CameraManager::CraeteCamera()
 {
 	cameras->insert_or_assign(++lastId, new Camera());

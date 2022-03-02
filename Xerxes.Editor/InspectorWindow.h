@@ -12,5 +12,9 @@ public:
 	virtual void OnGUI() override;
 	virtual int GetCustomWindowFlags() override;
 
+
+	// Inherited via EditorWindow
+	virtual void Update(float deltaTime) override;
+
 };
 

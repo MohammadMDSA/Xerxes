@@ -8,6 +8,7 @@ class CameraManager
 {
 public:
 	CameraManager();
+	~CameraManager();
 
 	int							CraeteCamera();
 	const Camera&				GetCameraById(int id) const;
