@@ -44,8 +44,6 @@ void GameObject::OnGizmo()
 	auto view = camera->GetView();
 	auto projection = camera->GetProjection();
 	ImGuizmo::SetDrawlist();
-	ImGuiIO& io = ImGui::GetIO();
-	ImGuizmo::SetRect(0, 0, io.DisplaySize.x, io.DisplaySize.y); 
 	auto world = transform.GetWorldMatrix();
 	if (ImGuizmo::Manipulate((float*)&view, (float*)&projection, manipulationOperation, ImGuizmo::MODE::LOCAL, (float*)&(world)))
 	{

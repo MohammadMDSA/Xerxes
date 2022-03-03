@@ -138,6 +138,7 @@ void Editor::Render()
 	sceneWindow->SetPosition(0, 0);
 	sceneWindow->SetDimansion(sceneWidth, sceneHeight);
 	sceneWindow->BeginWindow();
+	ImGuizmo::SetRect(0, 0, sceneWidth, sceneHeight);
 	go1->OnGizmo();
 
 	sceneWindow->EndWindow();
