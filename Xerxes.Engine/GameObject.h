@@ -3,9 +3,14 @@
 #include "Transform.h"
 #include <memory>
 
+#include "Libs/imgui/imgui.h"
+#include "Libs/imgui/ImGuizmo.h"
+
 class GameObject
 {
 public:
+	GameObject();
+
 	Transform transform;
 
 	void					OnStart(ID3D11Device1* device, ID3D11DeviceContext1* context);
@@ -14,11 +19,9 @@ public:
 	void					OnRender(DirectX::SimpleMath::Matrix view, DirectX::SimpleMath::Matrix proj, ID3D11DeviceContext1* context);
 	void					OnDestroy();
 
-	virtual void			OnGizmo();
-	void					OnInspectorBase();
-protected:
+	void					OnGizmo();
+	void					OnInspector();
 
-	virtual void			OnInspector();
 
 private:
 
@@ -28,5 +31,7 @@ private:
 	std::unique_ptr<DirectX::CommonStates> m_states;
 	std::unique_ptr<DirectX::IEffectFactory> m_fxFactory;
 	std::unique_ptr<DirectX::GeometricPrimitive> m_model;
+
+	ImGuizmo::OPERATION			manipulationOperation;
 };
 
