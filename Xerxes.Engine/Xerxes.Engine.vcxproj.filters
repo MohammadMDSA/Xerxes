@@ -34,6 +34,9 @@
     <Filter Include="Source\Public\SubsystemManager">
       <UniqueIdentifier>{fcbedd7d-09f6-444a-b241-fc35ccf7ec61}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Libs\ImGuizmo">
+      <UniqueIdentifier>{add183bc-7b51-4179-9fde-1cad2e4c9d99}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -78,6 +81,24 @@
     <ClInclude Include="InputManager.h">
       <Filter>Source\Public\SubsystemManager</Filter>
     </ClInclude>
+    <ClInclude Include="Libs\imgui\ImZoomSlider.h">
+      <Filter>Libs\ImGuizmo</Filter>
+    </ClInclude>
+    <ClInclude Include="Libs\imgui\ImSequencer.h">
+      <Filter>Libs\ImGuizmo</Filter>
+    </ClInclude>
+    <ClInclude Include="Libs\imgui\ImGuizmo.h">
+      <Filter>Libs\ImGuizmo</Filter>
+    </ClInclude>
+    <ClInclude Include="Libs\imgui\ImGradient.h">
+      <Filter>Libs\ImGuizmo</Filter>
+    </ClInclude>
+    <ClInclude Include="Libs\imgui\ImCurveEdit.h">
+      <Filter>Libs\ImGuizmo</Filter>
+    </ClInclude>
+    <ClInclude Include="Libs\imgui\GraphEditor.h">
+      <Filter>Libs\ImGuizmo</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Xerxes.Engine.cpp">
@@ -118,6 +139,21 @@
     </ClCompile>
     <ClCompile Include="InputManager.cpp">
       <Filter>Source\Private\SubsystemManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Libs\imgui\ImSequencer.cpp">
+      <Filter>Libs\ImGuizmo</Filter>
+    </ClCompile>
+    <ClCompile Include="Libs\imgui\ImGuizmo.cpp">
+      <Filter>Libs\ImGuizmo</Filter>
+    </ClCompile>
+    <ClCompile Include="Libs\imgui\ImGradient.cpp">
+      <Filter>Libs\ImGuizmo</Filter>
+    </ClCompile>
+    <ClCompile Include="Libs\imgui\ImCurveEdit.cpp">
+      <Filter>Libs\ImGuizmo</Filter>
+    </ClCompile>
+    <ClCompile Include="Libs\imgui\GraphEditor.cpp">
+      <Filter>Libs\ImGuizmo</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -26,7 +26,7 @@ public:
 	const DirectX::SimpleMath::Vector3& GetRight() const;
 	const DirectX::SimpleMath::Vector3& GetForward() const;
 	
-	void							SetRotation(DirectX::SimpleMath::Quaternion quat);
+	void							SetRotation(DirectX::SimpleMath::Quaternion quat, bool updateWorld = true);
 	void							SetRotationX(float x, bool updateWorld = true);
 	void							SetRotationY(float y, bool updateWorld = true);
 	void							SetRotationZ(float z, bool updateWorld = true);
@@ -55,6 +55,8 @@ private:
 	float							outputWidth;
 	float							outputHeight;
 	float							fieldOfView;
+	float							orthoGraphicSize;
+	const float						ORTHO_SIZE_DIVISOR = 100;
 
 	float							nearPlane;
 	float							farPlane;

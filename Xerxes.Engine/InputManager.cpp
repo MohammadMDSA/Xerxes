@@ -1,6 +1,8 @@
 #include "pch.h"
 #include "InputManager.h"
 
+#include <iostream>
+
 using namespace std;
 using namespace DirectX;
 
@@ -120,14 +122,19 @@ void InputManager::Update()
 	{
 		mouseDeltaX = 0;
 		mouseDeltaY = 0;
+		if (nextMouseMode == Mouse::Mode::MODE_RELATIVE)
+		{
+			mouseX = mouseY = 0;
+		}
+
 	}
 	else
 	{
 		mouseDeltaX = newX - mouseX;
 		mouseDeltaY = newY - mouseY;
 
+		mouseX = newX;
+		mouseY = newY;
 	}
-	mouseX = newX;
-	mouseY = newY;
-	mouseMode = nextMouseMode;
+	mouseMode = mouseState.positionMode;
 }

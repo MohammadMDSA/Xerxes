@@ -89,6 +89,15 @@ void Transform::SetRotationZ(float z, bool updateWorld)
 		this->CreateWorld();
 }
 
+void Transform::SetWorld(DirectX::SimpleMath::Matrix world)
+{
+	this->world = world;
+	this->world.Decompose(scale, rotation, position);
+	rotationX = DirectX::XMConvertToDegrees(atan2f(world._23, world._33));
+	rotationY = DirectX::XMConvertToDegrees(atan2f(-world._13, sqrtf(world._23 * world._23 + world._33 * world._33)));
+	rotationZ = DirectX::XMConvertToDegrees(atan2f(world._12, world._11));
+}
+
 void Transform::SetPositionV(const Vector3& position, bool updateWorld)
 {
 	this->position = position;

@@ -11,7 +11,8 @@ Camera::Camera() :
 	isPerspective(true),
 	outputWidth(1500.f),
 	outputHeight(900.f),
-	transform(Transform())
+	transform(Transform()),
+	orthoGraphicSize(10)
 {
 }
 
@@ -65,9 +66,19 @@ void Camera::OnGui()
 		isPerspective = currentItem == 0 ? true : false;
 		CreateProjection();
 	}
-	if (ImGui::DragFloat("FoV", &fieldOfView, 0.1, 1.f, 179.9f, "%.2f"))
+	if (isPerspective)
 	{
-		CreateProjection();
+		if (ImGui::DragFloat("FoV", &fieldOfView, 0.1, 1.f, 179.9f, "%.2f"))
+		{
+			CreateProjection();
+		}
+	}
+	else
+	{
+		if (ImGui::DragFloat("Ortho Size", &orthoGraphicSize, 0.1, 0.01, 100))
+		{
+			CreateProjection();
+		}
 	}
 	if (ImGui::DragFloat("Near Plane", &nearPlane, 0.1, 0.01, farPlane - 0.001))
 	{
@@ -85,7 +96,7 @@ void Camera::CreateProjection()
 	if (isPerspective)
 		projection = Matrix::CreatePerspectiveFieldOfView(DirectX::XMConvertToRadians(fieldOfView), outputWidth / outputHeight, nearPlane, farPlane);
 	else
-		projection = Matrix::CreateOrthographic(outputWidth, outputHeight, nearPlane, farPlane);
+		projection = Matrix::CreateOrthographic(outputWidth / orthoGraphicSize / ORTHO_SIZE_DIVISOR, outputHeight / orthoGraphicSize / ORTHO_SIZE_DIVISOR, nearPlane, farPlane);
 }
 
 void Camera::CreateView()
@@ -164,9 +175,9 @@ const DirectX::SimpleMath::Vector3& Camera::GetForward() const
 	return transform.Forward();
 }
 
-void Camera::SetRotation(DirectX::SimpleMath::Quaternion quat)
+void Camera::SetRotation(DirectX::SimpleMath::Quaternion quat, bool updateWorld)
 {
-	transform.SetRotation(quat);
+	transform.SetRotation(quat, updateWorld);
 	CreateView();
 }
 
