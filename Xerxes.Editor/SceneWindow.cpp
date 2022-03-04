@@ -56,8 +56,8 @@ void SceneWindow::Update(float deltaTime)
 		auto pos = camera->GetPosition();
 		auto matRot = Matrix::CreateFromQuaternion(preRot);
 
-		auto xDelta = ROTATION_GAIN * input->GetMouseX();
-		auto yDelta = ROTATION_GAIN * -input->GetMouseY();
+		auto xDelta = ROTATION_GAIN * -input->GetMouseX();
+		auto yDelta = ROTATION_GAIN * input->GetMouseY();
 
 		auto right = matRot.Right();
 		right.Normalize();

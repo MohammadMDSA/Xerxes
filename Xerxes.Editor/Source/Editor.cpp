@@ -23,11 +23,12 @@ Editor::Editor() noexcept :
 	m_window(nullptr),
 	m_outputWidth(1500),
 	m_outputHeight(900),
-	m_featureLevel(D3D_FEATURE_LEVEL_9_1),
 	m_imguiActive(false),
 	showDemo(true),
 	rootManager(nullptr)
 {
+	m_deviceResources = std::make_unique<DX::DeviceResources>();
+	m_deviceResources->RegisterDeviceNotify(this);
 }
 
 Editor::~Editor()
@@ -45,11 +46,10 @@ void Editor::Initialize(HWND window, int width, int height)
 	m_outputWidth = std::max(width, 1);
 	m_outputHeight = std::max(height, 1);
 
-	// TODO: Change the timer settings if you want something other than the default variable timestep mode.
-	// e.g. for 60 FPS fixed timestep update logic, call:
+	m_deviceResources->SetWindow(window, m_outputWidth, m_outputHeight);
 
-	m_timer.SetFixedTimeStep(true);
-	m_timer.SetTargetElapsedSeconds(1.0 / 60);
+	////////////////////////// REMOVE below
+
 
 	this->sceneWindow = new SceneWindow(1);
 	this->inspectorWindow = new InspectorWindow(2);
@@ -67,6 +67,21 @@ void Editor::Initialize(HWND window, int width, int height)
 	go5->transform.SetPosition(0, -2, 0);
 	this->rootManager = RootManager::GetInstance();
 
+	/////////////////////////// Remove above
+
+
+	m_deviceResources->CreateDeviceResources();
+	CreateDeviceDependentResources();
+
+	m_deviceResources->CreateWindowSizeDependentResources();
+	CreateWindowSizeDependentResources();
+
+	// TODO: Change the timer settings if you want something other than the default variable timestep mode.
+	// e.g. for 60 FPS fixed timestep update logic, call:
+
+	m_timer.SetFixedTimeStep(true);
+	m_timer.SetTargetElapsedSeconds(1.0 / 60);
+
 	rootManager->GetInputManager()->GetMouse()->SetWindow(window);
 
 	rootManager->GetCameraManager()->CraeteCamera();
@@ -75,9 +90,6 @@ void Editor::Initialize(HWND window, int width, int height)
 
 	GetDefaultSize(sceneWidth, sceneHeight);
 
-	CreateDevice();
-
-	CreateResources();
 }
 
 // Executes the basic game loop.
@@ -160,60 +172,48 @@ void Editor::Render()
 
 	Clear();
 
+	m_deviceResources->PIXBeginEvent(L"Render");
+	auto context = m_deviceResources->GetD3DDeviceContext();
 
-	go->OnRender(camera->GetView(), camera->GetProjection(), m_d3dContext.Get());
-	go1->OnRender(camera->GetView(), camera->GetProjection(), m_d3dContext.Get());
-	go2->OnRender(camera->GetView(), camera->GetProjection(), m_d3dContext.Get());
-	go3->OnRender(camera->GetView(), camera->GetProjection(), m_d3dContext.Get());
-	go4->OnRender(camera->GetView(), camera->GetProjection(), m_d3dContext.Get());
-	go5->OnRender(camera->GetView(), camera->GetProjection(), m_d3dContext.Get());
+	go->OnRender(camera->GetView(), camera->GetProjection(), context);
+	go1->OnRender(camera->GetView(), camera->GetProjection(), context);
+	go2->OnRender(camera->GetView(), camera->GetProjection(), context);
+	go3->OnRender(camera->GetView(), camera->GetProjection(), context);
+	go4->OnRender(camera->GetView(), camera->GetProjection(), context);
+	go5->OnRender(camera->GetView(), camera->GetProjection(), context);
 	//go->OnRender(camera->GetView(), Matrix::CreatePerspectiveFieldOfView(XM_PI / 4.f,
 		//float(m_outputWidth) / float(m_outputHeight), 0.1f, 10.f));
 	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 	// TODO: Add your rendering code here.
 
-	Present();
+	m_deviceResources->PIXEndEvent();
+	m_deviceResources->Present();
 }
 
 // Helper method to clear the back buffers.
 void Editor::Clear()
 {
-	// Clear the views.
-	m_d3dContext->ClearRenderTargetView(m_renderTargetView.Get(), Colors::CornflowerBlue);
-	m_d3dContext->ClearDepthStencilView(m_depthStencilView.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
+	auto context = m_deviceResources->GetD3DDeviceContext();
+	auto renderTarget = m_deviceResources->GetRenderTargetView();
+	auto depthStencil = m_deviceResources->GetDepthStencilView();
 
-	m_d3dContext->OMSetRenderTargets(1, m_renderTargetView.GetAddressOf(), m_depthStencilView.Get());
+	// Clear the views.
+	context->ClearRenderTargetView(renderTarget, Colors::CornflowerBlue);
+	context->ClearDepthStencilView(depthStencil, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
+
+	context->OMSetRenderTargets(1, &renderTarget, depthStencil);
 
 	// Set the viewport.
 	float width = sceneWindow->GetWidth(), height = sceneWindow->GetHeight();
 	if (width > 0 && height > 0)
 	{
 		CD3D11_VIEWPORT viewport(sceneWindow->GetPosX(), sceneWindow->GetPosY(), static_cast<float>(width), static_cast<float>(height));
-		m_d3dContext->RSSetViewports(1, &viewport);
+		context->RSSetViewports(1, &viewport);
 	}
 	else
 	{
 		CD3D11_VIEWPORT viewport(0.0f, 0.0f, static_cast<float>(m_outputWidth), static_cast<float>(m_outputHeight));
-		m_d3dContext->RSSetViewports(1, &viewport);
-	}
-}
-
-// Presents the back buffer contents to the screen.
-void Editor::Present()
-{
-	// The first argument instructs DXGI to block until VSync, putting the application
-	// to sleep until the next VSync. This ensures we don't waste any cycles rendering
-	// frames that will never be displayed to the screen.
-	HRESULT hr = m_swapChain->Present(1, 0);
-
-	// If the device was reset we must completely reinitialize the renderer.
-	if (hr == DXGI_ERROR_DEVICE_REMOVED || hr == DXGI_ERROR_DEVICE_RESET)
-	{
-		OnDeviceLost();
-	}
-	else
-	{
-		DX::ThrowIfFailed(hr);
+		context->RSSetViewports(1, &viewport);
 	}
 }
 
@@ -240,12 +240,20 @@ void Editor::OnResuming()
 	// TODO: Game is being power-resumed (or returning from minimize).
 }
 
+void Editor::OnWindowMoved()
+{
+	auto r = m_deviceResources->GetOutputSize();
+	m_deviceResources->WindowSizeChanged(r.right, r.bottom);
+}
+
 void Editor::OnWindowSizeChanged(int width, int height)
 {
+	if (!m_deviceResources->WindowSizeChanged(width, height))
+		return;
 	m_outputWidth = std::max(width, 1);
 	m_outputHeight = std::max(height, 1);
 
-	CreateResources();
+	CreateWindowSizeDependentResources();
 }
 
 // Properties
@@ -256,178 +264,6 @@ void Editor::GetDefaultSize(int& width, int& height) const noexcept
 	height = 900;
 }
 
-// These are the resources that depend on the device.
-void Editor::CreateDevice()
-{
-	UINT creationFlags = 0;
-
-#ifdef _DEBUG
-	creationFlags |= D3D11_CREATE_DEVICE_DEBUG;
-#endif
-
-	static const D3D_FEATURE_LEVEL featureLevels[] =
-	{
-		// TODO: Modify for supported Direct3D feature levels
-		D3D_FEATURE_LEVEL_11_1,
-		D3D_FEATURE_LEVEL_11_0,
-		D3D_FEATURE_LEVEL_10_1,
-		D3D_FEATURE_LEVEL_10_0,
-		D3D_FEATURE_LEVEL_9_3,
-		D3D_FEATURE_LEVEL_9_2,
-		D3D_FEATURE_LEVEL_9_1,
-	};
-
-	// Create the DX11 API device object, and get a corresponding context.
-	ComPtr<ID3D11Device> device;
-	ComPtr<ID3D11DeviceContext> context;
-	DX::ThrowIfFailed(D3D11CreateDevice(
-		nullptr,                            // specify nullptr to use the default adapter
-		D3D_DRIVER_TYPE_HARDWARE,
-		nullptr,
-		creationFlags,
-		featureLevels,
-		static_cast<UINT>(std::size(featureLevels)),
-		D3D11_SDK_VERSION,
-		device.ReleaseAndGetAddressOf(),    // returns the Direct3D device created
-		&m_featureLevel,                    // returns feature level of device created
-		context.ReleaseAndGetAddressOf()    // returns the device immediate context
-	));
-
-#ifndef NDEBUG
-	ComPtr<ID3D11Debug> d3dDebug;
-	if (SUCCEEDED(device.As(&d3dDebug)))
-	{
-		ComPtr<ID3D11InfoQueue> d3dInfoQueue;
-		if (SUCCEEDED(d3dDebug.As(&d3dInfoQueue)))
-		{
-#ifdef _DEBUG
-			d3dInfoQueue->SetBreakOnSeverity(D3D11_MESSAGE_SEVERITY_CORRUPTION, true);
-			d3dInfoQueue->SetBreakOnSeverity(D3D11_MESSAGE_SEVERITY_ERROR, true);
-#endif
-			D3D11_MESSAGE_ID hide[] =
-			{
-				D3D11_MESSAGE_ID_SETPRIVATEDATA_CHANGINGPARAMS,
-				// TODO: Add more message IDs here as needed.
-			};
-			D3D11_INFO_QUEUE_FILTER filter = {};
-			filter.DenyList.NumIDs = static_cast<UINT>(std::size(hide));
-			filter.DenyList.pIDList = hide;
-			d3dInfoQueue->AddStorageFilterEntries(&filter);
-		}
-	}
-#endif
-
-	DX::ThrowIfFailed(device.As(&m_d3dDevice));
-	DX::ThrowIfFailed(context.As(&m_d3dContext));
-
-}
-
-// Allocate all memory resources that change on a window SizeChanged event.
-void Editor::CreateResources()
-{
-	// Clear the previous window size specific context.
-	m_d3dContext->OMSetRenderTargets(0, nullptr, nullptr);
-	m_renderTargetView.Reset();
-	m_depthStencilView.Reset();
-	m_d3dContext->Flush();
-
-	const UINT backBufferWidth = static_cast<UINT>(m_outputWidth);
-	const UINT backBufferHeight = static_cast<UINT>(m_outputHeight);
-	const DXGI_FORMAT backBufferFormat = DXGI_FORMAT_B8G8R8A8_UNORM;
-	const DXGI_FORMAT depthBufferFormat = DXGI_FORMAT_D24_UNORM_S8_UINT;
-	constexpr UINT backBufferCount = 2;
-
-	// If the swap chain already exists, resize it, otherwise create one.
-	if (m_swapChain)
-	{
-		HRESULT hr = m_swapChain->ResizeBuffers(backBufferCount, backBufferWidth, backBufferHeight, backBufferFormat, 0);
-
-		if (hr == DXGI_ERROR_DEVICE_REMOVED || hr == DXGI_ERROR_DEVICE_RESET)
-		{
-			// If the device was removed for any reason, a new device and swap chain will need to be created.
-			OnDeviceLost();
-
-			// Everything is set up now. Do not continue execution of this method. OnDeviceLost will reenter this method 
-			// and correctly set up the new device.
-			return;
-		}
-		else
-		{
-			DX::ThrowIfFailed(hr);
-		}
-	}
-	else
-	{
-		// First, retrieve the underlying DXGI Device from the D3D Device.
-		ComPtr<IDXGIDevice1> dxgiDevice;
-		DX::ThrowIfFailed(m_d3dDevice.As(&dxgiDevice));
-
-		// Identify the physical adapter (GPU or card) this device is running on.
-		ComPtr<IDXGIAdapter> dxgiAdapter;
-		DX::ThrowIfFailed(dxgiDevice->GetAdapter(dxgiAdapter.GetAddressOf()));
-
-		// And obtain the factory object that created it.
-		ComPtr<IDXGIFactory2> dxgiFactory;
-		DX::ThrowIfFailed(dxgiAdapter->GetParent(IID_PPV_ARGS(dxgiFactory.GetAddressOf())));
-
-		// Create a descriptor for the swap chain.
-		DXGI_SWAP_CHAIN_DESC1 swapChainDesc = {};
-		swapChainDesc.Width = backBufferWidth;
-		swapChainDesc.Height = backBufferHeight;
-		swapChainDesc.Format = backBufferFormat;
-		swapChainDesc.SampleDesc.Count = 1;
-		swapChainDesc.SampleDesc.Quality = 0;
-		swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-		swapChainDesc.BufferCount = backBufferCount;
-
-		DXGI_SWAP_CHAIN_FULLSCREEN_DESC fsSwapChainDesc = {};
-		fsSwapChainDesc.Windowed = TRUE;
-
-		// Create a SwapChain from a Win32 window.
-		DX::ThrowIfFailed(dxgiFactory->CreateSwapChainForHwnd(
-			m_d3dDevice.Get(),
-			m_window,
-			&swapChainDesc,
-			&fsSwapChainDesc,
-			nullptr,
-			m_swapChain.ReleaseAndGetAddressOf()
-		));
-
-		// This template does not support exclusive fullscreen mode and prevents DXGI from responding to the ALT+ENTER shortcut.
-		DX::ThrowIfFailed(dxgiFactory->MakeWindowAssociation(m_window, DXGI_MWA_NO_ALT_ENTER));
-	}
-
-	// Obtain the backbuffer for this window which will be the final 3D rendertarget.
-	ComPtr<ID3D11Texture2D> backBuffer;
-	DX::ThrowIfFailed(m_swapChain->GetBuffer(0, IID_PPV_ARGS(backBuffer.GetAddressOf())));
-
-	// Create a view interface on the rendertarget to use on bind.
-	DX::ThrowIfFailed(m_d3dDevice->CreateRenderTargetView(backBuffer.Get(), nullptr, m_renderTargetView.ReleaseAndGetAddressOf()));
-
-	// Allocate a 2-D surface as the depth/stencil buffer and
-	// create a DepthStencil view on this surface to use on bind.
-	CD3D11_TEXTURE2D_DESC depthStencilDesc(depthBufferFormat, backBufferWidth, backBufferHeight, 1, 1, D3D11_BIND_DEPTH_STENCIL);
-
-	ComPtr<ID3D11Texture2D> depthStencil;
-	DX::ThrowIfFailed(m_d3dDevice->CreateTexture2D(&depthStencilDesc, nullptr, depthStencil.GetAddressOf()));
-
-	CD3D11_DEPTH_STENCIL_VIEW_DESC depthStencilViewDesc(D3D11_DSV_DIMENSION_TEXTURE2D);
-	DX::ThrowIfFailed(m_d3dDevice->CreateDepthStencilView(depthStencil.Get(), &depthStencilViewDesc, m_depthStencilView.ReleaseAndGetAddressOf()));
-
-	PostResourceCreation();
-}
-
-void Editor::PostResourceCreation()
-{
-	InitializeImgui();
-	go->OnStart(m_d3dDevice.Get(), m_d3dContext.Get());
-	go1->OnStart(m_d3dDevice.Get(), m_d3dContext.Get());
-	go2->OnStart(m_d3dDevice.Get(), m_d3dContext.Get());
-	go3->OnStart(m_d3dDevice.Get(), m_d3dContext.Get());
-	go4->OnStart(m_d3dDevice.Get(), m_d3dContext.Get());
-	go5->OnStart(m_d3dDevice.Get(), m_d3dContext.Get());
-}
-
 void Editor::OnDeviceLost()
 {
 	// Cleaning up imgui
@@ -436,15 +272,32 @@ void Editor::OnDeviceLost()
 	ImGui::DestroyContext();
 	m_imguiActive = false;
 	
-	m_depthStencilView.Reset();
-	m_renderTargetView.Reset();
-	m_swapChain.Reset();
-	m_d3dContext.Reset();
-	m_d3dDevice.Reset();
+}
 
-	CreateDevice();
+void Editor::OnDeviceRestored()
+{
+	CreateDeviceDependentResources();
+	CreateWindowSizeDependentResources();
+}
 
-	CreateResources();
+void Editor::CreateDeviceDependentResources()
+{
+	auto device = m_deviceResources->GetD3DDevice();
+
+	device;
+}
+
+void Editor::CreateWindowSizeDependentResources()
+{
+	InitializeImgui();
+	auto context = m_deviceResources->GetD3DDeviceContext();
+	auto device = m_deviceResources->GetD3DDevice();
+	go->OnStart(device, context);
+	go1->OnStart(device, context);
+	go2->OnStart(device, context);
+	go3->OnStart(device, context);
+	go4->OnStart(device, context);
+	go5->OnStart(device, context);
 }
 
 void Editor::InitializeImgui()
@@ -468,7 +321,7 @@ void Editor::InitializeImgui()
 
 	// Setup Platform/Renderer backends
 	ImGui_ImplWin32_Init(m_window);
-	ImGui_ImplDX11_Init(m_d3dDevice.Get(), m_d3dContext.Get());
+	ImGui_ImplDX11_Init(m_deviceResources->GetD3DDevice(), m_deviceResources->GetD3DDeviceContext());
 
 	clear_color[0] = 0.45f;
 

@@ -100,6 +100,7 @@
     </Manifest>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="DeviceResources.h" />
     <ClInclude Include="EditorWindow.h" />
     <ClInclude Include="InspectorWindow.h" />
     <ClInclude Include="Libs\imgui\imgui_impl_dx11.h" />
@@ -110,6 +111,7 @@
     <ClInclude Include="Source\StepTimer.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="DeviceResources.cpp" />
     <ClCompile Include="EditorWindow.cpp" />
     <ClCompile Include="InspectorWindow.cpp" />
     <ClCompile Include="Libs\imgui\imgui_impl_dx11.cpp" />
