@@ -5,7 +5,8 @@
 using namespace DirectX;
 
 GameObject::GameObject() :
-	manipulationOperation(ImGuizmo::OPERATION::TRANSLATE)
+	manipulationOperation(ImGuizmo::OPERATION::TRANSLATE),
+	manipulationMode(ImGuizmo::MODE::LOCAL)
 {
 }
 
@@ -45,7 +46,7 @@ void GameObject::OnGizmo()
 	auto projection = camera->GetProjection();
 	ImGuizmo::SetDrawlist();
 	auto world = transform.GetWorldMatrix();
-	if (ImGuizmo::Manipulate((float*)&view, (float*)&projection, manipulationOperation, ImGuizmo::MODE::LOCAL, (float*)&(world)))
+	if (ImGuizmo::Manipulate((float*)&view, (float*)&projection, manipulationOperation, manipulationMode, (float*)&(world)))
 	{
 		transform.SetWorld(world);
 	}
@@ -56,12 +57,25 @@ void GameObject::OnInspector()
 	if (ImGui::CollapsingHeader("Transform", ImGuiTreeNodeFlags_DefaultOpen))
 	{
 
+		ImGui::Text("Manipulation Mode");
+		ImGui::RadioButton("World", (int*)&manipulationMode, ImGuizmo::MODE::WORLD);
+		ImGui::SameLine();
+		ImGui::RadioButton("Local", (int*)&manipulationMode, ImGuizmo::MODE::LOCAL);
+
+		ImGui::Separator();
+
+		// Manipulation operation selection
+		ImGui::Text("Manipulation Operation");
 		ImGui::RadioButton("Position", (int*)&manipulationOperation, ImGuizmo::OPERATION::TRANSLATE);
 		ImGui::SameLine();
 		ImGui::RadioButton("Rotation", (int*)&manipulationOperation, ImGuizmo::OPERATION::ROTATE);
 		ImGui::SameLine();
 		ImGui::RadioButton("Scale", (int*)&manipulationOperation, ImGuizmo::OPERATION::SCALE);
-
+		
+		ImGui::Separator();
+		
+		// Transform properties
+		ImGui::Text("Transform");
 		auto pos = transform.GetPosition();
 		if (ImGui::DragFloat3("Position", (float*)&(pos), 0.01f))
 			transform.SetPositionV(pos);

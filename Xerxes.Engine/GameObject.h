@@ -33,5 +33,6 @@ private:
 	std::unique_ptr<DirectX::GeometricPrimitive> m_model;
 
 	ImGuizmo::OPERATION			manipulationOperation;
+	ImGuizmo::MODE				manipulationMode;
 };
 
