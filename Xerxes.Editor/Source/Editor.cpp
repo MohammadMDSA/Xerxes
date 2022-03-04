@@ -458,11 +458,13 @@ void Editor::InitializeImgui()
 
 	ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 
-	//io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
-	//io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
-
 	// Setup Dear ImGui style
 	ImGui::StyleColorsDark();
+	ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 3.f);
+	ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 12.f);
+	ImGui::PushStyleVar(ImGuiStyleVar_ScrollbarRounding, 8.f);
+	ImGui::PushStyleVar(ImGuiStyleVar_GrabRounding, 6.f);
+	ImGui::PushStyleVar(ImGuiStyleVar_TabRounding, 3.f);
 
 	// Setup Platform/Renderer backends
 	ImGui_ImplWin32_Init(m_window);
