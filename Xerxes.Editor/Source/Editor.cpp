@@ -11,6 +11,8 @@
 #include "Libs/imgui/imgui_impl_dx11.h"
 #include "Libs/imgui/ImGuizmo.h"
 #include "Camera.h"
+#include <shobjidl.h> 
+#include "MeshRenderer.h"
 
 extern void ExitGame() noexcept;
 
@@ -53,6 +55,8 @@ void Editor::Initialize(HWND window, int width, int height)
 
 	this->sceneWindow = new SceneWindow(1);
 	this->inspectorWindow = new InspectorWindow(2);
+	this->sceneWindow->SetDimansion(100.f, 100.f);
+	this->sceneWindow->SetPosition(0.f, 0.f);
 	this->go = new GameObject();
 	go->transform.SetPosition(0, 0, 2);
 	this->go1 = new GameObject();
@@ -159,11 +163,13 @@ void Editor::Render()
 	inspectorWindow->BeginWindow();
 	go1->OnInspector();
 	inspectorWindow->EndWindow();
+	AppBarMenus();
 
 
 	ImGui::Begin("Camera Inspector", &showCameraInspector);
 	auto camera = sceneWindow->GetCamera();
 	camera->OnGui();
+
 	ImGui::End();
 
 	// 
@@ -175,18 +181,28 @@ void Editor::Render()
 	m_deviceResources->PIXBeginEvent(L"Render");
 	auto context = m_deviceResources->GetD3DDeviceContext();
 
-	go->OnRender(camera->GetView(), camera->GetProjection(), context);
-	go1->OnRender(camera->GetView(), camera->GetProjection(), context);
-	go2->OnRender(camera->GetView(), camera->GetProjection(), context);
-	go3->OnRender(camera->GetView(), camera->GetProjection(), context);
-	go4->OnRender(camera->GetView(), camera->GetProjection(), context);
-	go5->OnRender(camera->GetView(), camera->GetProjection(), context);
-	//go->OnRender(camera->GetView(), Matrix::CreatePerspectiveFieldOfView(XM_PI / 4.f,
-		//float(m_outputWidth) / float(m_outputHeight), 0.1f, 10.f));
-	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
-	// TODO: Add your rendering code here.
+	auto view = camera->GetView();
+	auto proj = camera->GetProjection();
+	for (auto gameObject : gameObjects)
+	{
+		gameObject->OnRender(view, proj, context);
+	}
+	go->OnRender(view, proj, context);
+	go1->OnRender(view, proj, context);
+	go2->OnRender(view, proj, context);
+	go3->OnRender(view, proj, context);
+	go4->OnRender(view, proj, context);
+	go5->OnRender(view, proj, context);
+
 
 	m_deviceResources->PIXEndEvent();
+
+	/*if (ImGui::GetIO().ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+	{
+		ImGui::UpdatePlatformWindows();
+		ImGui::RenderPlatformWindowsDefault();
+	}*/
+	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 	m_deviceResources->Present();
 }
 
@@ -271,7 +287,7 @@ void Editor::OnDeviceLost()
 	ImGui_ImplWin32_Shutdown();
 	ImGui::DestroyContext();
 	m_imguiActive = false;
-	
+
 }
 
 void Editor::OnDeviceRestored()
@@ -292,6 +308,9 @@ void Editor::CreateWindowSizeDependentResources()
 	InitializeImgui();
 	auto context = m_deviceResources->GetD3DDeviceContext();
 	auto device = m_deviceResources->GetD3DDevice();
+	RootManager::GetInstance()->GetResourceManager()->SetDevice(device);
+	RootManager::GetInstance()->GetResourceManager()->SetDeviceContext(context);
+
 	go->OnStart(device, context);
 	go1->OnStart(device, context);
 	go2->OnStart(device, context);
@@ -308,6 +327,7 @@ void Editor::InitializeImgui()
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
+	//io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
 
 	ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 
@@ -329,4 +349,64 @@ void Editor::InitializeImgui()
 
 	clear_color[2] = 0.60f;
 	m_imguiActive = true;
+}
+
+void Editor::AppBarMenus()
+{
+	if (ImGui::BeginMainMenuBar())
+	{
+		if (ImGui::BeginMenu("File"))
+		{
+			if (ImGui::MenuItem("New", "CTRL+N"))
+			{
+				AddItem();
+			}
+			ImGui::EndMenu();
+		}
+		ImGui::EndMainMenuBar();
+	}
+}
+
+void Editor::AddItem()
+{
+	IFileOpenDialog* pFileOpen;
+
+	// Create the FileOpenDialog object.
+	HRESULT hr = CoCreateInstance(CLSID_FileOpenDialog, NULL, CLSCTX_ALL,
+		IID_IFileOpenDialog, reinterpret_cast<void**>(&pFileOpen));
+
+	if (SUCCEEDED(hr))
+	{
+		// Show the Open dialog box.
+		hr = pFileOpen->Show(NULL);
+
+		// Get the file name from the dialog box.
+		if (SUCCEEDED(hr))
+		{
+			IShellItem* pItem;
+			hr = pFileOpen->GetResult(&pItem);
+			if (SUCCEEDED(hr))
+			{
+				PWSTR pszFilePath;
+				hr = pItem->GetDisplayName(SIGDN_FILESYSPATH, &pszFilePath);
+
+				// Display the file name to the user.
+				if (SUCCEEDED(hr))
+				{
+					auto goo = new GameObject();
+					int modelId = rootManager->GetResourceManager()->CreateModel(pszFilePath);
+					auto mesh = new MeshRenderer();
+					mesh->SetModelResourceId(modelId);
+					mesh->address = pszFilePath;
+					goo->AddComponent(mesh);
+					CoTaskMemFree(pszFilePath);
+					goo->OnStart(m_deviceResources->GetD3DDevice(), m_deviceResources->GetD3DDeviceContext());
+					gameObjects.push_back(goo);
+				}
+				pItem->Release();
+			}
+		}
+		pFileOpen->Release();
+	}
+	CoUninitialize();
 }

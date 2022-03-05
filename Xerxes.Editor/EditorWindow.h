@@ -49,6 +49,7 @@ protected:
 	float					positionY;
 	bool					isOpen;
 	bool					hasFocus;
+	bool					isHovered;
 
 	bool					shouldUpdatePosition;
 	bool					shouldUpdateDimansion;

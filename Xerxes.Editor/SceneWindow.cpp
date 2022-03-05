@@ -9,7 +9,8 @@ using namespace DirectX::SimpleMath;
 SceneWindow::SceneWindow(int id) :
 	EditorWindow(id, "Scene"),
 	cameraPitch(XM_2PI / 4.f),
-	cameraYaw(0.f)
+	cameraYaw(0.f),
+	moveingCamera(false)
 {
 
 	backgroundAlpha = 0.f;
@@ -31,12 +32,13 @@ void SceneWindow::OnGUI()
 
 int SceneWindow::GetCustomWindowFlags()
 {
-	return ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoDocking;
+	return ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoDecoration;
+	return 0;
 }
 
 void SceneWindow::Update(float deltaTime)
 {
-	if (!hasFocus)
+	if (!isHovered && !moveingCamera)
 		return;
 	auto input = RootManager::GetInstance()->GetInputManager();
 
@@ -52,6 +54,7 @@ void SceneWindow::Update(float deltaTime)
 	// Handle panngin
 	if (input->GetMiddleButton() && input->GetMouseMode() == Mouse::MODE_RELATIVE)
 	{
+		moveingCamera = true;
 		auto preRot = camera->GetRotation();
 		auto pos = camera->GetPosition();
 		auto matRot = Matrix::CreateFromQuaternion(preRot);
@@ -72,7 +75,7 @@ void SceneWindow::Update(float deltaTime)
 	// Handle right click self rotation and movement
 	if (input->GetRightButton() && input->GetMouseMode() == Mouse::MODE_RELATIVE)
 	{
-
+		moveingCamera = true;
 		auto cameraYawDelta = ROTATION_GAIN * -input->GetMouseX();
 		auto cameraPitchDelta = ROTATION_GAIN * -input->GetMouseY();
 
@@ -114,6 +117,7 @@ void SceneWindow::Update(float deltaTime)
 		camera->SetPositionV(direction * deltaTime * MOVEMENT_GAIN + pos);
 		return;
 	}
+	moveingCamera = false;
 	if (!input->GetMiddleButton() && !input->GetRightButton())
 		input->SetMouseMode(Mouse::MODE_ABSOLUTE);
 }

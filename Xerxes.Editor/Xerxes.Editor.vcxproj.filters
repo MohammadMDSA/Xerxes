@@ -96,6 +96,30 @@
     <Image Include="directx.ico">
       <Filter>Assets</Filter>
     </Image>
+    <Image Include="assets\head_diff.dds">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="assets\head_norm.dds">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="assets\jacket_diff.dds">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="assets\jacket_norm.dds">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="assets\pants_diff.dds">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="assets\pants_norm.dds">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="assets\upbody_norm.dds">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="assets\upBody_diff.dds">
+      <Filter>Assets</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <Manifest Include="settings.manifest">
@@ -104,10 +128,11 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <MeshContentTask Include="Zombie Idle.fbx">
+    <None Include="assets\soldier.sdkmesh_anim">
       <Filter>Assets</Filter>
-    </MeshContentTask>
+    </None>
+    <None Include="assets\soldier.sdkmesh">
+      <Filter>Assets</Filter>
+    </None>
   </ItemGroup>
 </Project>

@@ -29,6 +29,11 @@ InputManager* RootManager::GetInputManager()
 	return inputManager.get();
 }
 
+ResourceManager* RootManager::GetResourceManager()
+{
+	return resourceManager.get();
+}
+
 void RootManager::Update()
 {
 	inputManager->Update();
@@ -39,6 +44,7 @@ RootManager::RootManager()
 	instance = (RootManager*)this;
 	cameraManager = shared_ptr<CameraManager>(new CameraManager());
 	inputManager = shared_ptr<InputManager>(new InputManager());
+	resourceManager = shared_ptr<ResourceManager>(new ResourceManager());
 }
 
 RootManager::~RootManager()

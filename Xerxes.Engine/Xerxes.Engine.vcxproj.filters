@@ -37,6 +37,12 @@
     <Filter Include="Libs\ImGuizmo">
       <UniqueIdentifier>{add183bc-7b51-4179-9fde-1cad2e4c9d99}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Public\GameObjectComponent">
+      <UniqueIdentifier>{41ebc186-8e58-4e0d-bc8d-2cb797df67a4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Private\GameObjectComponent">
+      <UniqueIdentifier>{7015241e-7977-443e-a1bb-17b420d3468d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -99,6 +105,15 @@
     <ClInclude Include="Libs\imgui\GraphEditor.h">
       <Filter>Libs\ImGuizmo</Filter>
     </ClInclude>
+    <ClInclude Include="ResourceManager.h">
+      <Filter>Source\Public\SubsystemManager</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObjectComponent.h">
+      <Filter>Source\Public\GameObjectComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="MeshRenderer.h">
+      <Filter>Source\Public\GameObjectComponent</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Xerxes.Engine.cpp">
@@ -154,6 +169,15 @@
     </ClCompile>
     <ClCompile Include="Libs\imgui\GraphEditor.cpp">
       <Filter>Libs\ImGuizmo</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceManager.cpp">
+      <Filter>Source\Private\SubsystemManager</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObjectComponent.cpp">
+      <Filter>Source\Private\GameObjectComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="MeshRenderer.cpp">
+      <Filter>Source\Private\GameObjectComponent</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

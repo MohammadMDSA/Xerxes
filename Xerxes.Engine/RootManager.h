@@ -3,6 +3,7 @@
 #include <memory>
 #include "CameraManager.h"
 #include "InputManager.h"
+#include "ResourceManager.h"
 
 class RootManager
 {
@@ -12,6 +13,7 @@ public:
 
 	CameraManager*							GetCameraManager();
 	InputManager*							GetInputManager();
+	ResourceManager*						GetResourceManager();
 
 	void									Update();
 
@@ -21,6 +23,7 @@ private:
 
 	std::shared_ptr<CameraManager>			cameraManager;
 	std::shared_ptr<InputManager>			inputManager;
+	std::shared_ptr<ResourceManager>		resourceManager;
 	
 	RootManager(RootManager const&) {};
 	RootManager&							operator=(RootManager const&) {};

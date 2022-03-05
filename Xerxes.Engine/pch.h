@@ -9,6 +9,7 @@
 
 // add headers that you want to pre-compile here
 #include "framework.h"
+#include <memory>
 
 #include "BufferHelpers.h"
 #include "CommonStates.h"
@@ -29,7 +30,7 @@
 #include "SpriteFont.h"
 #include "VertexTypes.h"
 #include "WICTextureLoader.h"
-
+#include "wchar.h"
 namespace DX
 {
     inline void ThrowIfFailed(HRESULT hr)

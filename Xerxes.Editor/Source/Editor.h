@@ -60,6 +60,8 @@ private:
     void CreateWindowSizeDependentResources();
 
     void InitializeImgui();
+    void AppBarMenus();
+    void AddItem();
 
     // Device resources.
     HWND                                            m_window;
@@ -84,6 +86,9 @@ private:
 
     SceneWindow*                                    sceneWindow;
     InspectorWindow*                                inspectorWindow;
+
+    std::vector<GameObject*>                        gameObjects;
+
     DirectX::SimpleMath::Matrix m_proj;
     GameObject* go;
     GameObject* go1;

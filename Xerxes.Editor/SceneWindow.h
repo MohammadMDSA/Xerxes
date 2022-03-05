@@ -26,5 +26,7 @@ private:
 	const float				PAN_GAIN = 6.f;
 	float					cameraYaw;
 	float					cameraPitch;
+
+	bool					moveingCamera;
 };
 

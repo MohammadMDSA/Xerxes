@@ -79,6 +79,7 @@ void EditorWindow::BeginWindow()
 		width = ImGui::GetWindowWidth();
 		height = ImGui::GetWindowHeight();
 		hasFocus = ImGui::IsWindowFocused();
+		isHovered = ImGui::IsWindowHovered();
 	}
 	OnGUI();
 }
