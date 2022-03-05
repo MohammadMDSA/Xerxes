@@ -1,8 +1,11 @@
 #include "pch.h"
 #include "GameObject.h"
 #include "RootManager.h"
+#include <filesystem>
+#include <PathCch.h>
 
 using namespace DirectX;
+using namespace std;
 
 GameObject::GameObject() :
 	manipulationOperation(ImGuizmo::OPERATION::TRANSLATE),
@@ -12,31 +15,45 @@ GameObject::GameObject() :
 
 void GameObject::OnStart(ID3D11Device1* device, ID3D11DeviceContext1* context)
 {
-	m_states = std::make_unique<CommonStates>(device);
-
-	m_fxFactory = std::make_unique<EffectFactory>(device);
-
+	for (auto component : components)
+	{
+		component->OnStart(device, context);
+	}
 	m_shape = DirectX::GeometricPrimitive::CreateCube(context);
-
 }
 
 void GameObject::OnAwake()
 {
+	for (auto component : components)
+	{
+		component->OnAwake();
+	}
 }
 
-void GameObject::OnUpdate()
+void GameObject::OnUpdate(float deltaTime)
 {
-
+	for (auto component : components)
+	{
+		component->OnUpdate(deltaTime);
+	}
 }
 
 void GameObject::OnRender(DirectX::SimpleMath::Matrix view, DirectX::SimpleMath::Matrix proj, ID3D11DeviceContext1* context)
 {
-	//m_shape->Draw(context, *m_states, transform.GetWorldMatrix(), view, proj);
+	for (auto component : components)
+	{
+		component->OnRender(view, proj, context);
+	}
 	m_shape->Draw(transform.GetWorldMatrix(), view, proj);
 }
 
 void GameObject::OnDestroy()
 {
+	for (auto component : components)
+	{
+		component->OnDestroy();
+	}
+
 }
 
 void GameObject::OnGizmo()
@@ -49,6 +66,10 @@ void GameObject::OnGizmo()
 	if (ImGuizmo::Manipulate((float*)&view, (float*)&projection, manipulationOperation, manipulationMode, (float*)&(world)))
 	{
 		transform.SetWorld(world);
+	}
+	for (auto component : components)
+	{
+		component->OnGizmo();
 	}
 }
 
@@ -71,9 +92,9 @@ void GameObject::OnInspector()
 		ImGui::RadioButton("Rotation", (int*)&manipulationOperation, ImGuizmo::OPERATION::ROTATE);
 		ImGui::SameLine();
 		ImGui::RadioButton("Scale", (int*)&manipulationOperation, ImGuizmo::OPERATION::SCALE);
-		
+
 		ImGui::Separator();
-		
+
 		// Transform properties
 		ImGui::Text("Transform");
 		auto pos = transform.GetPosition();
@@ -81,7 +102,7 @@ void GameObject::OnInspector()
 			transform.SetPositionV(pos);
 
 		float rotations[3] = { transform.GetRotationX(), transform.GetRotationY(), transform.GetRotationZ() };
-	
+
 		if (ImGui::DragFloat3("Rotation", (float*)&rotations, 0.1f))
 		{
 			transform.SetRotationX(rotations[0]);
@@ -93,4 +114,32 @@ void GameObject::OnInspector()
 		if (ImGui::DragFloat3("Scale", (float*)&(scl), 0.01f))
 			transform.SetScaleV(scl);
 	}
+
+	for (auto component : components)
+	{
+		component->OnInspector();
+	}
+}
+
+void GameObject::AddComponent(GameObjectComponent* component)
+{
+	components.push_back(std::shared_ptr<GameObjectComponent>(component));
+	component->gameObject = std::shared_ptr<GameObject>(this);
+}
+
+void GameObject::DeleteComponent(GameObjectComponent* component)
+{
+	auto index = -1;
+	for (int i = 0; i < components.size(); i++)
+	{
+		if (component == components.at(i).get())
+		{
+			index = i;
+			break;
+		}
+	}
+	if (index == -1)
+		return;
+	component->gameObject = nullptr;
+	components.erase(components.begin() + index);
 }
