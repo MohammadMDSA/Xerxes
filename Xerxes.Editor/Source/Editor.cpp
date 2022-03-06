@@ -55,6 +55,7 @@ void Editor::Initialize(HWND window, int width, int height)
 
 	this->sceneWindow = new SceneWindow(1);
 	this->inspectorWindow = new InspectorWindow(2);
+	this->hierarchyWindow = new HierarchyWindow(3);
 	this->sceneWindow->SetDimansion(100.f, 100.f);
 	this->sceneWindow->SetPosition(0.f, 0.f);
 	this->go = new GameObject();
@@ -112,9 +113,6 @@ void Editor::Update(DX::StepTimer const& timer)
 {
 	float elapsedTime = float(timer.GetElapsedSeconds());
 
-	m_proj = Matrix::CreatePerspectiveFieldOfView(XM_PI / 4.f,
-		float(sceneWindow->GetWidth()) / float(sceneWindow->GetHeight()), 0.1f, 10.f);
-
 	rootManager->Update(elapsedTime);
 	sceneWindow->Update(elapsedTime);
 	inspectorWindow->Update(elapsedTime);
@@ -130,9 +128,6 @@ void Editor::Update(DX::StepTimer const& timer)
 	}
 	sceneWindow->SetPosition(0, 0);
 	sceneWindow->SetDimansion(sceneWidth, sceneHeight);
-
-	for (auto obj : gameObjects)
-		obj->OnUpdate(elapsedTime);
 
 	elapsedTime;
 }
@@ -156,22 +151,21 @@ void Editor::Render()
 	// 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
 	if (showDemo)
 		ImGui::ShowDemoWindow(&showDemo);
-
-	auto activeObject = gameObjects.size() > 0 ? gameObjects.back() : nullptr;
+	auto sceneManager = rootManager->GetSceneManager();
 
 	sceneWindow->BeginWindow();
 	ImGuizmo::SetRect(0, 0, sceneWidth, sceneHeight);
-
-	if (activeObject)
-		activeObject->OnGizmo();
+	sceneManager->OnGizmo();
 
 	sceneWindow->EndWindow();
 	inspectorWindow->SetPosition(m_outputWidth - inspectorWindow->GetWidth(), 0.f);
 	inspectorWindow->SetDimansion(inspectorWindow->GetWidth(), m_outputHeight);
 	inspectorWindow->BeginWindow();
-	if (activeObject)
-		activeObject->OnInspector();
+	sceneManager->OnInspector();
 	inspectorWindow->EndWindow();
+	hierarchyWindow->BeginWindow();
+	hierarchyWindow->EndWindow();
+
 	AppBarMenus();
 
 
@@ -192,10 +186,9 @@ void Editor::Render()
 
 	auto view = camera->GetView();
 	auto proj = camera->GetProjection();
-	for (auto gameObject : gameObjects)
-	{
-		gameObject->OnRender(view, proj, context);
-	}
+	
+	sceneManager->OnRender(view, proj);
+
 	go->OnRender(view, proj, context);
 	go1->OnRender(view, proj, context);
 	go2->OnRender(view, proj, context);
@@ -374,7 +367,7 @@ void Editor::AppBarMenus()
 			{
 				auto obj = new GameObject();
 				obj->OnStart(m_deviceResources->GetD3DDevice(), m_deviceResources->GetD3DDeviceContext());
-				gameObjects.push_back(obj);
+				rootManager->GetSceneManager()->AddGameObject(obj);
 			}
 			ImGui::EndMenu();
 		}
@@ -414,7 +407,7 @@ void Editor::AddItem()
 					goo->AddComponent(mesh);
 					CoTaskMemFree(pszFilePath);
 					goo->OnStart(m_deviceResources->GetD3DDevice(), m_deviceResources->GetD3DDeviceContext());
-					gameObjects.push_back(goo);
+					rootManager->GetSceneManager()->AddGameObject(goo);
 				}
 				pItem->Release();
 			}

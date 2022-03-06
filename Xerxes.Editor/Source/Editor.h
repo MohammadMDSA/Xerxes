@@ -10,6 +10,7 @@
 #include "InspectorWindow.h"
 #include "RootManager.h"
 #include "DeviceResources.h"
+#include "HierarchyWindow.h"
 
 //class EditorWindow;
 
@@ -86,10 +87,8 @@ private:
 
     SceneWindow*                                    sceneWindow;
     InspectorWindow*                                inspectorWindow;
+    HierarchyWindow*                                hierarchyWindow;
 
-    std::vector<GameObject*>                        gameObjects;
-
-    DirectX::SimpleMath::Matrix m_proj;
     GameObject* go;
     GameObject* go1;
     GameObject* go2;

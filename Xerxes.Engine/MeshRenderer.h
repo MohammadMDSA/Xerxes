@@ -9,8 +9,8 @@ public:
 	MeshRenderer();
 
 	// Inherited via GameObjectComponent
-	virtual void OnRender(DirectX::SimpleMath::Matrix view, DirectX::SimpleMath::Matrix proj, ID3D11DeviceContext1* context) override;
-	virtual void OnStart(ID3D11Device1* device, ID3D11DeviceContext1* context) override;
+	virtual void OnRender(DirectX::SimpleMath::Matrix view, DirectX::SimpleMath::Matrix proj, ID3D11DeviceContext* context) override;
+	virtual void OnStart(ID3D11Device* device, ID3D11DeviceContext* context) override;
 	virtual void OnAwake() override;
 	virtual void OnUpdate(float deltaTime) override;
 	virtual void OnGizmo() override;

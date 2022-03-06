@@ -43,18 +43,18 @@
     <Filter Include="Source\Private\GameObjectComponent">
       <UniqueIdentifier>{7015241e-7977-443e-a1bb-17b420d3468d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Public\Core">
+      <UniqueIdentifier>{bd230c13-db65-465e-af70-44d0fd0cb7ed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Private\Core">
+      <UniqueIdentifier>{ec6947ef-608d-45f7-913f-46fcd6281633}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
       <Filter>Source\Public</Filter>
     </ClInclude>
     <ClInclude Include="pch.h">
-      <Filter>Source\Public</Filter>
-    </ClInclude>
-    <ClInclude Include="GameObject.h">
-      <Filter>Source\Public</Filter>
-    </ClInclude>
-    <ClInclude Include="Transform.h">
       <Filter>Source\Public</Filter>
     </ClInclude>
     <ClInclude Include="Libs\imgui\imconfig.h">
@@ -74,9 +74,6 @@
     </ClInclude>
     <ClInclude Include="Libs\imgui\imstb_truetype.h">
       <Filter>Libs\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="Camera.h">
-      <Filter>Source\Public</Filter>
     </ClInclude>
     <ClInclude Include="CameraManager.h">
       <Filter>Source\Public\SubsystemManager</Filter>
@@ -123,18 +120,21 @@
     <ClInclude Include="SceneManager.h">
       <Filter>Source\Public\SubsystemManager</Filter>
     </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Source\Public\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject.h">
+      <Filter>Source\Public\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Transform.h">
+      <Filter>Source\Public\Core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Xerxes.Engine.cpp">
       <Filter>Source\Private</Filter>
     </ClCompile>
     <ClCompile Include="pch.cpp">
-      <Filter>Source\Private</Filter>
-    </ClCompile>
-    <ClCompile Include="GameObject.cpp">
-      <Filter>Source\Private</Filter>
-    </ClCompile>
-    <ClCompile Include="Transform.cpp">
       <Filter>Source\Private</Filter>
     </ClCompile>
     <ClCompile Include="Libs\imgui\imgui.cpp">
@@ -151,9 +151,6 @@
     </ClCompile>
     <ClCompile Include="Libs\imgui\imgui_widgets.cpp">
       <Filter>Libs\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="Camera.cpp">
-      <Filter>Source\Private</Filter>
     </ClCompile>
     <ClCompile Include="CameraManager.cpp">
       <Filter>Source\Private\SubsystemManager</Filter>
@@ -193,6 +190,15 @@
     </ClCompile>
     <ClCompile Include="SceneManager.cpp">
       <Filter>Source\Private\SubsystemManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Source\Private\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject.cpp">
+      <Filter>Source\Private\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Transform.cpp">
+      <Filter>Source\Private\Core</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -9,8 +9,8 @@ class GameObject;
 class GameObjectComponent
 {
 public:
-	virtual void OnRender(DirectX::SimpleMath::Matrix view, DirectX::SimpleMath::Matrix proj, ID3D11DeviceContext1* context) = 0;
-	virtual void OnStart(ID3D11Device1* device, ID3D11DeviceContext1* context) = 0;
+	virtual void OnRender(DirectX::SimpleMath::Matrix view, DirectX::SimpleMath::Matrix proj, ID3D11DeviceContext* context) = 0;
+	virtual void OnStart(ID3D11Device* device, ID3D11DeviceContext* context) = 0;
 	virtual void OnAwake() = 0;
 	virtual void OnUpdate(float deltaTime) = 0;
 	virtual void OnGizmo() = 0;

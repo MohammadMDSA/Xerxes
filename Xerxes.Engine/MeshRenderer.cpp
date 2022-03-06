@@ -12,13 +12,13 @@ MeshRenderer::MeshRenderer() :
 {
 }
 
-void MeshRenderer::OnRender(DirectX::SimpleMath::Matrix view, DirectX::SimpleMath::Matrix proj, ID3D11DeviceContext1* context)
+void MeshRenderer::OnRender(DirectX::SimpleMath::Matrix view, DirectX::SimpleMath::Matrix proj, ID3D11DeviceContext* context)
 {
 	if (resource)
 		resource->resource->Draw(context, *m_states, gameObject->transform.GetWorldMatrix(), view, proj);
 }
 
-void MeshRenderer::OnStart(ID3D11Device1* device, ID3D11DeviceContext1* context)
+void MeshRenderer::OnStart(ID3D11Device* device, ID3D11DeviceContext* context)
 {
 	m_states = std::make_unique<CommonStates>(device);
 }

@@ -104,6 +104,7 @@
   <ItemGroup>
     <ClInclude Include="DeviceResources.h" />
     <ClInclude Include="EditorWindow.h" />
+    <ClInclude Include="HierarchyWindow.h" />
     <ClInclude Include="InspectorWindow.h" />
     <ClInclude Include="Libs\imgui\imgui_impl_dx11.h" />
     <ClInclude Include="Libs\imgui\imgui_impl_win32.h" />
@@ -115,6 +116,7 @@
   <ItemGroup>
     <ClCompile Include="DeviceResources.cpp" />
     <ClCompile Include="EditorWindow.cpp" />
+    <ClCompile Include="HierarchyWindow.cpp" />
     <ClCompile Include="InspectorWindow.cpp" />
     <ClCompile Include="Libs\imgui\imgui_impl_dx11.cpp" />
     <ClCompile Include="Libs\imgui\imgui_impl_win32.cpp" />
