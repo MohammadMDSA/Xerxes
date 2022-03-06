@@ -19,8 +19,6 @@ public:
 	virtual std::string GetName() override;
 
 	void SetModelResourceId(int id);
-
-	PWSTR					address;
 private:
 
 	std::unique_ptr<DirectX::CommonStates> m_states;

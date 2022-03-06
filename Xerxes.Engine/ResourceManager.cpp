@@ -38,6 +38,15 @@ GameResource<DirectX::Model>* ResourceManager::GetModel(int id)
 	return models[id];
 }
 
+std::vector<GameResource<DirectX::Model>*> ResourceManager::GetAllModels()
+{
+	std::vector<GameResource<DirectX::Model>*> result;
+	for (auto& it : models) {
+		result.push_back(it.second);
+	}
+	return result;
+}
+
 int ResourceManager::CreateSDKMESHModel(boost::filesystem::path path)
 {
 

@@ -7,7 +7,6 @@ using namespace DirectX;
 using namespace std;
 
 MeshRenderer::MeshRenderer() :
-	address(nullptr),
 	modelResourceId(-1),
 	resource(nullptr)
 {
@@ -15,8 +14,8 @@ MeshRenderer::MeshRenderer() :
 
 void MeshRenderer::OnRender(DirectX::SimpleMath::Matrix view, DirectX::SimpleMath::Matrix proj, ID3D11DeviceContext1* context)
 {
-	if(resource)
-	resource->resource->Draw(context, *m_states, gameObject->transform.GetWorldMatrix(), view, proj);
+	if (resource)
+		resource->resource->Draw(context, *m_states, gameObject->transform.GetWorldMatrix(), view, proj);
 }
 
 void MeshRenderer::OnStart(ID3D11Device1* device, ID3D11DeviceContext1* context)
@@ -30,7 +29,6 @@ void MeshRenderer::OnAwake()
 
 void MeshRenderer::OnUpdate(float deltaTime)
 {
-	resource = RootManager::GetInstance()->GetResourceManager()->GetModel(modelResourceId);
 }
 
 void MeshRenderer::OnGizmo()
@@ -39,6 +37,27 @@ void MeshRenderer::OnGizmo()
 
 void MeshRenderer::OnInspector()
 {
+	std::string resourceName = resource ? resource->name : "[select model]";
+	ImGui::Text("Model: ");
+	ImGui::SameLine();
+	if (ImGui::Button(resourceName.c_str()))
+		ImGui::OpenPopup("MeshRendererModelSelection");
+
+	if (ImGui::BeginPopup("MeshRendererModelSelection"))
+	{
+		ImGui::Text("Models");
+		auto models = RootManager::GetInstance()->GetResourceManager()->GetAllModels();
+		ImGui::Separator();
+		for (auto it : models)
+		{
+			if (ImGui::Selectable(it->name.c_str()))
+			{
+				modelResourceId = it->id;
+				resource = it;
+			}
+		}
+		ImGui::EndPopup();
+	}
 }
 
 void MeshRenderer::OnDestroy()
@@ -53,4 +72,6 @@ std::string MeshRenderer::GetName()
 void MeshRenderer::SetModelResourceId(int id)
 {
 	this->modelResourceId = id;
+
+	resource = RootManager::GetInstance()->GetResourceManager()->GetModel(modelResourceId);
 }

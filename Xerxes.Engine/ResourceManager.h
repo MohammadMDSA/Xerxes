@@ -26,6 +26,7 @@ public:
 	void SetDevice(ID3D11Device* device);
 
 	GameResource<DirectX::Model>* GetModel(int id);
+	std::vector<GameResource<DirectX::Model>*> GetAllModels();
 
 	// Inherited via IManager
 	virtual void OnInit() override;
