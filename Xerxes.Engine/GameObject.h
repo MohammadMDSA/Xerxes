@@ -29,6 +29,9 @@ public:
 	void					AddComponent(GameObjectComponent* component);
 	void					DeleteComponent(GameObjectComponent* component);
 
+	void					SetName(std::string name);
+	std::string				GetName();
+
 private:
 
 	std::vector<std::shared_ptr<GameObjectComponent>>	components;
@@ -37,5 +40,6 @@ private:
 
 	ImGuizmo::OPERATION			manipulationOperation;
 	ImGuizmo::MODE				manipulationMode;
+	std::string					name;
 };
 

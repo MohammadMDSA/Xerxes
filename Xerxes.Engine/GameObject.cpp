@@ -3,6 +3,7 @@
 #include "RootManager.h"
 #include <filesystem>
 #include <PathCch.h>
+#include "Libs/imgui/imgui_stdlib.h"
 
 using namespace DirectX;
 using namespace std;
@@ -75,6 +76,8 @@ void GameObject::OnGizmo()
 
 void GameObject::OnInspector()
 {
+	ImGui::InputText("Name", &name);
+
 	if (ImGui::CollapsingHeader("Transform", ImGuiTreeNodeFlags_DefaultOpen))
 	{
 
@@ -148,4 +151,14 @@ void GameObject::DeleteComponent(GameObjectComponent* component)
 		return;
 	component->gameObject = nullptr;
 	components.erase(components.begin() + index);
+}
+
+void GameObject::SetName(std::string name)
+{
+	this->name = name;
+}
+
+std::string GameObject::GetName()
+{
+	return this->name;
 }
