@@ -1,6 +1,7 @@
 #pragma once
 
 #include <memory>
+#include <string>
 #include "GameObject.h"
 
 class GameObject;
@@ -15,6 +16,7 @@ public:
 	virtual void OnGizmo() = 0;
 	virtual void OnInspector() = 0;
 	virtual void OnDestroy() = 0;
+	virtual std::string GetName() = 0;
 protected:
 	friend class GameObject;
 	std::shared_ptr<GameObject> gameObject;

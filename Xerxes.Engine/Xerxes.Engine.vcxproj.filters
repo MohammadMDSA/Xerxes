@@ -114,6 +114,9 @@
     <ClInclude Include="MeshRenderer.h">
       <Filter>Source\Public\GameObjectComponent</Filter>
     </ClInclude>
+    <ClInclude Include="IManager.h">
+      <Filter>Source\Public\SubsystemManager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Xerxes.Engine.cpp">

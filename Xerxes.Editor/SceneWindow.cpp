@@ -8,8 +8,6 @@ using namespace DirectX::SimpleMath;
 
 SceneWindow::SceneWindow(int id) :
 	EditorWindow(id, "Scene"),
-	cameraPitch(XM_2PI / 4.f),
-	cameraYaw(0.f),
 	moveingCamera(false)
 {
 
@@ -41,14 +39,42 @@ void SceneWindow::Update(float deltaTime)
 	if (!isHovered && !moveingCamera)
 		return;
 	auto input = RootManager::GetInstance()->GetInputManager();
+	auto kb = input->GetKeyboard()->GetState();
 
-	if (input->GetRightButton() || input->GetMiddleButton())
+	if (input->GetRightButton() || input->GetMiddleButton() || (input->GetLeftButton() && kb.LeftAlt))
 	{
 		if (input->GetMouseMode() == Mouse::MODE_ABSOLUTE)
 		{
 			input->SetMouseMode(Mouse::MODE_RELATIVE);
 			return;
 		}
+	}
+
+	if (input->GetLeftButton() && kb.LeftAlt && input->GetMouseMode() == Mouse::MODE_RELATIVE)
+	{
+		moveingCamera = true;
+
+		auto cameraYawDelta = ROTATION_AROUND_ROTATION_GAIN * -input->GetMouseX();
+		auto cameraPitchDelta = ROTATION_AROUND_ROTATION_GAIN * -input->GetMouseY();
+
+		auto preRot = camera->GetRotation();
+		auto rot = Matrix::CreateFromQuaternion(preRot);
+		rot = DirectX::XMMatrixMultiply(rot, Matrix::CreateFromAxisAngle(rot.Right(), DirectX::XMConvertToRadians(cameraPitchDelta)));
+		rot *= Matrix::CreateFromAxisAngle(Vector3::Up, DirectX::XMConvertToRadians(cameraYawDelta));
+
+		auto pos = camera->GetPosition();
+		auto world = camera->GetWorld();
+
+		auto forward = camera->GetForward();
+		auto lookAtDir = Vector3(forward.x * ROTATION_AROUND_FORWARD, forward.y * ROTATION_AROUND_FORWARD, forward.z * ROTATION_AROUND_FORWARD);
+		auto lookAt = lookAtDir + pos;
+
+		world *= Matrix::CreateTranslation(-lookAt);
+		world *= rot;
+		world *= Matrix::CreateTranslation(lookAt);
+		camera->SetWorld(world);
+
+		return;
 	}
 
 	// Handle panngin
@@ -86,9 +112,6 @@ void SceneWindow::Update(float deltaTime)
 		rot *= Matrix::CreateFromAxisAngle(Vector3::Up, DirectX::XMConvertToRadians(cameraYawDelta));
 		camera->SetRotation(Quaternion::CreateFromRotationMatrix(rot), false);
 
-		cameraYaw += cameraYawDelta;
-		cameraPitch += cameraPitchDelta;
-
 		// Handle ghost movement
 		auto pos = camera->GetPosition();
 		Vector3 movement;
@@ -118,6 +141,5 @@ void SceneWindow::Update(float deltaTime)
 		return;
 	}
 	moveingCamera = false;
-	if (!input->GetMiddleButton() && !input->GetRightButton())
-		input->SetMouseMode(Mouse::MODE_ABSOLUTE);
+	input->SetMouseMode(Mouse::MODE_ABSOLUTE);
 }

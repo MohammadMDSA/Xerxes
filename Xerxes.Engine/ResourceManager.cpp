@@ -33,7 +33,7 @@ void ResourceManager::SetDevice(ID3D11Device* device)
 	this->device = device;
 }
 
-GameResourceModel* ResourceManager::GetModel(int id)
+GameResource<DirectX::Model>* ResourceManager::GetModel(int id)
 {
 	return models[id];
 }
@@ -41,14 +41,14 @@ GameResourceModel* ResourceManager::GetModel(int id)
 int ResourceManager::CreateSDKMESHModel(boost::filesystem::path path)
 {
 
-	auto effectResource = new GameResourceEffect();
+	auto effectResource = new GameResource<IEffectFactory>();
 	effectResource->id = GetNewId();
 	effectResource->name = std::string("effect_") + path.filename().string();
 	effectResource->isLoaded = true;
 	effectResource->path = path;
 	effectResource->resource = std::make_unique<EffectFactory>(device);
 	((EffectFactory*)effectResource->resource.get())->SetDirectory(path.parent_path().wstring().c_str());
-	auto modelResource = new GameResourceModel();
+	auto modelResource = new GameResource<Model>();
 	modelResource->id = GetNewId();
 	modelResource->name = std::string("model_") + path.filename().string();
 	modelResource->isLoaded = true;
@@ -67,4 +67,21 @@ int ResourceManager::CreateSDKMESHModel(boost::filesystem::path path)
 int ResourceManager::GetNewId()
 {
 	return lastId++;
+}
+
+void ResourceManager::OnInit()
+{
+}
+
+void ResourceManager::OnShutdown()
+{
+	for (auto& it : models) {
+		delete it.second;
+	}
+	models.clear();
+	for (auto& it : effectFactories)
+	{
+		delete it.second;
+	}
+	effectFactories.clear();
 }

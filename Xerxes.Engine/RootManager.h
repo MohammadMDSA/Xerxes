@@ -15,7 +15,7 @@ public:
 	InputManager*							GetInputManager();
 	ResourceManager*						GetResourceManager();
 
-	void									Update();
+	void									Update(float deltaTime);
 
 private:
 
@@ -28,6 +28,7 @@ private:
 	RootManager(RootManager const&) {};
 	RootManager&							operator=(RootManager const&) {};
 
+	void									Init();
 
 	RootManager();
 	~RootManager();

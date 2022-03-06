@@ -2,27 +2,20 @@
 #include <string>
 #include <unordered_map>
 
+#include "IManager.h"
 #include "boost/filesystem.hpp"
 
-struct GameResourceModel
+template<class T>
+struct GameResource
 {
 	int						id;
 	std::string				name;
 	bool					isLoaded;
-	std::unique_ptr<DirectX::Model>		resource;
+	std::unique_ptr<T>		resource;
 	boost::filesystem::path	path;
 };
 
-struct GameResourceEffect
-{
-	int						id;
-	std::string				name;
-	bool					isLoaded;
-	std::unique_ptr<DirectX::IEffectFactory>		resource;
-	boost::filesystem::path	path;
-};
-
-class ResourceManager
+class ResourceManager : public IManager
 {
 public:
 	ResourceManager();
@@ -32,7 +25,11 @@ public:
 	void SetDeviceContext(ID3D11DeviceContext* context);
 	void SetDevice(ID3D11Device* device);
 
-	GameResourceModel* GetModel(int id);
+	GameResource<DirectX::Model>* GetModel(int id);
+
+	// Inherited via IManager
+	virtual void OnInit() override;
+	virtual void OnShutdown() override;
 
 private:
 	int CreateSDKMESHModel(boost::filesystem::path path);
@@ -40,8 +37,8 @@ private:
 
 	int lastId;
 
-	std::unordered_map<int, GameResourceModel*>	models;
-	std::unordered_map<int, GameResourceEffect*> effectFactories;
+	std::unordered_map<int, GameResource<DirectX::Model>*>	models;
+	std::unordered_map<int, GameResource<DirectX::IEffectFactory>*> effectFactories;
 
 	ID3D11Device* device;
 	ID3D11DeviceContext* context;

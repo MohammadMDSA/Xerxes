@@ -1,7 +1,8 @@
 #pragma once
 #include <memory>
+#include "IManager.h"
 
-class InputManager
+class InputManager : public IManager
 {
 public:
 	InputManager();
@@ -27,6 +28,9 @@ public:
 
 	void								Update();
 
+	// Inherited via IManager
+	virtual void OnInit() override;
+	virtual void OnShutdown() override;
 private:
 	std::shared_ptr<DirectX::Mouse>		mouse;
 	std::shared_ptr<DirectX::Keyboard>	keyboard;

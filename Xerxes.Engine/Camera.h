@@ -22,6 +22,8 @@ public:
 	float							GetRotationX();
 	float							GetRotationY();
 	float							GetRotationZ();
+	DirectX::SimpleMath::Matrix		GetWorld();
+
 	const DirectX::SimpleMath::Vector3& GetUp() const;
 	const DirectX::SimpleMath::Vector3& GetRight() const;
 	const DirectX::SimpleMath::Vector3& GetForward() const;
@@ -32,6 +34,7 @@ public:
 	void							SetRotationZ(float z, bool updateWorld = true);
 	void							SetPositionV(DirectX::SimpleMath::Vector3 position, bool updateWorld = true);
 	void							SetPosition(float x, float y, float z, bool updateWorld = true);
+	void							SetWorld(DirectX::SimpleMath::Matrix world);
 
 	const DirectX::SimpleMath::Matrix& GetProjection() const;
 	const DirectX::SimpleMath::Matrix& GetView() const;

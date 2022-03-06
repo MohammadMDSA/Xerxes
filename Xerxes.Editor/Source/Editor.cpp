@@ -115,10 +115,25 @@ void Editor::Update(DX::StepTimer const& timer)
 	m_proj = Matrix::CreatePerspectiveFieldOfView(XM_PI / 4.f,
 		float(sceneWindow->GetWidth()) / float(sceneWindow->GetHeight()), 0.1f, 10.f);
 
-	rootManager->Update();
+	rootManager->Update(elapsedTime);
 	sceneWindow->Update(elapsedTime);
 	inspectorWindow->Update(elapsedTime);
-	// TODO: Add your game logic here.
+
+	// Handling layout
+	int newSceneWidth = m_outputWidth - inspectorWindow->GetWidth();
+	int newSceneHeight = m_outputHeight;
+	if (newSceneWidth != sceneWidth || newSceneHeight != sceneHeight)
+	{
+		sceneHeight = newSceneHeight;
+		sceneWidth = newSceneWidth;
+		RootManager::GetInstance()->GetCameraManager()->SetOutputSize(sceneWidth, sceneHeight);
+	}
+	sceneWindow->SetPosition(0, 0);
+	sceneWindow->SetDimansion(sceneWidth, sceneHeight);
+
+	for (auto obj : gameObjects)
+		obj->OnUpdate(elapsedTime);
+
 	elapsedTime;
 }
 
@@ -142,26 +157,20 @@ void Editor::Render()
 	if (showDemo)
 		ImGui::ShowDemoWindow(&showDemo);
 
+	auto activeObject = gameObjects.size() > 0 ? gameObjects.back() : nullptr;
 
-	int newSceneWidth = m_outputWidth - inspectorWindow->GetWidth();
-	int newSceneHeight = m_outputHeight;
-	if (newSceneWidth != sceneWidth || newSceneHeight != sceneHeight)
-	{
-		sceneHeight = newSceneHeight;
-		sceneWidth = newSceneWidth;
-		RootManager::GetInstance()->GetCameraManager()->SetOutputSize(sceneWidth, sceneHeight);
-	}
-	sceneWindow->SetPosition(0, 0);
-	sceneWindow->SetDimansion(sceneWidth, sceneHeight);
 	sceneWindow->BeginWindow();
 	ImGuizmo::SetRect(0, 0, sceneWidth, sceneHeight);
-	go1->OnGizmo();
+
+	if (activeObject)
+		activeObject->OnGizmo();
 
 	sceneWindow->EndWindow();
 	inspectorWindow->SetPosition(m_outputWidth - inspectorWindow->GetWidth(), 0.f);
 	inspectorWindow->SetDimansion(inspectorWindow->GetWidth(), m_outputHeight);
 	inspectorWindow->BeginWindow();
-	go1->OnInspector();
+	if (activeObject)
+		activeObject->OnInspector();
 	inspectorWindow->EndWindow();
 	AppBarMenus();
 

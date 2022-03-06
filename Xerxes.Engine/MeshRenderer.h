@@ -1,5 +1,6 @@
 #pragma once
 #include "GameObjectComponent.h"
+#include "ResourceManager.h"
 #include <string>
 
 class MeshRenderer : public GameObjectComponent
@@ -15,6 +16,7 @@ public:
 	virtual void OnGizmo() override;
 	virtual void OnInspector() override;
 	virtual void OnDestroy() override;
+	virtual std::string GetName() override;
 
 	void SetModelResourceId(int id);
 
@@ -23,6 +25,8 @@ private:
 
 	std::unique_ptr<DirectX::CommonStates> m_states;
 	int modelResourceId;
+
+	GameResource<DirectX::Model>* resource;
 
 };
 

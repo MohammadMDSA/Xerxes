@@ -105,7 +105,6 @@ void Camera::CreateView()
 	auto pos = transform.GetPosition();
 	target += pos;
 	view = Matrix::CreateLookAt(pos, target, transform.Up());
-	//view = Matrix::CreateLookAt(pos, Vector3(0, 0, 0.001), Vector3::Up);
 
 }
 
@@ -160,6 +159,11 @@ float Camera::GetRotationZ()
 	CreateView();
 }
 
+DirectX::SimpleMath::Matrix Camera::GetWorld()
+{
+	return transform.GetWorldMatrix();
+}
+
 const DirectX::SimpleMath::Vector3& Camera::GetUp() const
 {
 	return transform.Up();
@@ -208,5 +212,11 @@ void Camera::SetPositionV(Vector3 position, bool updateWorld)
 void Camera::SetPosition(float x, float y, float z, bool updateWorld)
 {
 	transform.SetPosition(x, y, z, updateWorld);
+	CreateView();
+}
+
+void Camera::SetWorld(DirectX::SimpleMath::Matrix world)
+{
+	transform.SetWorld(world);
 	CreateView();
 }

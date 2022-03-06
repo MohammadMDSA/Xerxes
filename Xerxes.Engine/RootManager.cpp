@@ -34,9 +34,16 @@ ResourceManager* RootManager::GetResourceManager()
 	return resourceManager.get();
 }
 
-void RootManager::Update()
+void RootManager::Update(float deltaTime)
 {
 	inputManager->Update();
+}
+
+void RootManager::Init()
+{
+	cameraManager->OnInit();
+	inputManager->OnInit();
+	resourceManager->OnInit();
 }
 
 RootManager::RootManager()
@@ -45,6 +52,7 @@ RootManager::RootManager()
 	cameraManager = shared_ptr<CameraManager>(new CameraManager());
 	inputManager = shared_ptr<InputManager>(new InputManager());
 	resourceManager = shared_ptr<ResourceManager>(new ResourceManager());
+	Init();
 }
 
 RootManager::~RootManager()

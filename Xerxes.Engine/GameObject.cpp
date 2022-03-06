@@ -117,6 +117,12 @@ void GameObject::OnInspector()
 
 	for (auto component : components)
 	{
+		ImGui::Spacing();
+		ImGui::Spacing();
+		ImGui::Separator();
+		ImGui::Spacing();
+		ImGui::Spacing();
+		if(ImGui::CollapsingHeader(component->GetName().c_str(), ImGuiTreeNodeFlags_DefaultOpen))
 		component->OnInspector();
 	}
 }

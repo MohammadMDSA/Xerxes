@@ -12,8 +12,6 @@ InputManager::InputManager() :
 	mouseDeltaX(0.f),
 	mouseDeltaY(0.f)
 {
-	mouse = make_shared<Mouse>();
-	keyboard = make_shared<Keyboard>();
 }
 
 DirectX::Mouse* InputManager::GetMouse()
@@ -137,4 +135,14 @@ void InputManager::Update()
 		mouseY = newY;
 	}
 	mouseMode = mouseState.positionMode;
+}
+
+void InputManager::OnInit()
+{
+	mouse = make_shared<Mouse>();
+	keyboard = make_shared<Keyboard>();
+}
+
+void InputManager::OnShutdown()
+{
 }

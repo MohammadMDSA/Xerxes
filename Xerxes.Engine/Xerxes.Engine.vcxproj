@@ -95,6 +95,7 @@
     <ClInclude Include="framework.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GameObjectComponent.h" />
+    <ClInclude Include="IManager.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="Libs\imgui\GraphEditor.h" />
     <ClInclude Include="Libs\imgui\imconfig.h" />
