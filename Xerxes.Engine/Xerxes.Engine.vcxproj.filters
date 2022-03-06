@@ -117,6 +117,12 @@
     <ClInclude Include="IManager.h">
       <Filter>Source\Public\SubsystemManager</Filter>
     </ClInclude>
+    <ClInclude Include="Libs\imgui\imgui_stdlib.h">
+      <Filter>Libs\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneManager.h">
+      <Filter>Source\Public\SubsystemManager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Xerxes.Engine.cpp">
@@ -181,6 +187,12 @@
     </ClCompile>
     <ClCompile Include="MeshRenderer.cpp">
       <Filter>Source\Private\GameObjectComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="Libs\imgui\imgui_stdlib.cpp">
+      <Filter>Libs\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneManager.cpp">
+      <Filter>Source\Private\SubsystemManager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
