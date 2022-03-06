@@ -24,6 +24,8 @@ public:
 
 	void SetDeviceContext(ID3D11DeviceContext* context);
 	void SetDevice(ID3D11Device* device);
+	ID3D11DeviceContext* GetDeviceContext();
+	ID3D11Device* GetDevice();
 
 	GameResource<DirectX::Model>* GetModel(int id);
 	std::vector<GameResource<DirectX::Model>*> GetAllModels();

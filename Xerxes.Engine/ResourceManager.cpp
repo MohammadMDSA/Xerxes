@@ -38,6 +38,16 @@ GameResource<DirectX::Model>* ResourceManager::GetModel(int id)
 	return models[id];
 }
 
+ID3D11DeviceContext* ResourceManager::GetDeviceContext()
+{
+	return context;
+}
+
+ID3D11Device* ResourceManager::GetDevice()
+{
+	return device;
+}
+
 std::vector<GameResource<DirectX::Model>*> ResourceManager::GetAllModels()
 {
 	std::vector<GameResource<DirectX::Model>*> result;
