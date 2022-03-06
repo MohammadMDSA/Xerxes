@@ -10,11 +10,13 @@ using namespace std;
 
 GameObject::GameObject() :
 	manipulationOperation(ImGuizmo::OPERATION::TRANSLATE),
-	manipulationMode(ImGuizmo::MODE::LOCAL)
+	manipulationMode(ImGuizmo::MODE::LOCAL),
+	name("GameObject"),
+	editName("GameObject")
 {
 }
 
-void GameObject::OnStart(ID3D11Device1* device, ID3D11DeviceContext1* context)
+void GameObject::OnStart(ID3D11Device* device, ID3D11DeviceContext* context)
 {
 	for (auto component : components)
 	{
@@ -39,7 +41,7 @@ void GameObject::OnUpdate(float deltaTime)
 	}
 }
 
-void GameObject::OnRender(DirectX::SimpleMath::Matrix view, DirectX::SimpleMath::Matrix proj, ID3D11DeviceContext1* context)
+void GameObject::OnRender(DirectX::SimpleMath::Matrix view, DirectX::SimpleMath::Matrix proj, ID3D11DeviceContext* context)
 {
 	for (auto component : components)
 	{
@@ -76,8 +78,18 @@ void GameObject::OnGizmo()
 
 void GameObject::OnInspector()
 {
-	ImGui::InputText("Name", &name);
+	// GameObject name
+	if (ImGui::InputText("Name", &editName, ImGuiInputTextFlags_CharsNoBlank))
+	{
+		SetName(editName);
+	}
 
+	if (!ImGui::IsItemActive() && editName.empty())
+	{
+		editName = std::string(name);
+	}
+
+	// GameObject Transformation
 	if (ImGui::CollapsingHeader("Transform", ImGuiTreeNodeFlags_DefaultOpen))
 	{
 
@@ -118,6 +130,7 @@ void GameObject::OnInspector()
 			transform.SetScaleV(scl);
 	}
 
+	// GameObject components
 	for (auto component : components)
 	{
 		ImGui::Spacing();
@@ -125,8 +138,8 @@ void GameObject::OnInspector()
 		ImGui::Separator();
 		ImGui::Spacing();
 		ImGui::Spacing();
-		if(ImGui::CollapsingHeader(component->GetName().c_str(), ImGuiTreeNodeFlags_DefaultOpen))
-		component->OnInspector();
+		if (ImGui::CollapsingHeader(component->GetName().c_str(), ImGuiTreeNodeFlags_DefaultOpen))
+			component->OnInspector();
 	}
 }
 
@@ -155,7 +168,8 @@ void GameObject::DeleteComponent(GameObjectComponent* component)
 
 void GameObject::SetName(std::string name)
 {
-	this->name = name;
+	if (!name.empty())
+		this->name = name;
 }
 
 std::string GameObject::GetName()

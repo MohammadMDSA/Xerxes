@@ -17,10 +17,10 @@ public:
 
 	Transform transform;
 
-	void					OnStart(ID3D11Device1* device, ID3D11DeviceContext1* context);
+	void					OnStart(ID3D11Device* device, ID3D11DeviceContext* context);
 	void					OnAwake();
 	void					OnUpdate(float deltaTime);
-	void					OnRender(DirectX::SimpleMath::Matrix view, DirectX::SimpleMath::Matrix proj, ID3D11DeviceContext1* context);
+	void					OnRender(DirectX::SimpleMath::Matrix view, DirectX::SimpleMath::Matrix proj, ID3D11DeviceContext* context);
 	void					OnDestroy();
 
 	void					OnGizmo();
@@ -41,5 +41,6 @@ private:
 	ImGuizmo::OPERATION			manipulationOperation;
 	ImGuizmo::MODE				manipulationMode;
 	std::string					name;
+	std::string					editName;
 };
 
