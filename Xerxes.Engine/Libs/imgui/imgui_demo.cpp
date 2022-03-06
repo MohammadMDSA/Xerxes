@@ -317,7 +317,7 @@ void ImGui::ShowDemoWindow(bool* p_open)
     // Dear ImGui Apps (accessible from the "Tools" menu)
     static bool show_app_metrics = false;
     static bool show_app_stack_tool = false;
-    static bool show_app_style_editor = true;
+    static bool show_app_style_editor = false;
     static bool show_app_about = false;
 
     if (show_app_metrics)       { ImGui::ShowMetricsWindow(&show_app_metrics); }

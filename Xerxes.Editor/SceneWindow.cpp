@@ -30,7 +30,7 @@ void SceneWindow::OnGUI()
 
 int SceneWindow::GetCustomWindowFlags()
 {
-	return ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoDecoration;
+	return ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove;
 	return 0;
 }
 
@@ -41,7 +41,7 @@ void SceneWindow::Update(float deltaTime)
 	auto input = RootManager::GetInstance()->GetInputManager();
 	auto kb = input->GetKeyboard()->GetState();
 
-	if (input->GetRightButton() || input->GetMiddleButton() || (input->GetLeftButton() && kb.LeftAlt))
+	if (input->GetRightButton() || input->GetMiddleButton()/* || (input->GetLeftButton() && kb.LeftAlt)*/)
 	{
 		if (input->GetMouseMode() == Mouse::MODE_ABSOLUTE)
 		{
@@ -50,7 +50,7 @@ void SceneWindow::Update(float deltaTime)
 		}
 	}
 
-	if (input->GetLeftButton() && kb.LeftAlt && input->GetMouseMode() == Mouse::MODE_RELATIVE)
+	/*if (input->GetLeftButton() && kb.LeftAlt && input->GetMouseMode() == Mouse::MODE_RELATIVE)
 	{
 		moveingCamera = true;
 
@@ -75,7 +75,7 @@ void SceneWindow::Update(float deltaTime)
 		camera->SetWorld(world);
 
 		return;
-	}
+	}*/
 
 	// Handle panngin
 	if (input->GetMiddleButton() && input->GetMouseMode() == Mouse::MODE_RELATIVE)

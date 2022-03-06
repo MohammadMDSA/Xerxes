@@ -93,10 +93,12 @@ void Camera::OnGui()
 
 void Camera::CreateProjection()
 {
+	auto width = max(outputWidth, 1.f);
+	auto height = max(outputHeight, 1.f);
 	if (isPerspective)
-		projection = Matrix::CreatePerspectiveFieldOfView(DirectX::XMConvertToRadians(fieldOfView), outputWidth / outputHeight, nearPlane, farPlane);
+		projection = Matrix::CreatePerspectiveFieldOfView(DirectX::XMConvertToRadians(fieldOfView), width / height, nearPlane, farPlane);
 	else
-		projection = Matrix::CreateOrthographic(outputWidth / orthoGraphicSize / ORTHO_SIZE_DIVISOR, outputHeight / orthoGraphicSize / ORTHO_SIZE_DIVISOR, nearPlane, farPlane);
+		projection = Matrix::CreateOrthographic(width / orthoGraphicSize / ORTHO_SIZE_DIVISOR, height / orthoGraphicSize / ORTHO_SIZE_DIVISOR, nearPlane, farPlane);
 }
 
 void Camera::CreateView()
