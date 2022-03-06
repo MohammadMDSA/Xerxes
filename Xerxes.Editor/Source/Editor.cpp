@@ -370,6 +370,12 @@ void Editor::AppBarMenus()
 			{
 				AddItem();
 			}
+			if (ImGui::MenuItem("New GameObject"))
+			{
+				auto obj = new GameObject();
+				obj->OnStart(m_deviceResources->GetD3DDevice(), m_deviceResources->GetD3DDeviceContext());
+				gameObjects.push_back(obj);
+			}
 			ImGui::EndMenu();
 		}
 		ImGui::EndMainMenuBar();
@@ -405,8 +411,6 @@ void Editor::AddItem()
 					auto goo = new GameObject();
 					int modelId = rootManager->GetResourceManager()->CreateModel(pszFilePath);
 					auto mesh = new MeshRenderer();
-					mesh->SetModelResourceId(modelId);
-					mesh->address = pszFilePath;
 					goo->AddComponent(mesh);
 					CoTaskMemFree(pszFilePath);
 					goo->OnStart(m_deviceResources->GetD3DDevice(), m_deviceResources->GetD3DDeviceContext());
