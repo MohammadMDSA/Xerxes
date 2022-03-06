@@ -8,7 +8,8 @@ using namespace DirectX::SimpleMath;
 
 SceneWindow::SceneWindow(int id) :
 	EditorWindow(id, "Scene"),
-	moveingCamera(false)
+	moveingCamera(false),
+	camera(nullptr)
 {
 
 	backgroundAlpha = 0.f;

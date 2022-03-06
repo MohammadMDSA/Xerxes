@@ -6,6 +6,7 @@
 class EditorWindow
 {
 public:
+	EditorWindow(int id, std::string);
 	~EditorWindow();
 
 	void					BeginWindow();
@@ -28,7 +29,6 @@ public:
 	inline float			GetPosX() { return positionX; }
 	inline float			GetPosY() { return positionY; }
 	bool					HasFocus() { return hasFocus; }
-	EditorWindow(int id, std::string);
 
 protected:
 

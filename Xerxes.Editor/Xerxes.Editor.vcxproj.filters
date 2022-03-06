@@ -61,6 +61,9 @@
     <ClInclude Include="DeviceResources.h">
       <Filter>Source\Public\Device</Filter>
     </ClInclude>
+    <ClInclude Include="HierarchyWindow.h">
+      <Filter>Source\Public\EditorWindow</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Editor.cpp">
@@ -87,6 +90,9 @@
     </ClCompile>
     <ClCompile Include="DeviceResources.cpp">
       <Filter>Source\Private\Device</Filter>
+    </ClCompile>
+    <ClCompile Include="HierarchyWindow.cpp">
+      <Filter>Source\Private\EditorWindow</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
