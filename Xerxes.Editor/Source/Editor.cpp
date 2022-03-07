@@ -187,7 +187,7 @@ void Editor::Render()
 
 	auto view = camera->GetView();
 	auto proj = camera->GetProjection();
-	
+
 	sceneManager->OnRender(view, proj);
 
 	go->OnRender(view, proj, context);
@@ -402,7 +402,12 @@ void Editor::AddItem()
 				// Display the file name to the user.
 				if (SUCCEEDED(hr))
 				{
-					
+					auto goo = new GameObject();
+					int modelId = rootManager->GetResourceManager()->CreateModel(pszFilePath);
+					auto mesh = new MeshRenderer();
+					goo->AddComponent(mesh);
+					goo->OnStart();
+					rootManager->GetSceneManager()->AddGameObject(goo);
 				}
 				pItem->Release();
 			}
