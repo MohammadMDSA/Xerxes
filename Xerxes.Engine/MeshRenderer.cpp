@@ -18,14 +18,14 @@ void MeshRenderer::OnRender(DirectX::SimpleMath::Matrix view, DirectX::SimpleMat
 	auto world = gameObject->transform.GetWorldMatrix();
 	if (usingPrimitives)
 	{
-		auto resource = resourceManager->GetPrimitive(meshResourceId);
+		auto resource = resourceManager->ResourceGroup<GeometricPrimitive>::GetById(meshResourceId);
 		if (!resource)
 			return;
 		resource->GetResource()->Draw(world, view, proj);
 	}
 	else
 	{
-		auto resource = resourceManager->GetModel(meshResourceId);
+		auto resource = resourceManager->ResourceGroup<Model>::GetById(meshResourceId);
 		if (!resource)
 			return;
 		resource->GetResource()->Draw(context, *m_states, world, view, proj);
@@ -55,9 +55,9 @@ void MeshRenderer::OnInspector()
 	auto resourceManager = RootManager::GetInstance()->GetResourceManager();
 	GameResourceBase* resource;
 	if (usingPrimitives)
-		resource = resourceManager->GetPrimitive(meshResourceId);
+		resource = resourceManager->ResourceGroup<GeometricPrimitive>::GetById(meshResourceId);
 	else
-		resource = resourceManager->GetModel(meshResourceId);
+		resource = resourceManager->ResourceGroup<DirectX::Model>::GetById(meshResourceId);
 
 	std::string resourceName = resource ? resource->GetName() : "[select model]";
 	ImGui::Text("Model: ");
@@ -67,7 +67,7 @@ void MeshRenderer::OnInspector()
 
 	if (ImGui::BeginPopup("MeshRendererModelSelection"))
 	{
-		auto models = resourceManager->GetAllModels();
+		auto models = resourceManager->ResourceGroup<DirectX::Model>::GetAll();
 		if (ImGui::Selectable("<none>"))
 		{
 			meshResourceId = -1;
@@ -84,7 +84,7 @@ void MeshRenderer::OnInspector()
 			}
 			ImGui::PopID();
 		}
-		auto primitives = resourceManager->GetAllGeometricPrimitives();
+		auto primitives = resourceManager->ResourceGroup<DirectX::GeometricPrimitive>::GetAll();
 		for (auto it : primitives)
 		{
 			ImGui::PushID(++i);

@@ -27,7 +27,7 @@ protected:
 template<class T>
 struct GameResource : public GameResourceBase
 {
-	T*						GetResource() { return resource.get(); }
+	T* GetResource() { return resource.get(); }
 
 private:
 	friend class ResourceManager;
@@ -35,7 +35,32 @@ private:
 
 };
 
-class ResourceManager : public IManager
+template<class T>
+class ResourceGroup
+{
+public:
+	inline GameResource<T>* GetById(int id)
+	{
+		if (!group.contains(id))
+			return nullptr;
+		return group[id];
+	}
+
+	inline std::vector<GameResource<T>*> GetAll()
+	{
+		std::vector<GameResource<T>*> result;
+		for (auto& it : group) {
+			result.push_back(it.second);
+		}
+		return result;
+	}
+
+private:
+	friend class ResourceManager;
+	std::unordered_map<int, GameResource<T>*> group;
+};
+
+class ResourceManager : public IManager, public ResourceGroup<DirectX::IEffect>, public ResourceGroup<DirectX::Model>, public ResourceGroup<DirectX::GeometricPrimitive>
 {
 public:
 	ResourceManager();
@@ -47,14 +72,6 @@ public:
 	ID3D11DeviceContext* GetDeviceContext();
 	ID3D11Device* GetDevice();
 
-	GameResource<DirectX::Model>* GetModel(int id);
-	GameResource<DirectX::IEffect>* GetEffect(int id);
-	GameResource<DirectX::GeometricPrimitive>* GetPrimitive(int id);
-
-	std::vector<GameResource<DirectX::Model>*> GetAllModels();
-	std::vector<GameResource<DirectX::IEffect>*> GetAllEffects();
-	std::vector<GameResource<DirectX::GeometricPrimitive>*> GetAllGeometricPrimitives();
-
 	// Inherited via IManager
 	virtual void OnInit() override;
 	virtual void OnShutdown() override;
@@ -65,10 +82,6 @@ private:
 	GameResource<DirectX::GeometricPrimitive>* AddPrimitive(std::string name);
 
 	int lastId;
-
-	std::unordered_map<int, GameResource<DirectX::Model>*>	models;
-	std::unordered_map<int, GameResource<DirectX::IEffect>*> effects;
-	std::unordered_map<int, GameResource<DirectX::GeometricPrimitive>*> geometricPrimitives;
 
 	ID3D11Device* device;
 	ID3D11DeviceContext* context;
