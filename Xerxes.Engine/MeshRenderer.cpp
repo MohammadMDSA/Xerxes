@@ -15,16 +15,20 @@ MeshRenderer::MeshRenderer() :
 void MeshRenderer::OnRender(DirectX::SimpleMath::Matrix view, DirectX::SimpleMath::Matrix proj, ID3D11DeviceContext* context)
 {
 	auto resourceManager = RootManager::GetInstance()->GetResourceManager();
+	auto world = gameObject->transform.GetWorldMatrix();
 	if (usingPrimitives)
 	{
-		//auto resource = resourceManager->
+		auto resource = resourceManager->GetPrimitive(meshResourceId);
+		if (!resource)
+			return;
+		resource->GetResource()->Draw(world, view, proj);
 	}
 	else
 	{
 		auto resource = resourceManager->GetModel(meshResourceId);
 		if (!resource)
 			return;
-		resource->GetResource()->Draw(context, *m_states, gameObject->transform.GetWorldMatrix(), view, proj);
+		resource->GetResource()->Draw(context, *m_states, world, view, proj);
 	}
 }
 

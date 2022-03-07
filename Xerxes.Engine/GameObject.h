@@ -35,9 +35,7 @@ public:
 private:
 
 	std::vector<std::shared_ptr<GameObjectComponent>>	components;
-
-	std::unique_ptr<DirectX::GeometricPrimitive>    m_shape;
-
+	
 	ImGuizmo::OPERATION			manipulationOperation;
 	ImGuizmo::MODE				manipulationMode;
 	std::string					name;

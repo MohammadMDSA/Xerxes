@@ -24,15 +24,11 @@ void GameObject::OnStart()
 	if (isStarted)
 		return;
 	isStarted = true;
-	auto resourceManager = RootManager::GetInstance()->GetResourceManager();
-	auto context = resourceManager->GetDeviceContext();
-	auto device = resourceManager->GetDevice();
 
 	for (auto component : components)
 	{
 		component->OnStart();
 	}
-	m_shape = DirectX::GeometricPrimitive::CreateCube(context);
 }
 
 void GameObject::OnAwake()
@@ -60,7 +56,6 @@ void GameObject::OnRender(DirectX::SimpleMath::Matrix view, DirectX::SimpleMath:
 	{
 		component->OnRender(view, proj, context);
 	}
-	m_shape->Draw(transform.GetWorldMatrix(), view, proj);
 }
 
 void GameObject::OnDestroy()
