@@ -13,6 +13,7 @@
 #include "Camera.h"
 #include <shobjidl.h> 
 #include "MeshRenderer.h"
+#include "Libs/ImGuiFileDialog/ImGuiFileDialog.h"
 
 extern void ExitGame() noexcept;
 
@@ -401,13 +402,7 @@ void Editor::AddItem()
 				// Display the file name to the user.
 				if (SUCCEEDED(hr))
 				{
-					auto goo = new GameObject();
-					int modelId = rootManager->GetResourceManager()->CreateModel(pszFilePath);
-					auto mesh = new MeshRenderer();
-					goo->AddComponent(mesh);
-					CoTaskMemFree(pszFilePath);
-					goo->OnStart();
-					rootManager->GetSceneManager()->AddGameObject(goo);
+					
 				}
 				pItem->Release();
 			}
@@ -416,3 +411,26 @@ void Editor::AddItem()
 	}
 	CoUninitialize();
 }
+
+
+//void Editor::AddItem()
+//{
+//	ImGuiFileDialog::Instance()->OpenDialog("ChooseFileDlgKey", "Choose File", ".sdkmesh", ".");
+//
+//	if (ImGuiFileDialog::Instance()->Display("ChooseFileDlgKey"))
+//	{
+//		if (ImGuiFileDialog::Instance()->IsOk())
+//		{
+//			std::string filePathName = ImGuiFileDialog::Instance()->GetFilePathName();
+//
+//			auto goo = new GameObject();
+//			int modelId = rootManager->GetResourceManager()->CreateModel(std::wstring(filePathName.begin(), filePathName.end()));
+//			auto mesh = new MeshRenderer();
+//			goo->AddComponent(mesh);
+//			goo->OnStart();
+//			rootManager->GetSceneManager()->AddGameObject(goo);
+//		}
+//
+//		ImGuiFileDialog::Instance()->Close();
+//	}
+//}
