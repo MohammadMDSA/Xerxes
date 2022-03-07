@@ -21,13 +21,16 @@ void HierarchyWindow::OnGUI()
     auto sceneManager = RootManager::GetInstance()->GetSceneManager();
     auto selected = sceneManager->GetSelectedGameObject();
     
+    int i = 0;
     for (auto go : *sceneManager->GetGameObjects())
     {
+        ImGui::PushID(++i);
         if (ImGui::Selectable(go->GetName().c_str(), selected == go))
         {
             selected = go;
             sceneManager->SetSelectedGameObject(go);
         }
+        ImGui::PopID();
     }
 }
 

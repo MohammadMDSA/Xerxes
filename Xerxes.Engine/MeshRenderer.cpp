@@ -18,9 +18,10 @@ void MeshRenderer::OnRender(DirectX::SimpleMath::Matrix view, DirectX::SimpleMat
 		resource->resource->Draw(context, *m_states, gameObject->transform.GetWorldMatrix(), view, proj);
 }
 
-void MeshRenderer::OnStart(ID3D11Device* device, ID3D11DeviceContext* context)
+void MeshRenderer::OnStart()
 {
-	m_states = std::make_unique<CommonStates>(device);
+	auto resourceManager = RootManager::GetInstance()->GetResourceManager();
+	m_states = std::make_unique<CommonStates>(resourceManager->GetDevice());
 }
 
 void MeshRenderer::OnAwake()

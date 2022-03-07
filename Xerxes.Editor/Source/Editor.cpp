@@ -313,12 +313,12 @@ void Editor::CreateWindowSizeDependentResources()
 	RootManager::GetInstance()->GetResourceManager()->SetDevice(device);
 	RootManager::GetInstance()->GetResourceManager()->SetDeviceContext(context);
 
-	go->OnStart(device, context);
-	go1->OnStart(device, context);
-	go2->OnStart(device, context);
-	go3->OnStart(device, context);
-	go4->OnStart(device, context);
-	go5->OnStart(device, context);
+	go->OnStart();
+	go1->OnStart();
+	go2->OnStart();
+	go3->OnStart();
+	go4->OnStart();
+	go5->OnStart();
 }
 
 void Editor::InitializeImgui()
@@ -366,7 +366,7 @@ void Editor::AppBarMenus()
 			if (ImGui::MenuItem("New GameObject"))
 			{
 				auto obj = new GameObject();
-				obj->OnStart(m_deviceResources->GetD3DDevice(), m_deviceResources->GetD3DDeviceContext());
+				obj->OnStart();
 				rootManager->GetSceneManager()->AddGameObject(obj);
 			}
 			ImGui::EndMenu();
@@ -406,7 +406,7 @@ void Editor::AddItem()
 					auto mesh = new MeshRenderer();
 					goo->AddComponent(mesh);
 					CoTaskMemFree(pszFilePath);
-					goo->OnStart(m_deviceResources->GetD3DDevice(), m_deviceResources->GetD3DDeviceContext());
+					goo->OnStart();
 					rootManager->GetSceneManager()->AddGameObject(goo);
 				}
 				pItem->Release();

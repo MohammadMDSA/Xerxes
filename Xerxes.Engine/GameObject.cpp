@@ -4,6 +4,7 @@
 #include <filesystem>
 #include <PathCch.h>
 #include "Libs/imgui/imgui_stdlib.h"
+#include "MeshRenderer.h"
 
 using namespace DirectX;
 using namespace std;
@@ -12,21 +13,33 @@ GameObject::GameObject() :
 	manipulationOperation(ImGuizmo::OPERATION::TRANSLATE),
 	manipulationMode(ImGuizmo::MODE::LOCAL),
 	name("GameObject"),
-	editName("GameObject")
+	editName("GameObject"),
+	isAwake(false),
+	isStarted(false)
 {
 }
 
-void GameObject::OnStart(ID3D11Device* device, ID3D11DeviceContext* context)
+void GameObject::OnStart()
 {
+	if (isStarted)
+		return;
+	isStarted = true;
+	auto resourceManager = RootManager::GetInstance()->GetResourceManager();
+	auto context = resourceManager->GetDeviceContext();
+	auto device = resourceManager->GetDevice();
+
 	for (auto component : components)
 	{
-		component->OnStart(device, context);
+		component->OnStart();
 	}
 	m_shape = DirectX::GeometricPrimitive::CreateCube(context);
 }
 
 void GameObject::OnAwake()
 {
+	if (isAwake)
+		return;
+	isAwake = true;
 	for (auto component : components)
 	{
 		component->OnAwake();
@@ -141,12 +154,43 @@ void GameObject::OnInspector()
 		if (ImGui::CollapsingHeader(component->GetName().c_str(), ImGuiTreeNodeFlags_DefaultOpen))
 			component->OnInspector();
 	}
+
+	ImGui::Spacing();
+	ImGui::Spacing();
+	ImGui::Separator();
+	ImGui::Spacing();
+	ImGui::Spacing();
+
+	float width = 120.f;
+	ImGui::SetNextItemWidth(width);
+	ImGui::SetCursorPos(ImVec2((ImGui::GetWindowWidth() - width) / 2, ImGui::GetCursorPosY()));
+	if (ImGui::Button("Add Component"))
+		ImGui::OpenPopup("AddComponentSelection");
+
+	if (ImGui::BeginPopup("AddComponentSelection"))
+	{
+		ImGui::Text("Components");
+		ImGui::Separator();
+		if (ImGui::Selectable("Mesh Renderer"))
+		{
+			this->AddComponent(new MeshRenderer());
+		}
+		ImGui::EndPopup();
+	}
 }
 
 void GameObject::AddComponent(GameObjectComponent* component)
 {
+	for (auto comp : components)
+	{
+		if (comp.get() == component)
+			return;
+	}
 	components.push_back(std::shared_ptr<GameObjectComponent>(component));
-	component->gameObject = std::shared_ptr<GameObject>(this);
+	component->gameObject = this;
+	component->OnStart();
+	if (isAwake)
+		component->OnAwake();
 }
 
 void GameObject::DeleteComponent(GameObjectComponent* component)
