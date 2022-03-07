@@ -22,9 +22,7 @@ public:
 private:
 
 	std::unique_ptr<DirectX::CommonStates> m_states;
-	int modelResourceId;
-
-	GameResource<DirectX::Model>* resource;
-
+	int meshResourceId;
+	bool usingPrimitives;
 };
 

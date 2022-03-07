@@ -4,7 +4,8 @@
 #include "RootManager.h"
 
 ResourceWindow::ResourceWindow(int id):
-	EditorWindow(id, "Resources")
+	EditorWindow(id, "Resources"),
+	selectedResource(nullptr)
 {
 }
 
@@ -28,7 +29,7 @@ void ResourceWindow::OnGUI()
 			{
 				ImGui::PushID(++index);
 				
-				if (ImGui::Selectable(model->GetName().c_str(), selectedResource == model))
+				if (ImGui::Selectable((model->GetName() + " (" + model->GetType() + ")").c_str(), selectedResource == model))
 				{
 					selectedResource = model;
 				}
@@ -41,13 +42,30 @@ void ResourceWindow::OnGUI()
 		if (ImGui::BeginTabItem("Effects"))
 		{
 			int index = 0;
-			for (auto effectFactory : resourceManager->GetAllEffects())
+			for (auto effect : resourceManager->GetAllEffects())
 			{
 				ImGui::PushID(++index);
 
-				if (ImGui::Selectable(effectFactory->GetName().c_str(), selectedResource == effectFactory))
+				if (ImGui::Selectable((effect->GetName() + " (" + effect->GetType() + ")").c_str(), selectedResource == effect))
 				{
-					selectedResource = effectFactory;
+					selectedResource = effect;
+				}
+
+				ImGui::PopID();
+			}
+			ImGui::EndTabItem();
+		}
+
+		if (ImGui::BeginTabItem("Primitives"))
+		{
+			int index = 0;
+			for (auto primitive : resourceManager->GetAllGeometricPrimitives())
+			{
+				ImGui::PushID(++index);
+
+				if (ImGui::Selectable(primitive->GetName().c_str(), selectedResource == primitive))
+				{
+					selectedResource = primitive;
 				}
 
 				ImGui::PopID();

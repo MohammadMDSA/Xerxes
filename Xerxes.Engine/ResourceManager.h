@@ -11,13 +11,15 @@ struct GameResourceBase
 {
 public:
 	int						GetId() { return id; }
-	std::string				GetName() { return name; }
+	const std::string		GetName() const { return name; }
 	bool					IsLoaded() { return isLoaded; }
 	const boost::filesystem::path& GetPath() const { return path; }
+	const std::string		GetType() const { return type; }
 
 protected:
 	int						id;
 	std::string				name;
+	std::string				type;
 	bool					isLoaded;
 	boost::filesystem::path	path;
 };
@@ -46,8 +48,12 @@ public:
 	ID3D11Device* GetDevice();
 
 	GameResource<DirectX::Model>* GetModel(int id);
+	GameResource<DirectX::IEffect>* GetEffect(int id);
+	GameResource<DirectX::GeometricPrimitive>* GetPrimitive(int id);
+
 	std::vector<GameResource<DirectX::Model>*> GetAllModels();
-	std::vector<GameResource<DirectX::IEffectFactory>*> GetAllEffects();
+	std::vector<GameResource<DirectX::IEffect>*> GetAllEffects();
+	std::vector<GameResource<DirectX::GeometricPrimitive>*> GetAllGeometricPrimitives();
 
 	// Inherited via IManager
 	virtual void OnInit() override;
@@ -56,11 +62,13 @@ public:
 private:
 	int CreateSDKMESHModel(boost::filesystem::path path);
 	int GetNewId();
+	GameResource<DirectX::GeometricPrimitive>* AddPrimitive(std::string name);
 
 	int lastId;
 
 	std::unordered_map<int, GameResource<DirectX::Model>*>	models;
-	std::unordered_map<int, GameResource<DirectX::IEffectFactory>*> effectFactories;
+	std::unordered_map<int, GameResource<DirectX::IEffect>*> effects;
+	std::unordered_map<int, GameResource<DirectX::GeometricPrimitive>*> geometricPrimitives;
 
 	ID3D11Device* device;
 	ID3D11DeviceContext* context;

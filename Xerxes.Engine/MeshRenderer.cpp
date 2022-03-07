@@ -7,15 +7,25 @@ using namespace DirectX;
 using namespace std;
 
 MeshRenderer::MeshRenderer() :
-	modelResourceId(-1),
-	resource(nullptr)
+	meshResourceId(-1),
+	usingPrimitives(true)
 {
 }
 
 void MeshRenderer::OnRender(DirectX::SimpleMath::Matrix view, DirectX::SimpleMath::Matrix proj, ID3D11DeviceContext* context)
 {
-	if (resource)
+	auto resourceManager = RootManager::GetInstance()->GetResourceManager();
+	if (usingPrimitives)
+	{
+		//auto resource = resourceManager->
+	}
+	else
+	{
+		auto resource = resourceManager->GetModel(meshResourceId);
+		if (!resource)
+			return;
 		resource->GetResource()->Draw(context, *m_states, gameObject->transform.GetWorldMatrix(), view, proj);
+	}
 }
 
 void MeshRenderer::OnStart()
@@ -38,6 +48,13 @@ void MeshRenderer::OnGizmo()
 
 void MeshRenderer::OnInspector()
 {
+	auto resourceManager = RootManager::GetInstance()->GetResourceManager();
+	GameResourceBase* resource;
+	if (usingPrimitives)
+		resource = resourceManager->GetPrimitive(meshResourceId);
+	else
+		resource = resourceManager->GetModel(meshResourceId);
+
 	std::string resourceName = resource ? resource->GetName() : "[select model]";
 	ImGui::Text("Model: ");
 	ImGui::SameLine();
@@ -46,23 +63,31 @@ void MeshRenderer::OnInspector()
 
 	if (ImGui::BeginPopup("MeshRendererModelSelection"))
 	{
-		ImGui::Text("Models");
-		auto models = RootManager::GetInstance()->GetResourceManager()->GetAllModels();
-		ImGui::Separator();
+		auto models = resourceManager->GetAllModels();
 		if (ImGui::Selectable("<none>"))
 		{
-			modelResourceId = -1;
-			resource = nullptr;
+			meshResourceId = -1;
 		}
 
 		int i = 0;
 		for (auto it : models)
 		{
 			ImGui::PushID(++i);
-			if (ImGui::Selectable(it->GetName().c_str()))
+			if (ImGui::Selectable((it->GetName() + " (" + it->GetType() + ")").c_str()))
 			{
-				modelResourceId = it->GetId();
-				resource = it;
+				meshResourceId = it->GetId();
+				usingPrimitives = false;
+			}
+			ImGui::PopID();
+		}
+		auto primitives = resourceManager->GetAllGeometricPrimitives();
+		for (auto it : primitives)
+		{
+			ImGui::PushID(++i);
+			if (ImGui::Selectable((it->GetName() + " (" + it->GetType() + ")").c_str()))
+			{
+				meshResourceId = it->GetId();
+				usingPrimitives = true;
 			}
 			ImGui::PopID();
 		}
@@ -81,7 +106,5 @@ std::string MeshRenderer::GetName()
 
 void MeshRenderer::SetModelResourceId(int id)
 {
-	this->modelResourceId = id;
-
-	resource = RootManager::GetInstance()->GetResourceManager()->GetModel(modelResourceId);
+	this->meshResourceId = id;
 }

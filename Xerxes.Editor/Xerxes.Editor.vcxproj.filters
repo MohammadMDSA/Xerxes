@@ -153,6 +153,9 @@
     <Image Include="assets\upBody_diff.dds">
       <Filter>Assets</Filter>
     </Image>
+    <Image Include="assets\SunSubMixer_specularIBL.dds">
+      <Filter>Assets</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <Manifest Include="settings.manifest">
