@@ -88,6 +88,15 @@ int ResourceManager::GetNewId()
 	return lastId++;
 }
 
+std::vector<GameResource<DirectX::IEffectFactory>*> ResourceManager::GetAllEffects()
+{
+	std::vector<GameResource<DirectX::IEffectFactory>*> result;
+	for (auto& it : effectFactories) {
+		result.push_back(it.second);
+	}
+	return result;
+}
+
 void ResourceManager::OnInit()
 {
 }

@@ -113,6 +113,7 @@
     <ClInclude Include="Libs\ImGuiFileDialog\stb\stb_image_resize.h" />
     <ClInclude Include="Libs\imgui\imgui_impl_dx11.h" />
     <ClInclude Include="Libs\imgui\imgui_impl_win32.h" />
+    <ClInclude Include="ResourceWindow.h" />
     <ClInclude Include="SceneWindow.h" />
     <ClInclude Include="Source\Editor.h" />
     <ClInclude Include="Source\pch.h" />
@@ -126,6 +127,7 @@
     <ClCompile Include="Libs\ImGuiFileDialog\ImGuiFileDialog.cpp" />
     <ClCompile Include="Libs\imgui\imgui_impl_dx11.cpp" />
     <ClCompile Include="Libs\imgui\imgui_impl_win32.cpp" />
+    <ClCompile Include="ResourceWindow.cpp" />
     <ClCompile Include="SceneWindow.cpp" />
     <ClCompile Include="Source\Editor.cpp" />
     <ClCompile Include="Source\Main.cpp" />

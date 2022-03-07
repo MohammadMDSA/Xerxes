@@ -11,6 +11,7 @@
 #include "RootManager.h"
 #include "DeviceResources.h"
 #include "HierarchyWindow.h"
+#include "ResourceWindow.h"
 
 //class EditorWindow;
 
@@ -88,6 +89,7 @@ private:
     SceneWindow*                                    sceneWindow;
     InspectorWindow*                                inspectorWindow;
     HierarchyWindow*                                hierarchyWindow;
+    ResourceWindow*                                 resourceWindow;
 
     GameObject* go;
     GameObject* go1;

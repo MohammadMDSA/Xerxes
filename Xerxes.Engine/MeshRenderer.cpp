@@ -15,7 +15,7 @@ MeshRenderer::MeshRenderer() :
 void MeshRenderer::OnRender(DirectX::SimpleMath::Matrix view, DirectX::SimpleMath::Matrix proj, ID3D11DeviceContext* context)
 {
 	if (resource)
-		resource->resource->Draw(context, *m_states, gameObject->transform.GetWorldMatrix(), view, proj);
+		resource->GetResource()->Draw(context, *m_states, gameObject->transform.GetWorldMatrix(), view, proj);
 }
 
 void MeshRenderer::OnStart()
@@ -38,7 +38,7 @@ void MeshRenderer::OnGizmo()
 
 void MeshRenderer::OnInspector()
 {
-	std::string resourceName = resource ? resource->name : "[select model]";
+	std::string resourceName = resource ? resource->GetName() : "[select model]";
 	ImGui::Text("Model: ");
 	ImGui::SameLine();
 	if (ImGui::Button(resourceName.c_str()))
@@ -59,9 +59,9 @@ void MeshRenderer::OnInspector()
 		for (auto it : models)
 		{
 			ImGui::PushID(++i);
-			if (ImGui::Selectable(it->name.c_str()))
+			if (ImGui::Selectable(it->GetName().c_str()))
 			{
-				modelResourceId = it->id;
+				modelResourceId = it->GetId();
 				resource = it;
 			}
 			ImGui::PopID();

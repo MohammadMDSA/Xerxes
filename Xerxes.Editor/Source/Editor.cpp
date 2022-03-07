@@ -57,6 +57,7 @@ void Editor::Initialize(HWND window, int width, int height)
 	this->sceneWindow = new SceneWindow(1);
 	this->inspectorWindow = new InspectorWindow(2);
 	this->hierarchyWindow = new HierarchyWindow(3);
+	this->resourceWindow = new ResourceWindow(4);
 	this->sceneWindow->SetDimansion(100.f, 100.f);
 	this->sceneWindow->SetPosition(0.f, 0.f);
 	this->go = new GameObject();
@@ -166,6 +167,8 @@ void Editor::Render()
 	inspectorWindow->EndWindow();
 	hierarchyWindow->BeginWindow();
 	hierarchyWindow->EndWindow();
+	resourceWindow->BeginWindow();
+	resourceWindow->EndWindow();
 
 	AppBarMenus();
 

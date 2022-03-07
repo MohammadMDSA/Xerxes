@@ -5,7 +5,10 @@ EditorWindow::EditorWindow(int id, std::string title) :
 	firstFrame(true),
 	alwaysFullscreen(false),
 	fullscreen(false),
-	hasFocus(false)
+	hasFocus(false),
+	shouldUpdateDimansion(false),
+	shouldUpdatePosition(false),
+	backgroundAlpha(0.8)
 {
 	this->id = id;
 	this->title = title;

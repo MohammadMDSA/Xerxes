@@ -6,6 +6,8 @@ HierarchyWindow::HierarchyWindow(int id)
     : EditorWindow(id, "Hierarchy")
 {
     backgroundAlpha = 0.7f;
+    SetPosition(200, 100);
+    SetDimansion(150, 200);
 }
 
 HierarchyWindow::~HierarchyWindow()

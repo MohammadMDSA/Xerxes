@@ -82,6 +82,9 @@
     <ClInclude Include="Libs\ImGuiFileDialog\dirent\dirent.h">
       <Filter>Libs\ImGuiFileDialog</Filter>
     </ClInclude>
+    <ClInclude Include="ResourceWindow.h">
+      <Filter>Source\Public\EditorWindow</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Editor.cpp">
@@ -114,6 +117,9 @@
     </ClCompile>
     <ClCompile Include="Libs\ImGuiFileDialog\ImGuiFileDialog.cpp">
       <Filter>Libs\ImGuiFileDialog</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceWindow.cpp">
+      <Filter>Source\Private\EditorWindow</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

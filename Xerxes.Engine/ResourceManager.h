@@ -5,14 +5,32 @@
 #include "IManager.h"
 #include "boost/filesystem.hpp"
 
-template<class T>
-struct GameResource
+class ResourceManager;
+
+struct GameResourceBase
 {
+public:
+	int						GetId() { return id; }
+	std::string				GetName() { return name; }
+	bool					IsLoaded() { return isLoaded; }
+	const boost::filesystem::path& GetPath() const { return path; }
+
+protected:
 	int						id;
 	std::string				name;
 	bool					isLoaded;
-	std::unique_ptr<T>		resource;
 	boost::filesystem::path	path;
+};
+
+template<class T>
+struct GameResource : public GameResourceBase
+{
+	T*						GetResource() { return resource.get(); }
+
+private:
+	friend class ResourceManager;
+	std::unique_ptr<T>		resource;
+
 };
 
 class ResourceManager : public IManager
@@ -29,6 +47,7 @@ public:
 
 	GameResource<DirectX::Model>* GetModel(int id);
 	std::vector<GameResource<DirectX::Model>*> GetAllModels();
+	std::vector<GameResource<DirectX::IEffectFactory>*> GetAllEffects();
 
 	// Inherited via IManager
 	virtual void OnInit() override;
