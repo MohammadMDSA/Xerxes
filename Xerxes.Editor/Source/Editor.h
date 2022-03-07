@@ -91,10 +91,4 @@ private:
     HierarchyWindow*                                hierarchyWindow;
     ResourceWindow*                                 resourceWindow;
 
-    GameObject* go;
-    GameObject* go1;
-    GameObject* go2;
-    GameObject* go3;
-    GameObject* go4;
-    GameObject* go5;
 };

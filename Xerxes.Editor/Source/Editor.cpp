@@ -39,7 +39,6 @@ Editor::~Editor()
 	rootManager->Destroy();
 	delete sceneWindow;
 	delete inspectorWindow;
-	delete go;
 }
 
 // Initialize the Direct3D resources required to run.
@@ -60,18 +59,7 @@ void Editor::Initialize(HWND window, int width, int height)
 	this->resourceWindow = new ResourceWindow(4);
 	this->sceneWindow->SetDimansion(100.f, 100.f);
 	this->sceneWindow->SetPosition(0.f, 0.f);
-	this->go = new GameObject();
-	go->transform.SetPosition(0, 0, 2);
-	this->go1 = new GameObject();
-	go1->transform.SetPosition(0, 0, -2);
-	this->go2 = new GameObject();
-	go2->transform.SetPosition(2, 0, 0);
-	this->go3 = new GameObject();
-	go3->transform.SetPosition(-2, 0, 0);
-	this->go4 = new GameObject();
-	go4->transform.SetPosition(0, 2, 0);
-	this->go5 = new GameObject();
-	go5->transform.SetPosition(0, -2, 0);
+
 	this->rootManager = RootManager::GetInstance();
 
 	/////////////////////////// Remove above
@@ -193,14 +181,6 @@ void Editor::Render()
 
 	sceneManager->OnRender(view, proj);
 
-	go->OnRender(view, proj, context);
-	go1->OnRender(view, proj, context);
-	go2->OnRender(view, proj, context);
-	go3->OnRender(view, proj, context);
-	go4->OnRender(view, proj, context);
-	go5->OnRender(view, proj, context);
-
-
 	m_deviceResources->PIXEndEvent();
 
 	/*if (ImGui::GetIO().ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
@@ -316,13 +296,6 @@ void Editor::CreateWindowSizeDependentResources()
 	auto device = m_deviceResources->GetD3DDevice();
 	RootManager::GetInstance()->GetResourceManager()->SetDevice(device);
 	RootManager::GetInstance()->GetResourceManager()->SetDeviceContext(context);
-
-	go->OnStart();
-	go1->OnStart();
-	go2->OnStart();
-	go3->OnStart();
-	go4->OnStart();
-	go5->OnStart();
 }
 
 void Editor::InitializeImgui()
@@ -365,7 +338,7 @@ void Editor::AppBarMenus()
 		{
 			if (ImGui::MenuItem("New", "CTRL+N"))
 			{
-				AddItem();
+				ImGuiFileDialog::Instance()->OpenDialog("ChooseFileDlgKey", "Choose File", ".sdkmesh", ".");
 			}
 			if (ImGui::MenuItem("New GameObject"))
 			{
@@ -377,68 +350,24 @@ void Editor::AppBarMenus()
 		}
 		ImGui::EndMainMenuBar();
 	}
+	AddItem();
 }
-
 void Editor::AddItem()
 {
-	IFileOpenDialog* pFileOpen;
-
-	// Create the FileOpenDialog object.
-	HRESULT hr = CoCreateInstance(CLSID_FileOpenDialog, NULL, CLSCTX_ALL,
-		IID_IFileOpenDialog, reinterpret_cast<void**>(&pFileOpen));
-
-	if (SUCCEEDED(hr))
+	if (ImGuiFileDialog::Instance()->Display("ChooseFileDlgKey"))
 	{
-		// Show the Open dialog box.
-		hr = pFileOpen->Show(NULL);
-
-		// Get the file name from the dialog box.
-		if (SUCCEEDED(hr))
+		if (ImGuiFileDialog::Instance()->IsOk())
 		{
-			IShellItem* pItem;
-			hr = pFileOpen->GetResult(&pItem);
-			if (SUCCEEDED(hr))
-			{
-				PWSTR pszFilePath;
-				hr = pItem->GetDisplayName(SIGDN_FILESYSPATH, &pszFilePath);
+			std::string filePathName = ImGuiFileDialog::Instance()->GetFilePathName();
 
-				// Display the file name to the user.
-				if (SUCCEEDED(hr))
-				{
-					auto goo = new GameObject();
-					int modelId = rootManager->GetResourceManager()->CreateModel(pszFilePath);
-					auto mesh = new MeshRenderer();
-					goo->AddComponent(mesh);
-					goo->OnStart();
-					rootManager->GetSceneManager()->AddGameObject(goo);
-				}
-				pItem->Release();
-			}
+			auto goo = new GameObject();
+			int modelId = rootManager->GetResourceManager()->CreateModel(std::wstring(filePathName.begin(), filePathName.end()));
+			auto mesh = new MeshRenderer();
+			goo->AddComponent(mesh);
+			goo->OnStart();
+			rootManager->GetSceneManager()->AddGameObject(goo);
 		}
-		pFileOpen->Release();
+
+		ImGuiFileDialog::Instance()->Close();
 	}
-	CoUninitialize();
 }
-
-
-//void Editor::AddItem()
-//{
-//	ImGuiFileDialog::Instance()->OpenDialog("ChooseFileDlgKey", "Choose File", ".sdkmesh", ".");
-//
-//	if (ImGuiFileDialog::Instance()->Display("ChooseFileDlgKey"))
-//	{
-//		if (ImGuiFileDialog::Instance()->IsOk())
-//		{
-//			std::string filePathName = ImGuiFileDialog::Instance()->GetFilePathName();
-//
-//			auto goo = new GameObject();
-//			int modelId = rootManager->GetResourceManager()->CreateModel(std::wstring(filePathName.begin(), filePathName.end()));
-//			auto mesh = new MeshRenderer();
-//			goo->AddComponent(mesh);
-//			goo->OnStart();
-//			rootManager->GetSceneManager()->AddGameObject(goo);
-//		}
-//
-//		ImGuiFileDialog::Instance()->Close();
-//	}
-//}
