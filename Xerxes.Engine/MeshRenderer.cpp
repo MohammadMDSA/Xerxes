@@ -49,13 +49,22 @@ void MeshRenderer::OnInspector()
 		ImGui::Text("Models");
 		auto models = RootManager::GetInstance()->GetResourceManager()->GetAllModels();
 		ImGui::Separator();
+		if (ImGui::Selectable("<none>"))
+		{
+			modelResourceId = -1;
+			resource = nullptr;
+		}
+
+		int i = 0;
 		for (auto it : models)
 		{
+			ImGui::PushID(++i);
 			if (ImGui::Selectable(it->name.c_str()))
 			{
 				modelResourceId = it->id;
 				resource = it;
 			}
+			ImGui::PopID();
 		}
 		ImGui::EndPopup();
 	}
