@@ -22,6 +22,7 @@ protected:
 	std::string				type;
 	bool					isLoaded;
 	boost::filesystem::path	path;
+	bool					isDefault = false;
 };
 
 template<class T>
@@ -55,12 +56,21 @@ public:
 		return result;
 	}
 
+	inline void CleanUpDefaults()
+	{
+		group.erase(std::remove_if(
+			group.begin(), group.end(),
+			[](const GameResource<T>*& x) {
+				return !x->isDefault; // put your condition here
+			}), group.end());
+	}
+
 private:
 	friend class ResourceManager;
 	std::unordered_map<int, GameResource<T>*> group;
 };
 
-class ResourceManager : public IManager, public ResourceGroup<DirectX::IEffect>, public ResourceGroup<DirectX::Model>, public ResourceGroup<DirectX::GeometricPrimitive>
+class ResourceManager : public IManager, public ResourceGroup<DirectX::IEffect>, public ResourceGroup<DirectX::Model>, public ResourceGroup<DirectX::GeometricPrimitive>, public ResourceGroup<ID3D11ShaderResourceView>
 {
 public:
 	ResourceManager();
@@ -80,10 +90,15 @@ private:
 	int CreateSDKMESHModel(boost::filesystem::path path);
 	int GetNewId();
 	GameResource<DirectX::GeometricPrimitive>* AddPrimitive(std::string name);
+	
+	void AddDefaultGeometricPrimitives();
+	void AddDefaultEffects();
 
 	int lastId;
 
 	ID3D11Device* device;
 	ID3D11DeviceContext* context;
+
+	Microsoft::WRL::ComPtr<ID3D11InputLayout> dInputLayout;
 };
 
