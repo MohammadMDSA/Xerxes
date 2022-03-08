@@ -51,7 +51,7 @@ int ResourceManager::CreateSDKMESHModel(boost::filesystem::path path)
 
 	auto effectFactory = std::make_unique<EffectFactory>(device);
 	effectFactory->SetDirectory(path.parent_path().wstring().c_str());
-	auto modelResource = new GameResource<Model>();
+	auto modelResource = new ModelResource();
 	modelResource->id = GetNewId();
 	modelResource->name = std::string("model_") + path.filename().string();
 	modelResource->isLoaded = true;
@@ -63,7 +63,7 @@ int ResourceManager::CreateSDKMESHModel(boost::filesystem::path path)
 		*effectFactory,
 		ModelLoader_IncludeBones
 	);
-	ResourceGroup<DirectX::Model>::group.insert({ modelResource->id, modelResource });
+	ResourceGroup<ModelResource>::group.insert({ modelResource->id, modelResource });
 	return modelResource->id;
 }
 
@@ -76,9 +76,9 @@ void ResourceManager::OnInit()
 {
 }
 
-GameResource<GeometricPrimitive>* ResourceManager::AddPrimitive(std::string name)
+GeometricPrimitiveResource* ResourceManager::AddPrimitive(std::string name)
 {
-	auto gr = new GameResource<GeometricPrimitive>();
+	auto gr = new GeometricPrimitiveResource();
 	gr->id = GetNewId();
 	gr->name = name;
 	gr->path = "";
@@ -91,56 +91,56 @@ void ResourceManager::AddDefaultGeometricPrimitives()
 {
 	auto grBox = AddPrimitive("Box");
 	grBox->resource = GeometricPrimitive::CreateBox(context, DirectX::SimpleMath::Vector3::One);
-	ResourceGroup<GeometricPrimitive>::group.insert({ grBox->id, grBox });
+	ResourceGroup<GeometricPrimitiveResource>::group.insert({ grBox->id, grBox });
 
 	auto grCone = AddPrimitive("Cone");
 	grCone->resource = GeometricPrimitive::CreateCone(context);
-	ResourceGroup<GeometricPrimitive>::group.insert({ grCone->id, grCone });
+	ResourceGroup<GeometricPrimitiveResource>::group.insert({ grCone->id, grCone });
 
 	auto grCube = AddPrimitive("Cube");
 	grCube->resource = GeometricPrimitive::CreateCube(context);
-	ResourceGroup<GeometricPrimitive>::group.insert({ grCube->id, grCube });
+	ResourceGroup<GeometricPrimitiveResource>::group.insert({ grCube->id, grCube });
 
 	auto grCylinder = AddPrimitive("Cylinder");
 	grCylinder->resource = GeometricPrimitive::CreateCylinder(context);
-	ResourceGroup<GeometricPrimitive>::group.insert({ grCylinder->id, grCylinder });
+	ResourceGroup<GeometricPrimitiveResource>::group.insert({ grCylinder->id, grCylinder });
 
 	auto grDodecahedron = AddPrimitive("Dodecahedron");
 	grDodecahedron->resource = GeometricPrimitive::CreateDodecahedron(context);
-	ResourceGroup<GeometricPrimitive>::group.insert({ grDodecahedron->id, grDodecahedron });
+	ResourceGroup<GeometricPrimitiveResource>::group.insert({ grDodecahedron->id, grDodecahedron });
 
 	auto grGeoSphere = AddPrimitive("GeoSphere");
 	grGeoSphere->resource = GeometricPrimitive::CreateGeoSphere(context);
-	ResourceGroup<GeometricPrimitive>::group.insert({ grGeoSphere->id, grGeoSphere });
+	ResourceGroup<GeometricPrimitiveResource>::group.insert({ grGeoSphere->id, grGeoSphere });
 
 	auto grIcosahedron = AddPrimitive("Icosahedron");
 	grIcosahedron->resource = GeometricPrimitive::CreateIcosahedron(context);
-	ResourceGroup<GeometricPrimitive>::group.insert({ grIcosahedron->id, grIcosahedron });
+	ResourceGroup<GeometricPrimitiveResource>::group.insert({ grIcosahedron->id, grIcosahedron });
 
 	auto grOctahedron = AddPrimitive("Octahedron");
 	grOctahedron->resource = GeometricPrimitive::CreateOctahedron(context);
-	ResourceGroup<GeometricPrimitive>::group.insert({ grOctahedron->id, grOctahedron });
+	ResourceGroup<GeometricPrimitiveResource>::group.insert({ grOctahedron->id, grOctahedron });
 
 	auto grSphere = AddPrimitive("Sphere");
 	grSphere->resource = GeometricPrimitive::CreateSphere(context);
-	ResourceGroup<GeometricPrimitive>::group.insert({ grSphere->id, grSphere });
+	ResourceGroup<GeometricPrimitiveResource>::group.insert({ grSphere->id, grSphere });
 
 	auto grTeapot = AddPrimitive("Teapot");
 	grTeapot->resource = GeometricPrimitive::CreateTeapot(context);
-	ResourceGroup<GeometricPrimitive>::group.insert({ grTeapot->id, grTeapot });
+	ResourceGroup<GeometricPrimitiveResource>::group.insert({ grTeapot->id, grTeapot });
 
 	auto grTetrahedron = AddPrimitive("Tetrahedron");
 	grTetrahedron->resource = GeometricPrimitive::CreateTetrahedron(context);
-	ResourceGroup<GeometricPrimitive>::group.insert({ grTetrahedron->id, grTetrahedron });
+	ResourceGroup<GeometricPrimitiveResource>::group.insert({ grTetrahedron->id, grTetrahedron });
 
 	auto grTorus = AddPrimitive("Torus");
 	grTorus->resource = GeometricPrimitive::CreateTorus(context);
-	ResourceGroup<GeometricPrimitive>::group.insert({grTorus->id, grTorus});
+	ResourceGroup<GeometricPrimitiveResource>::group.insert({grTorus->id, grTorus});
 }
 
 void ResourceManager::AddDefaultEffects()
 {
-	auto gr = new GameResource<IEffect>();
+	auto gr = new EffectResource();
 	gr->isDefault = true;
 	gr->id = GetNewId();
 	gr->isLoaded = true;
@@ -155,24 +155,24 @@ void ResourceManager::AddDefaultEffects()
 	dynamic_cast<BasicEffect*>(gr->resource.get())->SetLightDiffuseColor(0, Colors::Red);
 	dynamic_cast<BasicEffect*>(gr->resource.get())->SetLightDirection(0, -DirectX::SimpleMath::Vector3::UnitZ);
 
-	ResourceGroup<DirectX::GeometricPrimitive>::group.begin()->second->resource->CreateInputLayout(gr->resource.get(), &dInputLayout);
-	ResourceGroup<DirectX::IEffect>::group.insert({ gr->id, gr });
+	ResourceGroup<GeometricPrimitiveResource>::group.begin()->second->resource->CreateInputLayout(gr->resource.get(), &dInputLayout);
+	ResourceGroup<EffectResource>::group.insert({ gr->id, gr });
 }
 
 void ResourceManager::OnShutdown()
 {
-	for (auto& it : ResourceGroup<DirectX::Model>::group) {
+	for (auto& it : ResourceGroup<ModelResource>::group) {
 		delete it.second;
 	}
-	ResourceGroup<DirectX::Model>::group.clear();
-	for (auto& it : ResourceGroup<DirectX::IEffect>::group)
+	ResourceGroup<ModelResource>::group.clear();
+	for (auto& it : ResourceGroup<EffectResource>::group)
 	{
 		delete it.second;
 	}
-	ResourceGroup<DirectX::IEffect>::group.clear();
-	for (auto& it : ResourceGroup<DirectX::GeometricPrimitive>::group)
+	ResourceGroup<EffectResource>::group.clear();
+	for (auto& it : ResourceGroup<GeometricPrimitiveResource>::group)
 	{
 		delete it.second;
 	}
-	ResourceGroup<DirectX::GeometricPrimitive>::group.clear();
+	ResourceGroup<GeometricPrimitiveResource>::group.clear();
 }

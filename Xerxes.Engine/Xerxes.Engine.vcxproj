@@ -61,6 +61,7 @@
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
+      <DisableSpecificWarnings>%(DisableSpecificWarnings)</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -80,6 +81,7 @@
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
+      <DisableSpecificWarnings>%(DisableSpecificWarnings)</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -92,9 +94,12 @@
   <ItemGroup>
     <ClInclude Include="Camera.h" />
     <ClInclude Include="CameraManager.h" />
+    <ClInclude Include="EffectResource.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GameObjectComponent.h" />
+    <ClInclude Include="GameResource.h" />
+    <ClInclude Include="GeometricPrimitiveResource.h" />
     <ClInclude Include="IManager.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="Libs\imgui\GraphEditor.h" />
@@ -111,17 +116,23 @@
     <ClInclude Include="Libs\imgui\imstb_truetype.h" />
     <ClInclude Include="Libs\imgui\ImZoomSlider.h" />
     <ClInclude Include="MeshRenderer.h" />
+    <ClInclude Include="ModelResource.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="ResourceGroup.h" />
     <ClInclude Include="ResourceManager.h" />
     <ClInclude Include="RootManager.h" />
     <ClInclude Include="SceneManager.h" />
+    <ClInclude Include="TextureResource.h" />
     <ClInclude Include="Transform.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CameraManager.cpp" />
+    <ClCompile Include="EffectResource.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GameObjectComponent.cpp" />
+    <ClCompile Include="GeometricPrimitiveResource.cpp" />
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="Libs\imgui\GraphEditor.cpp" />
     <ClCompile Include="Libs\imgui\ImCurveEdit.cpp" />
@@ -135,6 +146,7 @@
     <ClCompile Include="Libs\imgui\imgui_widgets.cpp" />
     <ClCompile Include="Libs\imgui\ImSequencer.cpp" />
     <ClCompile Include="MeshRenderer.cpp" />
+    <ClCompile Include="ModelResource.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
@@ -142,11 +154,15 @@
     <ClCompile Include="ResourceManager.cpp" />
     <ClCompile Include="RootManager.cpp" />
     <ClCompile Include="SceneManager.cpp" />
+    <ClCompile Include="TextureResource.cpp" />
     <ClCompile Include="Transform.cpp" />
     <ClCompile Include="Xerxes.Engine.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Xerxes.Engine.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

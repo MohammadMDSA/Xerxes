@@ -2,6 +2,7 @@
 #include "MeshRenderer.h"
 #include <string>
 #include "RootManager.h"
+#include "GeometricPrimitiveResource.h"
 
 using namespace DirectX;
 using namespace std;
@@ -18,14 +19,14 @@ void MeshRenderer::OnRender(DirectX::SimpleMath::Matrix view, DirectX::SimpleMat
 	auto world = gameObject->transform.GetWorldMatrix();
 	if (usingPrimitives)
 	{
-		auto resource = resourceManager->ResourceGroup<GeometricPrimitive>::GetById(meshResourceId);
+		auto resource = resourceManager->ResourceGroup<GeometricPrimitiveResource>::GetById(meshResourceId);
 		if (!resource)
 			return;
 		resource->GetResource()->Draw(world, view, proj);
 	}
 	else
 	{
-		auto resource = resourceManager->ResourceGroup<Model>::GetById(meshResourceId);
+		auto resource = resourceManager->ResourceGroup<ModelResource>::GetById(meshResourceId);
 		if (!resource)
 			return;
 		resource->GetResource()->Draw(context, *m_states, world, view, proj);
@@ -55,9 +56,9 @@ void MeshRenderer::OnInspector()
 	auto resourceManager = RootManager::GetInstance()->GetResourceManager();
 	GameResourceBase* resource;
 	if (usingPrimitives)
-		resource = resourceManager->ResourceGroup<GeometricPrimitive>::GetById(meshResourceId);
+		resource = resourceManager->ResourceGroup<GeometricPrimitiveResource>::GetById(meshResourceId);
 	else
-		resource = resourceManager->ResourceGroup<DirectX::Model>::GetById(meshResourceId);
+		resource = resourceManager->ResourceGroup<ModelResource>::GetById(meshResourceId);
 
 	std::string resourceName = resource ? resource->GetName() : "[select model]";
 	ImGui::Text("Model: ");
@@ -67,7 +68,7 @@ void MeshRenderer::OnInspector()
 
 	if (ImGui::BeginPopup("MeshRendererModelSelection"))
 	{
-		auto models = resourceManager->ResourceGroup<DirectX::Model>::GetAll();
+		auto models = resourceManager->ResourceGroup<ModelResource>::GetAll();
 		if (ImGui::Selectable("<none>"))
 		{
 			meshResourceId = -1;
@@ -84,7 +85,7 @@ void MeshRenderer::OnInspector()
 			}
 			ImGui::PopID();
 		}
-		auto primitives = resourceManager->ResourceGroup<DirectX::GeometricPrimitive>::GetAll();
+		auto primitives = resourceManager->ResourceGroup<GeometricPrimitiveResource>::GetAll();
 		for (auto it : primitives)
 		{
 			ImGui::PushID(++i);

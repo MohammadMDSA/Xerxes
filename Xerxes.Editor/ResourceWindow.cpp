@@ -25,7 +25,7 @@ void ResourceWindow::OnGUI()
 		if (ImGui::BeginTabItem("Models"))
 		{
 			int index = 0;
-			for (auto model : resourceManager->ResourceGroup<DirectX::Model>::GetAll())
+			for (auto model : resourceManager->ResourceGroup<ModelResource>::GetAll())
 			{
 				ImGui::PushID(++index);
 				
@@ -42,7 +42,7 @@ void ResourceWindow::OnGUI()
 		if (ImGui::BeginTabItem("Effects"))
 		{
 			int index = 0;
-			for (auto effect : resourceManager->ResourceGroup<DirectX::IEffect>::GetAll())
+			for (auto effect : resourceManager->ResourceGroup<EffectResource>::GetAll())
 			{
 				ImGui::PushID(++index);
 
@@ -59,7 +59,7 @@ void ResourceWindow::OnGUI()
 		if (ImGui::BeginTabItem("Primitives"))
 		{
 			int index = 0;
-			for (auto primitive : resourceManager->ResourceGroup<DirectX::GeometricPrimitive>::GetAll())
+			for (auto primitive : resourceManager->ResourceGroup<GeometricPrimitiveResource>::GetAll())
 			{
 				ImGui::PushID(++index);
 

@@ -49,6 +49,12 @@
     <Filter Include="Source\Private\Core">
       <UniqueIdentifier>{ec6947ef-608d-45f7-913f-46fcd6281633}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Private\GameResources">
+      <UniqueIdentifier>{eb0f11ce-efe0-4097-8f27-2965e711cf95}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Public\GameResrouces">
+      <UniqueIdentifier>{70550e9d-7b32-46db-9d65-664fb1c61cdd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -129,6 +135,27 @@
     <ClInclude Include="Transform.h">
       <Filter>Source\Public\Core</Filter>
     </ClInclude>
+    <ClInclude Include="GameResource.h">
+      <Filter>Source\Public\GameResrouces</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceGroup.h">
+      <Filter>Source\Public\GameResrouces</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureResource.h">
+      <Filter>Source\Public\GameResrouces</Filter>
+    </ClInclude>
+    <ClInclude Include="ModelResource.h">
+      <Filter>Source\Public\GameResrouces</Filter>
+    </ClInclude>
+    <ClInclude Include="EffectResource.h">
+      <Filter>Source\Public\GameResrouces</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Source\Public</Filter>
+    </ClInclude>
+    <ClInclude Include="GeometricPrimitiveResource.h">
+      <Filter>Source\Public\GameResrouces</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Xerxes.Engine.cpp">
@@ -200,8 +227,25 @@
     <ClCompile Include="Transform.cpp">
       <Filter>Source\Private\Core</Filter>
     </ClCompile>
+    <ClCompile Include="TextureResource.cpp">
+      <Filter>Source\Private\GameResources</Filter>
+    </ClCompile>
+    <ClCompile Include="ModelResource.cpp">
+      <Filter>Source\Private\GameResources</Filter>
+    </ClCompile>
+    <ClCompile Include="EffectResource.cpp">
+      <Filter>Source\Private\GameResources</Filter>
+    </ClCompile>
+    <ClCompile Include="GeometricPrimitiveResource.cpp">
+      <Filter>Source\Private\GameResources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Xerxes.Engine.rc">
+      <Filter>Resources</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>
