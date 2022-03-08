@@ -162,6 +162,12 @@
     <ClInclude Include="IInspectorDrawer.h">
       <Filter>Source\Public\Core</Filter>
     </ClInclude>
+    <ClInclude Include="LightComponent.h">
+      <Filter>Source\Public\GameObjectComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="LightManager.h">
+      <Filter>Source\Public\SubsystemManager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Xerxes.Engine.cpp">
@@ -246,6 +252,12 @@
       <Filter>Source\Private\GameResources</Filter>
     </ClCompile>
     <ClCompile Include="SelectionManager.cpp">
+      <Filter>Source\Private\SubsystemManager</Filter>
+    </ClCompile>
+    <ClCompile Include="LightComponent.cpp">
+      <Filter>Source\Private\GameObjectComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="LightManager.cpp">
       <Filter>Source\Private\SubsystemManager</Filter>
     </ClCompile>
   </ItemGroup>

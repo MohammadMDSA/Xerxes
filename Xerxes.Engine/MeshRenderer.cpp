@@ -18,6 +18,7 @@ void MeshRenderer::OnRender(DirectX::SimpleMath::Matrix view, DirectX::SimpleMat
 {
 	auto resourceManager = RootManager::GetInstance()->GetResourceManager();
 	auto world = gameObject->transform.GetWorldMatrix();
+	auto lightManager = RootManager::GetInstance()->GetLightManager();
 	if (usingPrimitives)
 	{
 		auto effect = resourceManager->ResourceGroup<EffectResource>::GetById(effectResourceId);
@@ -27,9 +28,8 @@ void MeshRenderer::OnRender(DirectX::SimpleMath::Matrix view, DirectX::SimpleMat
 		if (effect)
 		{
 			auto effectRes = effect->GetResource();
-			effectRes->SetWorld(world);
-			effectRes->SetView(view);
-			effectRes->SetProjection(proj);
+			effectRes->SetMatrices(world, view, proj);
+			lightManager->ApplyToEffect(effectRes);
 			resource->GetResource()->Draw(effect->GetResource(), resourceManager->GetDefaultInputLayout());
 		}
 		else
@@ -40,6 +40,21 @@ void MeshRenderer::OnRender(DirectX::SimpleMath::Matrix view, DirectX::SimpleMat
 		auto resource = resourceManager->ResourceGroup<ModelResource>::GetById(meshResourceId);
 		if (!resource)
 			return;
+		resource->GetResource()->UpdateEffects([lightManager, world, view, proj](IEffect* effect)
+			{
+				auto lightEffect = dynamic_cast<IEffectLights*>(effect);
+				if (lightEffect)
+				{
+					lightManager->ApplyToEffect(lightEffect);
+				}
+				
+				auto matrixEffect = dynamic_cast<IEffectMatrices*>(effect);
+				if (matrixEffect)
+				{
+					matrixEffect->SetMatrices(world, view, proj);
+				}
+
+			});
 		resource->GetResource()->Draw(context, *m_states, world, view, proj);
 	}
 }

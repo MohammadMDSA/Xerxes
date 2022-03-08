@@ -171,6 +171,10 @@ void GameObject::OnInspector()
 		{
 			this->AddComponent(new MeshRenderer());
 		}
+		if (ImGui::Selectable("Light"))
+		{
+			this->AddComponent(new LightComponent());
+		}
 		ImGui::EndPopup();
 	}
 }

@@ -6,6 +6,7 @@
 #include "ResourceManager.h"
 #include "SceneManager.h"
 #include "SelectionManager.h"
+#include "LightManager.h"
 
 class RootManager
 {
@@ -18,6 +19,7 @@ public:
 	ResourceManager*						GetResourceManager();
 	SceneManager*							GetSceneManager();
 	SelectionManager*						GetSelectionManager();
+	LightManager*							GetLightManager();
 
 	void									Update(float deltaTime);
 
@@ -30,6 +32,7 @@ private:
 	std::shared_ptr<ResourceManager>		resourceManager;
 	std::shared_ptr<SceneManager>			sceneManager;
 	std::shared_ptr<SelectionManager>		selectionManager;
+	std::shared_ptr<LightManager>			lightManager;
 	
 	RootManager(RootManager const&) {};
 	RootManager&							operator=(RootManager const&) {};

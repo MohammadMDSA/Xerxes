@@ -9,9 +9,9 @@ void EffectResource::OnInspector()
 	auto res = resource.get();
 	ImGui::Text("Diffuse Color:");
 	ImGui::SameLine();
-	if (ImGui::ColorEdit4("Diffuse Color", (float*)&DiffuseColor, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoLabel))
+	if (ImGui::ColorEdit4("Diffuse Color", (float*)&diffuseColor, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoLabel))
 	{
-		res->SetLightDiffuseColor(0, DiffuseColor);
+		res->SetColorAndAlpha(diffuseColor);
 	}
 
 }

@@ -116,6 +116,8 @@
     <ClInclude Include="Libs\imgui\imstb_textedit.h" />
     <ClInclude Include="Libs\imgui\imstb_truetype.h" />
     <ClInclude Include="Libs\imgui\ImZoomSlider.h" />
+    <ClInclude Include="LightComponent.h" />
+    <ClInclude Include="LightManager.h" />
     <ClInclude Include="MeshRenderer.h" />
     <ClInclude Include="ModelResource.h" />
     <ClInclude Include="pch.h" />
@@ -147,6 +149,8 @@
     <ClCompile Include="Libs\imgui\imgui_tables.cpp" />
     <ClCompile Include="Libs\imgui\imgui_widgets.cpp" />
     <ClCompile Include="Libs\imgui\ImSequencer.cpp" />
+    <ClCompile Include="LightComponent.cpp" />
+    <ClCompile Include="LightManager.cpp" />
     <ClCompile Include="MeshRenderer.cpp" />
     <ClCompile Include="ModelResource.cpp" />
     <ClCompile Include="pch.cpp">

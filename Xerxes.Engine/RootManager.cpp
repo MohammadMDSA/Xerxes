@@ -44,6 +44,11 @@ SelectionManager* RootManager::GetSelectionManager()
 	return selectionManager.get();
 }
 
+LightManager* RootManager::GetLightManager()
+{
+	return lightManager.get();
+}
+
 void RootManager::Update(float deltaTime)
 {
 	inputManager->Update();
@@ -56,10 +61,12 @@ void RootManager::Init()
 	resourceManager->OnInit();
 	sceneManager->OnInit();
 	selectionManager->OnInit();
+	lightManager->OnInit();
 }
 
 void RootManager::Shutdown()
 {
+	lightManager->OnShutdown();
 	selectionManager->OnShutdown();
 	sceneManager->OnShutdown();
 	resourceManager->OnShutdown();
@@ -76,6 +83,7 @@ RootManager::RootManager()
 	resourceManager = shared_ptr<ResourceManager>(new ResourceManager());
 	sceneManager = shared_ptr<SceneManager>(new SceneManager());
 	selectionManager = shared_ptr<SelectionManager>(new SelectionManager());
+	lightManager = shared_ptr<LightManager>(new LightManager());
 	Init();
 }
 

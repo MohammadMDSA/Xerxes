@@ -8,6 +8,6 @@ class EffectResource : public GameResource<DirectX::BasicEffect>
 	virtual void OnInspector() override;
 
 private:
-	DirectX::SimpleMath::Vector4 DiffuseColor = DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f);
+	DirectX::SimpleMath::Vector4 diffuseColor = DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f);
 };
 

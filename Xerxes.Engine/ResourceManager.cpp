@@ -153,6 +153,7 @@ void ResourceManager::AddDefaultEffects()
 	effect->SetPerPixelLighting(true);
 	effect->SetLightingEnabled(true);
 	effect->SetLightEnabled(0, true);
+	effect->SetDiffuseColor(Colors::Red);
 	dynamic_cast<BasicEffect*>(gr->resource.get())->SetLightDirection(0, -DirectX::SimpleMath::Vector3::UnitZ);
 
 	auto mm = ResourceGroup<GeometricPrimitiveResource>::group.begin();
