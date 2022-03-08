@@ -142,19 +142,28 @@ void Editor::Render()
 	if (showDemo)
 		ImGui::ShowDemoWindow(&showDemo);
 	auto sceneManager = rootManager->GetSceneManager();
+	auto selectionManager = rootManager->GetSelectionManager();
+	auto selected = selectionManager->GetSelectedInspectorDrawer();
 
 	sceneWindow->BeginWindow();
 	ImGuizmo::SetRect(0, 0, sceneWidth, sceneHeight);
 	sceneManager->OnGizmo();
 
 	sceneWindow->EndWindow();
+
+	// Drawing Inspector
 	inspectorWindow->SetPosition(m_outputWidth - inspectorWindow->GetWidth(), 0.f);
 	inspectorWindow->SetDimansion(inspectorWindow->GetWidth(), m_outputHeight);
 	inspectorWindow->BeginWindow();
-	sceneManager->OnInspector();
+	if (selected)
+		selected->OnInspector();
 	inspectorWindow->EndWindow();
+
+	// Drawing Hierarchy
 	hierarchyWindow->BeginWindow();
 	hierarchyWindow->EndWindow();
+
+	// Drawing Resource
 	resourceWindow->BeginWindow();
 	resourceWindow->EndWindow();
 

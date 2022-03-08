@@ -9,7 +9,8 @@ using namespace std;
 
 MeshRenderer::MeshRenderer() :
 	meshResourceId(-1),
-	usingPrimitives(true)
+	usingPrimitives(true),
+	effectResourceId(-1)
 {
 }
 
@@ -19,10 +20,20 @@ void MeshRenderer::OnRender(DirectX::SimpleMath::Matrix view, DirectX::SimpleMat
 	auto world = gameObject->transform.GetWorldMatrix();
 	if (usingPrimitives)
 	{
+		auto effect = resourceManager->ResourceGroup<EffectResource>::GetById(effectResourceId);
 		auto resource = resourceManager->ResourceGroup<GeometricPrimitiveResource>::GetById(meshResourceId);
 		if (!resource)
 			return;
-		resource->GetResource()->Draw(world, view, proj);
+		if (effect)
+		{
+			auto effectRes = effect->GetResource();
+			effectRes->SetWorld(world);
+			effectRes->SetView(view);
+			effectRes->SetProjection(proj);
+			resource->GetResource()->Draw(effect->GetResource(), resourceManager->GetDefaultInputLayout());
+		}
+		else
+			resource->GetResource()->Draw(world, view, proj);
 	}
 	else
 	{
@@ -55,12 +66,16 @@ void MeshRenderer::OnInspector()
 {
 	auto resourceManager = RootManager::GetInstance()->GetResourceManager();
 	GameResourceBase* resource;
+
+	auto effectResource = resourceManager->ResourceGroup<EffectResource>::GetById(effectResourceId);
+
 	if (usingPrimitives)
 		resource = resourceManager->ResourceGroup<GeometricPrimitiveResource>::GetById(meshResourceId);
 	else
 		resource = resourceManager->ResourceGroup<ModelResource>::GetById(meshResourceId);
 
 	std::string resourceName = resource ? resource->GetName() : "[select model]";
+	std::string effectName = effectResource ? effectResource->GetName() : "[select effect]";
 	ImGui::Text("Model: ");
 	ImGui::SameLine();
 	if (ImGui::Button(resourceName.c_str()))
@@ -98,6 +113,33 @@ void MeshRenderer::OnInspector()
 		}
 		ImGui::EndPopup();
 	}
+
+	ImGui::Spacing();
+	ImGui::Text("Effect: ");
+	ImGui::SameLine();
+	if (ImGui::Button(effectName.c_str()))
+		ImGui::OpenPopup("MeshRendererEffectSelection");
+
+	if (ImGui::BeginPopup("MeshRendererEffectSelection"))
+	{
+		auto effects = resourceManager->ResourceGroup<EffectResource>::GetAll();
+		if (ImGui::Selectable("<none>"))
+		{
+			effectResourceId = -1;
+		}
+
+		int i = 0;
+		for (auto it : effects)
+		{
+			ImGui::PushID(++i);
+			if (ImGui::Selectable((it->GetName() + " (" + it->GetType() + ")").c_str()))
+			{
+				effectResourceId = it->GetId();
+			}
+			ImGui::PopID();
+		}
+		ImGui::EndPopup();
+	}
 }
 
 void MeshRenderer::OnDestroy()
@@ -112,4 +154,12 @@ std::string MeshRenderer::GetName()
 void MeshRenderer::SetModelResourceId(int id)
 {
 	this->meshResourceId = id;
+}
+
+void MeshRenderer::RenderPrimitive()
+{
+}
+
+void MeshRenderer::RenderModel()
+{
 }

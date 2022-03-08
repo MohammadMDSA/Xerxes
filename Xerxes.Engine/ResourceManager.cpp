@@ -5,10 +5,7 @@
 using namespace boost::filesystem;
 using namespace DirectX;
 
-ResourceManager::ResourceManager() :
-	lastId(0),
-	context(nullptr),
-	device(nullptr)
+ResourceManager::ResourceManager()
 {
 }
 
@@ -74,6 +71,9 @@ int ResourceManager::GetNewId()
 
 void ResourceManager::OnInit()
 {
+	lastId = 0;
+	context = nullptr;
+	device = nullptr;
 }
 
 GeometricPrimitiveResource* ResourceManager::AddPrimitive(std::string name)
@@ -135,7 +135,7 @@ void ResourceManager::AddDefaultGeometricPrimitives()
 
 	auto grTorus = AddPrimitive("Torus");
 	grTorus->resource = GeometricPrimitive::CreateTorus(context);
-	ResourceGroup<GeometricPrimitiveResource>::group.insert({grTorus->id, grTorus});
+	ResourceGroup<GeometricPrimitiveResource>::group.insert({ grTorus->id, grTorus });
 }
 
 void ResourceManager::AddDefaultEffects()
@@ -147,15 +147,16 @@ void ResourceManager::AddDefaultEffects()
 	gr->name = "Default Effect";
 	gr->path = "";
 	gr->type = "Basic Effect";
-	gr->resource = std::unique_ptr<IEffect>(new BasicEffect(device));
-	dynamic_cast<BasicEffect*>(gr->resource.get())->SetTextureEnabled(true);
-	dynamic_cast<BasicEffect*>(gr->resource.get())->SetPerPixelLighting(true);
-	dynamic_cast<BasicEffect*>(gr->resource.get())->SetLightingEnabled(true);
-	dynamic_cast<BasicEffect*>(gr->resource.get())->SetLightEnabled(0, true);
-	dynamic_cast<BasicEffect*>(gr->resource.get())->SetLightDiffuseColor(0, Colors::Red);
+	gr->resource = std::unique_ptr<BasicEffect>(new BasicEffect(device));
+	auto effect = dynamic_cast<BasicEffect*>(gr->resource.get());
+	effect->SetTextureEnabled(false);
+	effect->SetPerPixelLighting(true);
+	effect->SetLightingEnabled(true);
+	effect->SetLightEnabled(0, true);
 	dynamic_cast<BasicEffect*>(gr->resource.get())->SetLightDirection(0, -DirectX::SimpleMath::Vector3::UnitZ);
 
-	ResourceGroup<GeometricPrimitiveResource>::group.begin()->second->resource->CreateInputLayout(gr->resource.get(), &dInputLayout);
+	auto mm = ResourceGroup<GeometricPrimitiveResource>::group.begin();
+	mm->second->resource->CreateInputLayout(gr->resource.get(), &dInputLayout);
 	ResourceGroup<EffectResource>::group.insert({ gr->id, gr });
 }
 
@@ -175,4 +176,9 @@ void ResourceManager::OnShutdown()
 		delete it.second;
 	}
 	ResourceGroup<GeometricPrimitiveResource>::group.clear();
+}
+
+ID3D11InputLayout* ResourceManager::GetDefaultInputLayout()
+{
+	return dInputLayout.Get();
 }

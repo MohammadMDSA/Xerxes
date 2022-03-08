@@ -2,8 +2,7 @@
 #include "SceneManager.h"
 #include "RootManager.h"
 
-SceneManager::SceneManager() :
-	selectedGameObject(nullptr)
+SceneManager::SceneManager()
 {
 }
 
@@ -30,24 +29,14 @@ void SceneManager::OnRender(DirectX::SimpleMath::Matrix view, DirectX::SimpleMat
 
 void SceneManager::OnGizmo()
 {
-	if (selectedGameObject)
-		selectedGameObject->OnGizmo();
-}
+	auto selection = RootManager::GetInstance()->GetSelectionManager();
 
-void SceneManager::OnInspector()
-{
-	if (selectedGameObject)
-		selectedGameObject->OnInspector();
-}
-
-GameObject* SceneManager::GetSelectedGameObject()
-{
-	return selectedGameObject;
-}
-
-void SceneManager::SetSelectedGameObject(GameObject* go)
-{
-	this->selectedGameObject = go;
+	if (!selection->IsResourceSelected())
+	{
+		auto obj = dynamic_cast<GameObject*>(selection->GetSelectedInspectorDrawer());
+		if (obj)
+			obj->OnGizmo();
+	}
 }
 
 void SceneManager::OnInit()

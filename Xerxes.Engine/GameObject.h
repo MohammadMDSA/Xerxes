@@ -2,6 +2,7 @@
 
 #include "Transform.h"
 #include <memory>
+#include "IInspectorDrawer.h"
 
 #include "GameObjectComponent.h"
 
@@ -10,7 +11,7 @@
 
 class GameObjectComponent;
 
-class GameObject
+class GameObject : public IInspectorDrawer
 {
 public:
 	GameObject();
@@ -24,7 +25,7 @@ public:
 	void					OnDestroy();
 
 	void					OnGizmo();
-	void					OnInspector();
+	virtual void			OnInspector() override;
 
 	void					AddComponent(GameObjectComponent* component);
 	void					DeleteComponent(GameObjectComponent* component);

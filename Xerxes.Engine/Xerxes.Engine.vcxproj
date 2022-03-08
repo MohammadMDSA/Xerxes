@@ -100,6 +100,7 @@
     <ClInclude Include="GameObjectComponent.h" />
     <ClInclude Include="GameResource.h" />
     <ClInclude Include="GeometricPrimitiveResource.h" />
+    <ClInclude Include="IInspectorDrawer.h" />
     <ClInclude Include="IManager.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="Libs\imgui\GraphEditor.h" />
@@ -123,6 +124,7 @@
     <ClInclude Include="ResourceManager.h" />
     <ClInclude Include="RootManager.h" />
     <ClInclude Include="SceneManager.h" />
+    <ClInclude Include="SelectionManager.h" />
     <ClInclude Include="TextureResource.h" />
     <ClInclude Include="Transform.h" />
   </ItemGroup>
@@ -154,6 +156,7 @@
     <ClCompile Include="ResourceManager.cpp" />
     <ClCompile Include="RootManager.cpp" />
     <ClCompile Include="SceneManager.cpp" />
+    <ClCompile Include="SelectionManager.cpp" />
     <ClCompile Include="TextureResource.cpp" />
     <ClCompile Include="Transform.cpp" />
     <ClCompile Include="Xerxes.Engine.cpp" />

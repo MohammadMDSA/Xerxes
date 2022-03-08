@@ -4,9 +4,7 @@
 
 using namespace std;
 
-CameraManager::CameraManager() :
-	lastId(1),
-	activeId(-1)
+CameraManager::CameraManager()
 {
 }
 
@@ -34,12 +32,14 @@ int CameraManager::GetFirstAvailableId()
 {
 	if (cameras.size() <= 0)
 		return -1;
-	
+
 	return cameras.cbegin()->first;
 }
 
 void CameraManager::OnInit()
 {
+	lastId = 1;
+	activeId = -1;
 }
 
 void CameraManager::OnShutdown()

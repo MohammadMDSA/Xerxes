@@ -21,7 +21,8 @@ void HierarchyWindow::Update(float deltaTime)
 void HierarchyWindow::OnGUI()
 {
     auto sceneManager = RootManager::GetInstance()->GetSceneManager();
-    auto selected = sceneManager->GetSelectedGameObject();
+    auto selection = RootManager::GetInstance()->GetSelectionManager();
+    auto selected = selection->IsResourceSelected() ? nullptr : selection->GetSelectedInspectorDrawer();
     
     int i = 0;
     for (auto go : *sceneManager->GetGameObjects())
@@ -30,7 +31,7 @@ void HierarchyWindow::OnGUI()
         if (ImGui::Selectable(go->GetName().c_str(), selected == go))
         {
             selected = go;
-            sceneManager->SetSelectedGameObject(go);
+            selection->SetSelectedGameObject(go);
         }
         ImGui::PopID();
     }

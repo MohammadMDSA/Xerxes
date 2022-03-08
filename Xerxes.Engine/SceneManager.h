@@ -8,17 +8,13 @@ public:
 	SceneManager();
 	~SceneManager();
 
-	void		Update(float deltaTime);
-	void		OnRender(DirectX::SimpleMath::Matrix view, DirectX::SimpleMath::Matrix proj);
-	void		OnGizmo();
-	void		OnInspector();
-
-	GameObject* GetSelectedGameObject();
-	void		SetSelectedGameObject(GameObject* go);
+	void			Update(float deltaTime);
+	void			OnRender(DirectX::SimpleMath::Matrix view, DirectX::SimpleMath::Matrix proj);
+	void			OnGizmo();
 
 	// Inherited via IManager
-	virtual void OnInit() override;
-	virtual void OnShutdown() override;
+	virtual void	OnInit() override;
+	virtual void	OnShutdown() override;
 
 	std::vector<GameObject*>*			GetGameObjects();
 	void								AddGameObject(GameObject* obj);
@@ -26,7 +22,6 @@ public:
 
 private:
 
-	GameObject*							selectedGameObject;
 	std::vector<GameObject*>			gameObjects;
 
 };

@@ -19,6 +19,7 @@ void ResourceWindow::Update(float deltaTime)
 
 void ResourceWindow::OnGUI()
 {
+	auto selection = RootManager::GetInstance()->GetSelectionManager();
 	auto resourceManager = RootManager::GetInstance()->GetResourceManager();
 	if (ImGui::BeginTabBar("ResourceType"))
 	{
@@ -32,6 +33,7 @@ void ResourceWindow::OnGUI()
 				if (ImGui::Selectable((model->GetName() + " (" + model->GetType() + ")").c_str(), selectedResource == model))
 				{
 					selectedResource = model;
+					selection->SetSelectedResource(selectedResource);
 				}
 
 				ImGui::PopID();
@@ -49,6 +51,7 @@ void ResourceWindow::OnGUI()
 				if (ImGui::Selectable((effect->GetName() + " (" + effect->GetType() + ")").c_str(), selectedResource == effect))
 				{
 					selectedResource = effect;
+					selection->SetSelectedResource(selectedResource);
 				}
 
 				ImGui::PopID();
@@ -66,6 +69,25 @@ void ResourceWindow::OnGUI()
 				if (ImGui::Selectable(primitive->GetName().c_str(), selectedResource == primitive))
 				{
 					selectedResource = primitive;
+					selection->SetSelectedResource(selectedResource);
+				}
+
+				ImGui::PopID();
+			}
+			ImGui::EndTabItem();
+		}
+
+		if (ImGui::BeginTabItem("Textures"))
+		{
+			int index = 0;
+			for (auto texture : resourceManager->ResourceGroup<TextureResource>::GetAll())
+			{
+				ImGui::PushID(++index);
+
+				if (ImGui::Selectable(texture->GetName().c_str(), selectedResource == texture))
+				{
+					selectedResource = texture;
+					selection->SetSelectedResource(selectedResource);
 				}
 
 				ImGui::PopID();

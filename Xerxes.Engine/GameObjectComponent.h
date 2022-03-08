@@ -7,7 +7,7 @@
 
 class GameObject;
 
-class GameObjectComponent
+class GameObjectComponent : public IInspectorDrawer
 {
 public:
 	virtual void OnRender(DirectX::SimpleMath::Matrix view, DirectX::SimpleMath::Matrix proj, ID3D11DeviceContext* context) = 0;

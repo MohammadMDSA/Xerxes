@@ -24,5 +24,9 @@ private:
 	std::unique_ptr<DirectX::CommonStates> m_states;
 	int meshResourceId;
 	bool usingPrimitives;
+	int effectResourceId;
+
+	void RenderPrimitive();
+	void RenderModel();
 };
 

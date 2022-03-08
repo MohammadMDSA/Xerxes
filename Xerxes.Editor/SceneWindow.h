@@ -22,7 +22,7 @@ private:
 
 	Camera*					camera;
 	const float				ROTATION_GAIN = 1.f;
-	const float				MOVEMENT_GAIN = 10.f;
+	const float				MOVEMENT_GAIN = 5.f;
 	const float				ROTATION_AROUND_FORWARD = 2.f;
 	const float				ROTATION_AROUND_ROTATION_GAIN = 0.1f;
 	const float				PAN_GAIN = 6.f;

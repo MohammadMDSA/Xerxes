@@ -27,6 +27,8 @@ public:
 	virtual void OnInit() override;
 	virtual void OnShutdown() override;
 
+	ID3D11InputLayout* GetDefaultInputLayout();
+
 private:
 	int CreateSDKMESHModel(boost::filesystem::path path);
 	int GetNewId();

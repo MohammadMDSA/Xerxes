@@ -6,11 +6,7 @@
 using namespace std;
 using namespace DirectX;
 
-InputManager::InputManager() :
-	mouseX(0.f),
-	mouseY(0.f),
-	mouseDeltaX(0.f),
-	mouseDeltaY(0.f)
+InputManager::InputManager()
 {
 }
 
@@ -141,6 +137,10 @@ void InputManager::OnInit()
 {
 	mouse = make_shared<Mouse>();
 	keyboard = make_shared<Keyboard>();
+	mouseX = 0.f;
+	mouseY = 0.f;
+	mouseDeltaX = 0.f;
+	mouseDeltaY = 0.f;
 }
 
 void InputManager::OnShutdown()

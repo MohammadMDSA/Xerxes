@@ -156,6 +156,12 @@
     <ClInclude Include="GeometricPrimitiveResource.h">
       <Filter>Source\Public\GameResrouces</Filter>
     </ClInclude>
+    <ClInclude Include="SelectionManager.h">
+      <Filter>Source\Public\SubsystemManager</Filter>
+    </ClInclude>
+    <ClInclude Include="IInspectorDrawer.h">
+      <Filter>Source\Public\Core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Xerxes.Engine.cpp">
@@ -238,6 +244,9 @@
     </ClCompile>
     <ClCompile Include="GeometricPrimitiveResource.cpp">
       <Filter>Source\Private\GameResources</Filter>
+    </ClCompile>
+    <ClCompile Include="SelectionManager.cpp">
+      <Filter>Source\Private\SubsystemManager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -1,6 +1,8 @@
 #pragma once
 #include "boost/filesystem.hpp"
-struct GameResourceBase
+#include "IInspectorDrawer.h"
+
+struct GameResourceBase : public IInspectorDrawer
 {
 public:
 	int						GetId() { return id; }
@@ -31,7 +33,7 @@ public:
 	// Inherited via GameResourceBase
 	virtual void OnInspector() = 0;
 
-private:
+protected:
 	friend class ResourceManager;
 	std::unique_ptr<M>		resource;
 
