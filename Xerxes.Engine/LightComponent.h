@@ -19,15 +19,18 @@ public:
 	virtual std::string GetName() override;
 
 	void							SetColor(DirectX::SimpleMath::Vector4 color);
+	void							SetSpecular(DirectX::SimpleMath::Vector4 color);
 	void							SetIndirectMultiplier(float coef);
 	void							SetIntencity(float intencity);
 	DirectX::SimpleMath::Vector4	GetColor();
+	DirectX::SimpleMath::Vector4	GetSpecular();
 	DirectX::SimpleMath::Vector3	GetDirection();
 	float							GetIndirectMultiplier();
 	float							GetIntencity();
 
 private:
 	DirectX::SimpleMath::Vector4	color;
+	DirectX::SimpleMath::Vector4	specular;
 	float							indirectMultiplier;
 	float							intencity;
 

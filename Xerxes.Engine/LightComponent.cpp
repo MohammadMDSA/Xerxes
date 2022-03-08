@@ -2,7 +2,11 @@
 #include "LightComponent.h"
 #include "RootManager.h"
 
-LightComponent::LightComponent()
+using namespace DirectX;
+
+LightComponent::LightComponent() :
+	color(Colors::Blue),
+	specular(Colors::White)
 {
 	RootManager::GetInstance()->GetLightManager()->AddDirectionalLight(this);
 }
@@ -34,7 +38,11 @@ void LightComponent::OnGizmo()
 void LightComponent::OnInspector()
 {
 	ImGui::Text("Color");
+	ImGui::SameLine();
 	ImGui::ColorEdit4("Color", (float*)&color, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoLabel);
+	ImGui::Text("Specular");
+	ImGui::SameLine();
+	ImGui::ColorEdit4("Specular", (float*)&specular, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoLabel);
 }
 
 void LightComponent::OnDestroy()
@@ -51,6 +59,11 @@ void LightComponent::SetColor(DirectX::SimpleMath::Vector4 color)
 	this->color = color;
 }
 
+void LightComponent::SetSpecular(DirectX::SimpleMath::Vector4 color)
+{
+	this->specular = color;
+}
+
 void LightComponent::SetIndirectMultiplier(float coef)
 {
 	this->indirectMultiplier = coef;
@@ -64,6 +77,11 @@ void LightComponent::SetIntencity(float intencity)
 DirectX::SimpleMath::Vector4 LightComponent::GetColor()
 {
 	return color;
+}
+
+DirectX::SimpleMath::Vector4 LightComponent::GetSpecular()
+{
+	return specular;
 }
 
 DirectX::SimpleMath::Vector3 LightComponent::GetDirection()

@@ -53,18 +53,20 @@ void LightManager::SetActiveLight(int id)
 void LightManager::ApplyToEffect(DirectX::IEffectLights* effect)
 {
 	auto light = GetActiveLight();
-	if (!light)
+	if (!light && !dynamic_cast<DirectX::NormalMapEffect*>(effect))
 	{
 		effect->SetLightingEnabled(false);
 		return;
 	}
+	else if (!light)
+		return;
 	auto color = light->GetColor();
 	effect->SetAmbientLightColor(color);
 	effect->SetLightDiffuseColor(0, color);
 	effect->SetLightDirection(0, light->GetDirection());
 	effect->SetLightEnabled(0, true);
 	effect->SetLightingEnabled(true);
-	effect->SetLightSpecularColor(0, DirectX::Colors::Pink);
+	effect->SetLightSpecularColor(0, light->GetSpecular());
 }
 
 void LightManager::OnInit()
