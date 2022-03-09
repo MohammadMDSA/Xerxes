@@ -91,6 +91,7 @@ void EditorWindow::EndWindow()
 {
 	ImGui::End();
 }
+
 int EditorWindow::GetForcedFullScreenFlags()
 {
 	int flags = ImGuiWindowFlags_NoCollapse;

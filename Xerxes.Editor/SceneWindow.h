@@ -12,11 +12,11 @@ public:
 
 	virtual void			OnGUI() override;
 	virtual void			Update(float deltaTime) override;
+	void					OnRender(DirectX::SimpleMath::Matrix view, DirectX::SimpleMath::Matrix proj);
 
 protected:
 	// Inherited via EditorWindow
 	virtual int				GetCustomWindowFlags() override;
-
 
 private:
 
@@ -28,5 +28,7 @@ private:
 	const float				PAN_GAIN = 6.f;
 
 	bool					moveingCamera;
+	int						effectId;
+	std::unique_ptr<DirectX::CommonStates> states;
 };
 

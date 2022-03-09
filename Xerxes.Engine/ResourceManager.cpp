@@ -20,12 +20,33 @@ int ResourceManager::CreateModel(std::wstring path)
 	throw std::exception("Not supported extension");
 }
 
+int ResourceManager::CreateEffect(IEffect* effect)
+{
+	auto basic = dynamic_cast<BasicEffect*>(effect);
+	if (basic)
+		return CreateBasicEffect(basic);
+}
+
+int ResourceManager::CreateBasicEffect(DirectX::BasicEffect* effect)
+{
+	auto resource = new EffectResource();
+	resource->id = GetNewId();
+	resource->path = "";
+	resource->name = "Scene Grid Effect";
+	resource->type = "BasicEffect";
+	resource->isLoaded = true;
+	resource->resource = std::unique_ptr<BasicEffect>(effect);
+	ResourceGroup<EffectResource>::group.insert({ resource->id, resource });
+	return resource->id;
+}
+
 void ResourceManager::SetDeviceContext(ID3D11DeviceContext* context)
 {
 	this->context = context;
 
 	AddDefaultGeometricPrimitives();
 	AddDefaultEffects();
+	AddDefaultBatcch();
 }
 
 void ResourceManager::SetDevice(ID3D11Device* device)
@@ -155,9 +176,14 @@ void ResourceManager::AddDefaultEffects()
 	effect->SetLightEnabled(0, true);
 	dynamic_cast<BasicEffect*>(gr->resource.get())->SetLightDirection(0, -DirectX::SimpleMath::Vector3::UnitZ);
 
-	auto mm = ResourceGroup<GeometricPrimitiveResource>::group.begin();
-	mm->second->resource->CreateInputLayout(gr->resource.get(), &dInputLayout);
+	ResourceGroup<GeometricPrimitiveResource>::group.begin()->second->resource->CreateInputLayout(gr->resource.get(), &dInputLayout);
+	//CreateInputLayoutFromEffect<VertexPosition>(device, gr->resource.get(), dInputLayout.ReleaseAndGetAddressOf());
 	ResourceGroup<EffectResource>::group.insert({ gr->id, gr });
+}
+
+void ResourceManager::AddDefaultBatcch()
+{
+	dBatch = std::make_unique<PrimitiveBatch<VertexPositionColor>>(context);
 }
 
 void ResourceManager::OnShutdown()
@@ -181,4 +207,9 @@ void ResourceManager::OnShutdown()
 ID3D11InputLayout* ResourceManager::GetDefaultInputLayout()
 {
 	return dInputLayout.Get();
+}
+
+DirectX::PrimitiveBatch<DirectX::VertexPositionColor>* ResourceManager::GetDefaultBatch()
+{
+	return dBatch.get();
 }

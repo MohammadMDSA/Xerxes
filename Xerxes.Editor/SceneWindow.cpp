@@ -9,10 +9,19 @@ using namespace DirectX::SimpleMath;
 SceneWindow::SceneWindow(int id) :
 	EditorWindow(id, "Scene"),
 	moveingCamera(false),
-	camera(nullptr)
+	camera(nullptr),
+	effectId(-1)
 {
-
 	backgroundAlpha = 0.f;
+	auto resourceManager = RootManager::GetInstance()->GetResourceManager();
+	auto device = resourceManager->GetDevice();
+
+	states = std::make_unique<DirectX::CommonStates>(device);
+	auto effect = new BasicEffect(device);
+	effect->SetVertexColorEnabled(true);
+	effectId = resourceManager->CreateEffect(effect);
+	auto eff = resourceManager->ResourceGroup<EffectResource>::GetById(effectId);
+	CreateInputLayoutFromEffect<VertexPositionColor>(device, eff->GetResource(), &resourceManager->vertexPositionInputLayout);
 }
 
 void SceneWindow::SetCamera(Camera* camera)
@@ -143,4 +152,58 @@ void SceneWindow::Update(float deltaTime)
 	}
 	moveingCamera = false;
 	input->SetMouseMode(Mouse::MODE_ABSOLUTE);
+}
+
+void SceneWindow::OnRender(DirectX::SimpleMath::Matrix view, DirectX::SimpleMath::Matrix proj)
+{
+
+	auto resourceManager = RootManager::GetInstance()->GetResourceManager();
+	auto context = resourceManager->GetDeviceContext();
+	auto batch = resourceManager->GetDefaultBatch();
+	auto effect = resourceManager->ResourceGroup<EffectResource>::GetById(effectId)->GetResource();
+
+	context->OMSetBlendState(states->Opaque(), nullptr, 0xFFFFFFFF);
+	context->OMSetDepthStencilState(states->DepthNone(), 0);
+	context->RSSetState(states->CullNone());
+
+	effect->SetView(view);
+	effect->SetProjection(proj);
+	effect->SetWorld(DirectX::SimpleMath::Matrix::Identity);
+	effect->Apply(context);
+
+	context->IASetInputLayout(resourceManager->vertexPositionInputLayout.Get());
+
+	batch->Begin();
+
+	Vector3 xaxis(2.f, 0.f, 0.f);
+	Vector3 yaxis(0.f, 0.f, 2.f);
+	Vector3 origin = Vector3::Zero;
+
+	constexpr size_t divisions = 20;
+
+	for (size_t i = 0; i <= divisions; ++i)
+	{
+		float fPercent = float(i) / float(divisions);
+		fPercent = (fPercent * 2.0f) - 1.0f;
+
+		Vector3 scale = xaxis * fPercent + origin;
+
+		VertexPositionColor v1(scale - yaxis, Colors::White);
+		VertexPositionColor v2(scale + yaxis, Colors::White);
+		batch->DrawLine(v1, v2);
+	}
+
+	for (size_t i = 0; i <= divisions; i++)
+	{
+		float fPercent = float(i) / float(divisions);
+		fPercent = (fPercent * 2.0f) - 1.0f;
+
+		Vector3 scale = yaxis * fPercent + origin;
+
+		VertexPositionColor v1(scale - xaxis, Colors::White);
+		VertexPositionColor v2(scale + xaxis, Colors::White);
+		batch->DrawLine(v1, v2);
+	}
+
+	batch->End();
 }

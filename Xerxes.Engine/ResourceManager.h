@@ -17,6 +17,7 @@ public:
 	ResourceManager();
 
 	int CreateModel(std::wstring path);
+	int CreateEffect(DirectX::IEffect* effect);
 
 	void SetDeviceContext(ID3D11DeviceContext* context);
 	void SetDevice(ID3D11Device* device);
@@ -28,14 +29,19 @@ public:
 	virtual void OnShutdown() override;
 
 	ID3D11InputLayout* GetDefaultInputLayout();
+	DirectX::PrimitiveBatch<DirectX::VertexPositionColor>* GetDefaultBatch();
 
+	Microsoft::WRL::ComPtr<ID3D11InputLayout> vertexPositionInputLayout;
 private:
 	int CreateSDKMESHModel(boost::filesystem::path path);
+	int CreateBasicEffect(DirectX::BasicEffect* effect);
+
 	int GetNewId();
 	GeometricPrimitiveResource* AddPrimitive(std::string name);
 	
 	void AddDefaultGeometricPrimitives();
 	void AddDefaultEffects();
+	void AddDefaultBatcch();
 
 	int lastId;
 
@@ -43,5 +49,7 @@ private:
 	ID3D11DeviceContext* context;
 
 	Microsoft::WRL::ComPtr<ID3D11InputLayout> dInputLayout;
+	std::unique_ptr<DirectX::PrimitiveBatch<DirectX::VertexPositionColor>> dBatch;
+
 };
 

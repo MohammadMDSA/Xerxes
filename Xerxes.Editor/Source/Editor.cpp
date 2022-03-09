@@ -50,6 +50,16 @@ void Editor::Initialize(HWND window, int width, int height)
 
 	m_deviceResources->SetWindow(window, m_outputWidth, m_outputHeight);
 
+
+	m_deviceResources->CreateDeviceResources();
+	CreateDeviceDependentResources();
+
+	m_deviceResources->CreateWindowSizeDependentResources();
+	CreateWindowSizeDependentResources();
+
+	// TODO: Change the timer settings if you want something other than the default variable timestep mode.
+	// e.g. for 60 FPS fixed timestep update logic, call:
+
 	////////////////////////// REMOVE below
 
 
@@ -63,16 +73,6 @@ void Editor::Initialize(HWND window, int width, int height)
 	this->rootManager = RootManager::GetInstance();
 
 	/////////////////////////// Remove above
-
-
-	m_deviceResources->CreateDeviceResources();
-	CreateDeviceDependentResources();
-
-	m_deviceResources->CreateWindowSizeDependentResources();
-	CreateWindowSizeDependentResources();
-
-	// TODO: Change the timer settings if you want something other than the default variable timestep mode.
-	// e.g. for 60 FPS fixed timestep update logic, call:
 
 	m_timer.SetFixedTimeStep(true);
 	m_timer.SetTargetElapsedSeconds(1.0 / 60);
@@ -189,6 +189,7 @@ void Editor::Render()
 	auto proj = camera->GetProjection();
 
 	sceneManager->OnRender(view, proj);
+	sceneWindow->OnRender(view, proj);
 
 	m_deviceResources->PIXEndEvent();
 
