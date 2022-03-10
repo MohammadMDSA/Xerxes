@@ -31,6 +31,16 @@ public:
 			}), group.end());
 	}
 
+	inline T* GetByName(std::string name)
+	{
+		for (auto res : group)
+		{
+			auto resource = dynamic_cast<GameResourceBase*>(res.second);
+			if (resource->GetName() == name)
+				return res.second;
+		}
+	}
+
 private:
 	friend class ResourceManager;
 	std::unordered_map<int, T*> group;

@@ -17,11 +17,7 @@ SceneWindow::SceneWindow(int id) :
 	auto device = resourceManager->GetDevice();
 
 	states = std::make_unique<DirectX::CommonStates>(device);
-	auto effect = new BasicEffect(device);
-	effect->SetVertexColorEnabled(true);
-	effectId = resourceManager->CreateEffect(effect);
-	auto eff = resourceManager->ResourceGroup<EffectResource>::GetById(effectId);
-	CreateInputLayoutFromEffect<VertexPositionColor>(device, eff->GetResource(), &resourceManager->vertexPositionInputLayout);
+	effectId = resourceManager->ResourceGroup<EffectResource>::GetByName("Position Color Effect")->GetId();
 }
 
 void SceneWindow::SetCamera(Camera* camera)
@@ -171,37 +167,32 @@ void SceneWindow::OnRender(DirectX::SimpleMath::Matrix view, DirectX::SimpleMath
 	effect->SetWorld(DirectX::SimpleMath::Matrix::Identity);
 	effect->Apply(context);
 
-	context->IASetInputLayout(resourceManager->vertexPositionInputLayout.Get());
+	context->IASetInputLayout(resourceManager->GetVertexPositionColorInputLayout());
 
 	batch->Begin();
 
-	Vector3 xaxis(2.f, 0.f, 0.f);
-	Vector3 yaxis(0.f, 0.f, 2.f);
+	Vector3 xaxis(1.f, 0.f, 0.f);
+	Vector3 yaxis(0.f, 0.f, 1.f);
 	Vector3 origin = Vector3::Zero;
 
-	constexpr size_t divisions = 20;
+	const int count = 100;
+	DirectX::XMVECTORF32 color;
 
-	for (size_t i = 0; i <= divisions; ++i)
+	for (int i = (-count); i <= count; ++i)
 	{
-		float fPercent = float(i) / float(divisions);
-		fPercent = (fPercent * 2.0f) - 1.0f;
-
-		Vector3 scale = xaxis * fPercent + origin;
-
-		VertexPositionColor v1(scale - yaxis, Colors::White);
-		VertexPositionColor v2(scale + yaxis, Colors::White);
+		color = (i == 0 ? Colors::White : Colors::Gray);
+		auto scale = xaxis * i;
+		VertexPositionColor v1(scale - (count * yaxis), color);
+		VertexPositionColor v2(scale + (count * yaxis), color);
 		batch->DrawLine(v1, v2);
 	}
 
-	for (size_t i = 0; i <= divisions; i++)
+	for (int i = -count; i <= count; i++)
 	{
-		float fPercent = float(i) / float(divisions);
-		fPercent = (fPercent * 2.0f) - 1.0f;
-
-		Vector3 scale = yaxis * fPercent + origin;
-
-		VertexPositionColor v1(scale - xaxis, Colors::White);
-		VertexPositionColor v2(scale + xaxis, Colors::White);
+		color = (i == 0 ? Colors::White : Colors::Gray);
+		auto scale = yaxis * i;
+		VertexPositionColor v1(scale - (count * xaxis), color);
+		VertexPositionColor v2(scale + (count * xaxis), color);
 		batch->DrawLine(v1, v2);
 	}
 

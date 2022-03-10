@@ -29,9 +29,9 @@ public:
 	virtual void OnShutdown() override;
 
 	ID3D11InputLayout* GetDefaultInputLayout();
+	ID3D11InputLayout* GetVertexPositionColorInputLayout();
 	DirectX::PrimitiveBatch<DirectX::VertexPositionColor>* GetDefaultBatch();
 
-	Microsoft::WRL::ComPtr<ID3D11InputLayout> vertexPositionInputLayout;
 private:
 	int CreateSDKMESHModel(boost::filesystem::path path);
 	int CreateBasicEffect(DirectX::BasicEffect* effect);
@@ -49,6 +49,7 @@ private:
 	ID3D11DeviceContext* context;
 
 	Microsoft::WRL::ComPtr<ID3D11InputLayout> dInputLayout;
+	Microsoft::WRL::ComPtr<ID3D11InputLayout> vertexPositionInputLayout;
 	std::unique_ptr<DirectX::PrimitiveBatch<DirectX::VertexPositionColor>> dBatch;
 
 };

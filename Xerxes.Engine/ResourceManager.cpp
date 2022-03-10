@@ -161,13 +161,14 @@ void ResourceManager::AddDefaultGeometricPrimitives()
 
 void ResourceManager::AddDefaultEffects()
 {
+	// Default shape effect
 	auto gr = new EffectResource();
 	gr->isDefault = true;
 	gr->id = GetNewId();
 	gr->isLoaded = true;
 	gr->name = "Default Effect";
 	gr->path = "";
-	gr->type = "Basic Effect";
+	gr->type = "BasicEffect";
 	gr->resource = std::unique_ptr<BasicEffect>(new BasicEffect(device));
 	auto effect = dynamic_cast<BasicEffect*>(gr->resource.get());
 	effect->SetTextureEnabled(false);
@@ -177,8 +178,20 @@ void ResourceManager::AddDefaultEffects()
 	dynamic_cast<BasicEffect*>(gr->resource.get())->SetLightDirection(0, -DirectX::SimpleMath::Vector3::UnitZ);
 
 	ResourceGroup<GeometricPrimitiveResource>::group.begin()->second->resource->CreateInputLayout(gr->resource.get(), &dInputLayout);
-	//CreateInputLayoutFromEffect<VertexPosition>(device, gr->resource.get(), dInputLayout.ReleaseAndGetAddressOf());
 	ResourceGroup<EffectResource>::group.insert({ gr->id, gr });
+
+	// Default position color effect
+	auto gre = new EffectResource();
+	gre->id = GetNewId();
+	gre->name = "Position Color Effect";
+	gre->path = "";
+	gre->type = "BasicEffect";
+	gre->resource = std::make_unique<BasicEffect>(device);
+
+	auto eff = gre->resource.get();
+	eff->SetVertexColorEnabled(true);
+	CreateInputLayoutFromEffect<VertexPositionColor>(device, eff, &vertexPositionInputLayout);
+	ResourceGroup<EffectResource>::group.insert({ gre->id, gre });
 }
 
 void ResourceManager::AddDefaultBatcch()
@@ -207,6 +220,11 @@ void ResourceManager::OnShutdown()
 ID3D11InputLayout* ResourceManager::GetDefaultInputLayout()
 {
 	return dInputLayout.Get();
+}
+
+ID3D11InputLayout* ResourceManager::GetVertexPositionColorInputLayout()
+{
+	return vertexPositionInputLayout.Get();
 }
 
 DirectX::PrimitiveBatch<DirectX::VertexPositionColor>* ResourceManager::GetDefaultBatch()
