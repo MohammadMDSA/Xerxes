@@ -37,7 +37,7 @@ void SceneWindow::OnGUI()
 int SceneWindow::GetCustomWindowFlags()
 {
 	return ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove;
-	return 0;
+
 }
 
 void SceneWindow::Update(float deltaTime)
@@ -159,7 +159,6 @@ void SceneWindow::OnRender(DirectX::SimpleMath::Matrix view, DirectX::SimpleMath
 	auto effect = resourceManager->ResourceGroup<EffectResource>::GetById(effectId)->GetResource();
 
 	context->OMSetBlendState(states->Opaque(), nullptr, 0xFFFFFFFF);
-	context->OMSetDepthStencilState(states->DepthNone(), 0);
 	context->RSSetState(states->CullNone());
 
 	effect->SetView(view);

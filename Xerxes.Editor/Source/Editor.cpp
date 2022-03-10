@@ -11,7 +11,6 @@
 #include "Libs/imgui/imgui_impl_dx11.h"
 #include "Libs/imgui/ImGuizmo.h"
 #include "Camera.h"
-#include <shobjidl.h> 
 #include "MeshRenderer.h"
 #include "Libs/ImGuiFileDialog/ImGuiFileDialog.h"
 

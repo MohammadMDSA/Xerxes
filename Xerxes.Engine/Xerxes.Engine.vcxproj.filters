@@ -52,7 +52,7 @@
     <Filter Include="Source\Private\GameResources">
       <UniqueIdentifier>{eb0f11ce-efe0-4097-8f27-2965e711cf95}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\Public\GameResrouces">
+    <Filter Include="Source\Public\GameResources">
       <UniqueIdentifier>{70550e9d-7b32-46db-9d65-664fb1c61cdd}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -136,25 +136,25 @@
       <Filter>Source\Public\Core</Filter>
     </ClInclude>
     <ClInclude Include="GameResource.h">
-      <Filter>Source\Public\GameResrouces</Filter>
+      <Filter>Source\Public\GameResources</Filter>
     </ClInclude>
     <ClInclude Include="ResourceGroup.h">
-      <Filter>Source\Public\GameResrouces</Filter>
+      <Filter>Source\Public\GameResources</Filter>
     </ClInclude>
     <ClInclude Include="TextureResource.h">
-      <Filter>Source\Public\GameResrouces</Filter>
+      <Filter>Source\Public\GameResources</Filter>
     </ClInclude>
     <ClInclude Include="ModelResource.h">
-      <Filter>Source\Public\GameResrouces</Filter>
+      <Filter>Source\Public\GameResources</Filter>
     </ClInclude>
     <ClInclude Include="EffectResource.h">
-      <Filter>Source\Public\GameResrouces</Filter>
+      <Filter>Source\Public\GameResources</Filter>
     </ClInclude>
     <ClInclude Include="resource.h">
       <Filter>Source\Public</Filter>
     </ClInclude>
     <ClInclude Include="GeometricPrimitiveResource.h">
-      <Filter>Source\Public\GameResrouces</Filter>
+      <Filter>Source\Public\GameResources</Filter>
     </ClInclude>
     <ClInclude Include="SelectionManager.h">
       <Filter>Source\Public\SubsystemManager</Filter>
