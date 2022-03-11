@@ -116,7 +116,7 @@ void SceneWindow::Update(float deltaTime)
 		auto rot = Matrix::CreateFromQuaternion(preRot);
 		rot = DirectX::XMMatrixMultiply(rot, Matrix::CreateFromAxisAngle(rot.Right(), DirectX::XMConvertToRadians(cameraPitchDelta)));
 		rot *= Matrix::CreateFromAxisAngle(Vector3::Up, DirectX::XMConvertToRadians(cameraYawDelta));
-		camera->SetRotation(Quaternion::CreateFromRotationMatrix(rot), false);
+		camera->SetRotation(Quaternion::CreateFromRotationMatrix(rot));
 
 		// Handle ghost movement
 		auto pos = camera->GetPosition();

@@ -11,7 +11,7 @@ Camera::Camera() :
 	isPerspective(true),
 	outputWidth(1500.f),
 	outputHeight(900.f),
-	transform(Transform()),
+	transform(Transform(nullptr)),
 	orthoGraphicSize(10)
 {
 }
@@ -181,9 +181,9 @@ const DirectX::SimpleMath::Vector3& Camera::GetForward() const
 	return transform.Forward();
 }
 
-void Camera::SetRotation(DirectX::SimpleMath::Quaternion quat, bool updateWorld)
+void Camera::SetRotation(DirectX::SimpleMath::Quaternion quat)
 {
-	transform.SetRotation(quat, updateWorld);
+	transform.SetRotation(quat);
 	CreateView();
 }
 

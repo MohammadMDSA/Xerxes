@@ -28,7 +28,7 @@ public:
 	const DirectX::SimpleMath::Vector3& GetRight() const;
 	const DirectX::SimpleMath::Vector3& GetForward() const;
 	
-	void							SetRotation(DirectX::SimpleMath::Quaternion quat, bool updateWorld = true);
+	void							SetRotation(DirectX::SimpleMath::Quaternion quat);
 	void							SetRotationX(float x, bool updateWorld = true);
 	void							SetRotationY(float y, bool updateWorld = true);
 	void							SetRotationZ(float z, bool updateWorld = true);

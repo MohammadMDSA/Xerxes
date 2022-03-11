@@ -15,7 +15,8 @@ GameObject::GameObject() :
 	name("GameObject"),
 	editName("GameObject"),
 	isAwake(false),
-	isStarted(false)
+	isStarted(false),
+	transform(Transform(this))
 {
 }
 
