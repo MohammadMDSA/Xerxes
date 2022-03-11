@@ -10,6 +10,7 @@ public:
 	//Delegate<float, float>				OnWorldCreated;
 
 	DirectX::SimpleMath::Matrix			GetWorldMatrix() const;
+	DirectX::SimpleMath::Matrix			GetUnscaledWorld() const;
 	DirectX::SimpleMath::Vector3		GetPosition();
 	DirectX::SimpleMath::Vector3		GetScale();
 	float								GetRotationX();
@@ -19,6 +20,7 @@ public:
 	float								GetWorldRotationX();
 	float								GetWorldRotationY();
 	float								GetWorldRotationZ();
+	DirectX::SimpleMath::Vector3		GetWorldScale();
 
 	const DirectX::SimpleMath::Quaternion&	GetRotation() const;
 	const DirectX::SimpleMath::Quaternion&	GetWorldRotation() const;

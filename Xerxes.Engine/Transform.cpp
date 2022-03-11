@@ -19,8 +19,16 @@ Transform::Transform(GameObject* obj) :
 DirectX::SimpleMath::Matrix Transform::GetWorldMatrix() const
 {
 	if (parent)
-		return world * parent->GetWorldMatrix();
+		return world * Matrix::CreateScale(parent->GetWorldScale()) * parent->GetUnscaledWorld();
 	return world;
+}
+
+DirectX::SimpleMath::Matrix Transform::GetUnscaledWorld() const
+{
+	auto unscaled = Matrix::CreateFromQuaternion(rotation);
+	if (parent)
+		return unscaled * Matrix::CreateTranslation(position) * parent->GetWorldMatrix();
+	return unscaled * Matrix::CreateTranslation(position);
 }
 
 DirectX::SimpleMath::Vector3 Transform::GetPosition()
@@ -77,6 +85,13 @@ float Transform::GetWorldRotationZ()
 		return rotationZ;
 	auto nWorld = GetWorldMatrix();
 	return DirectX::XMConvertToDegrees(atan2f(world._12, world._11)) + rotationZ;
+}
+
+DirectX::SimpleMath::Vector3 Transform::GetWorldScale()
+{
+	if (!parent)
+		return scale;
+	return parent->GetWorldScale() * scale;
 }
 
 const DirectX::SimpleMath::Quaternion& Transform::GetRotation() const
