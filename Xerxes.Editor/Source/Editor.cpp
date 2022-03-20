@@ -1,3 +1,4 @@
+
 //
 // Game.cpp
 //
@@ -79,7 +80,8 @@ void Editor::Initialize(HWND window, int width, int height)
 	rootManager->GetInputManager()->GetMouse()->SetWindow(window);
 
 	rootManager->GetCameraManager()->CraeteCamera();
-	rootManager->GetCameraManager()->GetActiveCamera();
+	auto camera = rootManager->GetCameraManager()->GetActiveCamera();
+	camera->SetPosition(2, 2, 2);
 	sceneWindow->SetCamera(rootManager->GetCameraManager()->GetActiveCamera());
 
 	GetDefaultSize(sceneWidth, sceneHeight);
