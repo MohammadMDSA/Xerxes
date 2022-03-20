@@ -32,6 +32,7 @@ Editor::Editor() noexcept :
 {
 	m_deviceResources = std::make_unique<DX::DeviceResources>();
 	m_deviceResources->RegisterDeviceNotify(this);
+	windowResource = new EditorWindowGraphicResource();
 }
 
 Editor::~Editor()
@@ -67,7 +68,6 @@ void Editor::Initialize(HWND window, int width, int height)
 	this->inspectorWindow = new InspectorWindow(2);
 	this->hierarchyWindow = new HierarchyWindow(3);
 	this->resourceWindow = new ResourceWindow(4);
-	this->sceneWindow->SetDimansion(100.f, 100.f);
 	this->sceneWindow->SetPosition(0.f, 0.f);
 
 	this->rootManager = RootManager::GetInstance();
@@ -109,16 +109,15 @@ void Editor::Update(DX::StepTimer const& timer)
 	inspectorWindow->Update(elapsedTime);
 
 	// Handling layout
-	int newSceneWidth = m_outputWidth - inspectorWindow->GetWidth();
-	int newSceneHeight = m_outputHeight;
+	int newSceneWidth = sceneWindow->GetWidth();
+	int newSceneHeight = sceneWindow->GetHeight();
 	if (newSceneWidth != sceneWidth || newSceneHeight != sceneHeight)
 	{
 		sceneHeight = newSceneHeight;
 		sceneWidth = newSceneWidth;
 		RootManager::GetInstance()->GetCameraManager()->SetOutputSize(sceneWidth, sceneHeight);
+		windowResource->Initialize(RootManager::GetInstance()->GetResourceManager()->GetDevice(), sceneWidth, sceneHeight);
 	}
-	sceneWindow->SetPosition(0, 0);
-	sceneWindow->SetDimansion(sceneWidth, sceneHeight);
 
 	elapsedTime;
 }
@@ -133,6 +132,27 @@ void Editor::Render()
 	}
 
 
+	
+	auto context = m_deviceResources->GetD3DDeviceContext();
+	auto depthStencil = m_deviceResources->GetDepthStencilView();
+	windowResource->ClearRenderTarget(context, depthStencil, 0.392156899f, 0.584313750f, 0.929411829f, 1);
+	windowResource->SetRenderTarget(context, depthStencil, m_deviceResources->GetRenderTargetView());
+
+
+	m_deviceResources->PIXBeginEvent(L"Render");
+	auto camera = sceneWindow->GetCamera();
+
+	auto view = camera->GetView();
+	auto proj = camera->GetProjection();
+	auto sceneManager = rootManager->GetSceneManager();
+
+	sceneManager->OnRender(view, proj);
+	sceneWindow->OnRender(view, proj);
+
+	m_deviceResources->PIXEndEvent();
+
+
+
 	// Start the Dear ImGui frame
 	ImGui_ImplDX11_NewFrame();
 	ImGui_ImplWin32_NewFrame();
@@ -142,19 +162,17 @@ void Editor::Render()
 	// 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
 	if (showDemo)
 		ImGui::ShowDemoWindow(&showDemo);
-	auto sceneManager = rootManager->GetSceneManager();
 	auto selectionManager = rootManager->GetSelectionManager();
 	auto selected = selectionManager->GetSelectedInspectorDrawer();
 
 	sceneWindow->BeginWindow();
-	ImGuizmo::SetRect(0, 0, sceneWidth, sceneHeight);
+	ImGui::Image((void*)windowResource->GetShaderResourceView(), ImVec2(sceneWidth, sceneHeight));
+	auto min = ImGui::GetWindowContentRegionMin();
+	ImGuizmo::SetRect(sceneWindow->GetPosX() + min.x, sceneWindow->GetPosY() + min.y, sceneWidth, sceneHeight);
 	sceneManager->OnGizmo();
-
 	sceneWindow->EndWindow();
 
 	// Drawing Inspector
-	inspectorWindow->SetPosition(m_outputWidth - inspectorWindow->GetWidth(), 0.f);
-	inspectorWindow->SetDimansion(inspectorWindow->GetWidth(), m_outputHeight);
 	inspectorWindow->BeginWindow();
 	if (selected)
 		selected->OnInspector();
@@ -172,7 +190,6 @@ void Editor::Render()
 
 
 	ImGui::Begin("Camera Inspector", &showCameraInspector);
-	auto camera = sceneWindow->GetCamera();
 	camera->OnGui();
 
 	ImGui::End();
@@ -181,24 +198,19 @@ void Editor::Render()
 	// Rendering
 	ImGui::Render();
 
-	Clear();
 
-	m_deviceResources->PIXBeginEvent(L"Render");
-	auto context = m_deviceResources->GetD3DDeviceContext();
 
-	auto view = camera->GetView();
-	auto proj = camera->GetProjection();
 
-	sceneManager->OnRender(view, proj);
-	sceneWindow->OnRender(view, proj);
 
-	m_deviceResources->PIXEndEvent();
+
+
 
 	/*if (ImGui::GetIO().ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
 	{
 		ImGui::UpdatePlatformWindows();
 		ImGui::RenderPlatformWindowsDefault();
 	}*/
+	Clear();
 	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 	m_deviceResources->Present();
 }
@@ -217,17 +229,17 @@ void Editor::Clear()
 	context->OMSetRenderTargets(1, &renderTarget, depthStencil);
 
 	// Set the viewport.
-	float width = sceneWindow->GetWidth(), height = sceneWindow->GetHeight();
-	if (width > 0 && height > 0)
+	float width = sceneWindow->GetWidth(), height = sceneHeight;
+	//if (width > 0 && height > 0)
 	{
-		CD3D11_VIEWPORT viewport(sceneWindow->GetPosX(), sceneWindow->GetPosY(), static_cast<float>(width), static_cast<float>(height));
+		CD3D11_VIEWPORT viewport(0.f, 0.f, static_cast<float>(width), static_cast<float>(height));
 		context->RSSetViewports(1, &viewport);
 	}
-	else
+	/*else
 	{
 		CD3D11_VIEWPORT viewport(0.0f, 0.0f, static_cast<float>(m_outputWidth), static_cast<float>(m_outputHeight));
 		context->RSSetViewports(1, &viewport);
-	}
+	}*/
 }
 
 // Message handlers
@@ -307,6 +319,8 @@ void Editor::CreateWindowSizeDependentResources()
 	auto device = m_deviceResources->GetD3DDevice();
 	RootManager::GetInstance()->GetResourceManager()->SetDevice(device);
 	RootManager::GetInstance()->GetResourceManager()->SetDeviceContext(context);
+
+	windowResource->Initialize(device, m_outputWidth, m_outputHeight);
 }
 
 void Editor::InitializeImgui()

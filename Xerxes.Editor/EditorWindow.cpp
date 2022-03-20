@@ -79,8 +79,10 @@ void EditorWindow::BeginWindow()
 		auto pos = ImGui::GetWindowPos();
 		positionX = pos.x;
 		positionY = pos.y;
-		width = ImGui::GetWindowWidth();
-		height = ImGui::GetWindowHeight();
+		auto min = ImGui::GetWindowContentRegionMin();
+		auto max = ImGui::GetWindowContentRegionMax();
+		width = max.x - min.x;
+		height = max.y - min.y;
 		hasFocus = ImGui::IsWindowFocused();
 		isHovered = ImGui::IsWindowHovered();
 	}

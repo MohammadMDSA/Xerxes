@@ -348,14 +348,18 @@ void DeviceResources::CreateWindowSizeDependentResources()
     if (m_depthBufferFormat != DXGI_FORMAT_UNKNOWN)
     {
         // Create a depth stencil view for use with 3D rendering if needed.
-        CD3D11_TEXTURE2D_DESC depthStencilDesc(
-            m_depthBufferFormat,
-            backBufferWidth,
-            backBufferHeight,
-            1, // This depth stencil view has only one texture.
-            1, // Use a single mipmap level.
-            D3D11_BIND_DEPTH_STENCIL
-        );
+        CD3D11_TEXTURE2D_DESC depthStencilDesc;
+        depthStencilDesc.Width = backBufferWidth;
+        depthStencilDesc.Height = backBufferHeight;
+        depthStencilDesc.MipLevels = 1;
+        depthStencilDesc.ArraySize = 1;
+        depthStencilDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+        depthStencilDesc.SampleDesc.Count = 1;
+        depthStencilDesc.SampleDesc.Quality = 0;
+        depthStencilDesc.Usage = D3D11_USAGE_DEFAULT;
+        depthStencilDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+        depthStencilDesc.CPUAccessFlags = 0;
+        depthStencilDesc.MiscFlags = 0;
 
         ThrowIfFailed(m_d3dDevice->CreateTexture2D(
             &depthStencilDesc,
@@ -363,7 +367,7 @@ void DeviceResources::CreateWindowSizeDependentResources()
             m_depthStencil.ReleaseAndGetAddressOf()
         ));
 
-        CD3D11_DEPTH_STENCIL_VIEW_DESC depthStencilViewDesc(D3D11_DSV_DIMENSION_TEXTURE2D);
+        CD3D11_DEPTH_STENCIL_VIEW_DESC depthStencilViewDesc(D3D11_DSV_DIMENSION_TEXTURE2D, DXGI_FORMAT_D24_UNORM_S8_UINT);
         ThrowIfFailed(m_d3dDevice->CreateDepthStencilView(
             m_depthStencil.Get(),
             &depthStencilViewDesc,

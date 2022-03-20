@@ -12,6 +12,7 @@
 #include "DeviceResources.h"
 #include "HierarchyWindow.h"
 #include "ResourceWindow.h"
+#include "EditorWindowGraphicResource.h"
 
 //class EditorWindow;
 
@@ -90,5 +91,7 @@ private:
     InspectorWindow*                                inspectorWindow;
     HierarchyWindow*                                hierarchyWindow;
     ResourceWindow*                                 resourceWindow;
+
+    EditorWindowGraphicResource*                    windowResource;
 
 };

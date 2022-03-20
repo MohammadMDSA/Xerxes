@@ -104,6 +104,7 @@
   <ItemGroup>
     <ClInclude Include="DeviceResources.h" />
     <ClInclude Include="EditorWindow.h" />
+    <ClInclude Include="EditorWindowGraphicResource.h" />
     <ClInclude Include="HierarchyWindow.h" />
     <ClInclude Include="InspectorWindow.h" />
     <ClInclude Include="Libs\ImGuiFileDialog\dirent\dirent.h" />
@@ -122,6 +123,7 @@
   <ItemGroup>
     <ClCompile Include="DeviceResources.cpp" />
     <ClCompile Include="EditorWindow.cpp" />
+    <ClCompile Include="EditorWindowGraphicResource.cpp" />
     <ClCompile Include="HierarchyWindow.cpp" />
     <ClCompile Include="InspectorWindow.cpp" />
     <ClCompile Include="Libs\ImGuiFileDialog\ImGuiFileDialog.cpp" />
