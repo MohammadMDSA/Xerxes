@@ -28,7 +28,9 @@ Editor::Editor() noexcept :
 	m_outputHeight(900),
 	m_imguiActive(false),
 	showDemo(true),
-	rootManager(nullptr)
+	rootManager(nullptr),
+	sceneWidth(1),
+	sceneHeight(1)
 {
 	m_deviceResources = std::make_unique<DX::DeviceResources>();
 	m_deviceResources->RegisterDeviceNotify(this);
@@ -132,7 +134,7 @@ void Editor::Render()
 	}
 
 
-	
+
 	auto context = m_deviceResources->GetD3DDeviceContext();
 	auto depthStencil = m_deviceResources->GetDepthStencilView();
 	windowResource->ClearRenderTarget(context, depthStencil, 0.392156899f, 0.584313750f, 0.929411829f, 1);
@@ -158,7 +160,7 @@ void Editor::Render()
 	ImGui_ImplWin32_NewFrame();
 	ImGui::NewFrame();
 	ImGuizmo::BeginFrame();
-
+	MakeDockSpace();
 	// 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
 	if (showDemo)
 		ImGui::ShowDemoWindow(&showDemo);
@@ -320,7 +322,7 @@ void Editor::CreateWindowSizeDependentResources()
 	RootManager::GetInstance()->GetResourceManager()->SetDevice(device);
 	RootManager::GetInstance()->GetResourceManager()->SetDeviceContext(context);
 
-	windowResource->Initialize(device, m_outputWidth, m_outputHeight);
+	windowResource->Initialize(device, sceneWidth, sceneHeight);
 }
 
 void Editor::InitializeImgui()
@@ -342,6 +344,8 @@ void Editor::InitializeImgui()
 	ImGui::PushStyleVar(ImGuiStyleVar_ScrollbarRounding, 8.f);
 	ImGui::PushStyleVar(ImGuiStyleVar_GrabRounding, 6.f);
 	ImGui::PushStyleVar(ImGuiStyleVar_TabRounding, 3.f);
+
+	io.ConfigWindowsMoveFromTitleBarOnly = true;
 
 	// Setup Platform/Renderer backends
 	ImGui_ImplWin32_Init(m_window);
@@ -395,4 +399,28 @@ void Editor::AddItem()
 
 		ImGuiFileDialog::Instance()->Close();
 	}
+}
+
+void Editor::MakeDockSpace()
+{
+	ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
+	static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;
+
+	const ImGuiViewport* viewport = ImGui::GetMainViewport();
+	ImGui::SetNextWindowPos(viewport->WorkPos);
+	ImGui::SetNextWindowSize(viewport->WorkSize);
+	ImGui::SetNextWindowViewport(viewport->ID);
+	window_flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;
+	window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
+
+
+	ImGui::Begin("DockSpace Demo", nullptr, window_flags);
+	// Submit the DockSpace
+	ImGuiIO& io = ImGui::GetIO();
+	if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable)
+	{
+		ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
+		ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
+	}
+	ImGui::End();
 }

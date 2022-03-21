@@ -24,10 +24,10 @@ public:
 	int						GetId() { return id; }
 	bool					GetAlwaysFullscreen() { return alwaysFullscreen; }
 	void					SetAlwaysFullScreen(bool afs) { this->alwaysFullscreen = afs; }
-	inline float			GetHeight() { return height; }
-	inline float			GetWidth() { return width; }
-	inline float			GetPosX() { return positionX; }
-	inline float			GetPosY() { return positionY; }
+	inline float			GetHeight() { return height > 0 ? height : 0; }
+	inline float			GetWidth() { return width > 0 ? width : 0; }
+	inline float			GetPosX() { return positionX >= 0 ? positionX : 0; }
+	inline float			GetPosY() { return positionY >= 0 ? positionY : 0; }
 	bool					HasFocus() { return hasFocus; }
 
 protected:

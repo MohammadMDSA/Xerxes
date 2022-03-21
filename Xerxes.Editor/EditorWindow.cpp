@@ -21,9 +21,9 @@ void EditorWindow::SetFullscreen(bool fullscreen)
 
 void EditorWindow::SetPosition(float x, float y)
 {
-	this->positionX = x;
-	this->positionY = y;
-	shouldUpdatePosition = true;
+	//this->positionX = x;
+	//this->positionY = y;
+	//shouldUpdatePosition = true;
 }
 
 void EditorWindow::SetDimansion(float width, float height)
