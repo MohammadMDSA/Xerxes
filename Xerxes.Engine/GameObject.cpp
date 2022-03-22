@@ -189,16 +189,18 @@ void GameObject::OnInspector()
 	{
 		ImGui::Text("Components");
 		ImGui::Separator();
-		if (ImGui::Selectable("Mesh Renderer"))
-		{
-			//this->AddComponent(new MeshRenderer());
-			this->AttachComponent<MeshRenderer>();
-		}
-		if (ImGui::Selectable("Light"))
-		{
-			//this->AddComponent(new LightComponent());
-			this->AttachComponent<LightComponent>();
-		}
+		if (!scene->registry.try_get<MeshRenderer>(entityId))
+			if (ImGui::Selectable("Mesh Renderer"))
+			{
+				//this->AddComponent(new MeshRenderer());
+				this->AttachComponent<MeshRenderer>();
+			}
+		if (!scene->registry.try_get<LightComponent>(entityId))
+			if (ImGui::Selectable("Light"))
+			{
+				//this->AddComponent(new LightComponent());
+				this->AttachComponent<LightComponent>();
+			}
 		ImGui::EndPopup();
 	}
 }
@@ -207,7 +209,12 @@ template<class T>
 T& GameObject::AttachComponent()
 {
 	auto& comp = scene->registry.emplace<T>(entityId);
-	static_cast<GameObjectComponent&>(comp).gameObject = this;
+	auto& goComp = static_cast<GameObjectComponent&>(comp);
+	goComp.gameObject = this;
+	if (isStarted)
+		goComp.OnStart();
+	if (isAwake)
+		goComp.OnAwake();
 	return comp;
 }
 
