@@ -1,6 +1,7 @@
 #pragma once
 #include "IManager.h"
 #include "GameObject.h"
+#include "Scene.h"
 
 class SceneManager : public IManager
 {
@@ -16,13 +17,11 @@ public:
 	virtual void	OnInit() override;
 	virtual void	OnShutdown() override;
 
-	std::vector<GameObject*>*			GetGameObjects();
-	void								AddGameObject(GameObject* obj);
-	void								RemoveGameObject(GameObject* obj);
+	Scene*								GetCurrentScene();
 
 private:
 
 	std::vector<GameObject*>			gameObjects;
-
+	Scene*								scene;
 };
 

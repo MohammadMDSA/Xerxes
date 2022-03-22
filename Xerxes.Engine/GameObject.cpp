@@ -8,16 +8,24 @@
 
 using namespace DirectX;
 using namespace std;
+using namespace entt::literals;
 
-GameObject::GameObject() :
+GameObject::GameObject(Scene* scn) :
 	manipulationOperation(ImGuizmo::OPERATION::TRANSLATE),
 	manipulationMode(ImGuizmo::MODE::LOCAL),
 	name("GameObject"),
 	editName("GameObject"),
 	isAwake(false),
 	isStarted(false),
-	transform(Transform(this))
+	transform(Transform(this)),
+	scene(scn)
 {
+	this->entityId = scn->AddGameObject(this);
+}
+
+GameObject::~GameObject()
+{
+	scene->registry.destroy(entityId);
 }
 
 void GameObject::OnStart()
@@ -25,8 +33,7 @@ void GameObject::OnStart()
 	if (isStarted)
 		return;
 	isStarted = true;
-
-	for (auto component : components)
+	for (auto component : GetComponents())
 	{
 		component->OnStart();
 	}
@@ -37,7 +44,7 @@ void GameObject::OnAwake()
 	if (isAwake)
 		return;
 	isAwake = true;
-	for (auto component : components)
+	for (auto component : GetComponents())
 	{
 		component->OnAwake();
 	}
@@ -45,27 +52,40 @@ void GameObject::OnAwake()
 
 void GameObject::OnUpdate(float deltaTime)
 {
-	for (auto component : components)
+	for (auto component : GetComponents())
 	{
 		component->OnUpdate(deltaTime);
 	}
 }
 
-void GameObject::OnRender(DirectX::SimpleMath::Matrix view, DirectX::SimpleMath::Matrix proj, ID3D11DeviceContext* context)
+void GameObject::OnRender(const DirectX::SimpleMath::Matrix& view, const DirectX::SimpleMath::Matrix& proj, ID3D11DeviceContext* context)
 {
-	for (auto component : components)
+	auto reg = &scene->registry;
+	for (auto comp : GetComponents())
 	{
-		component->OnRender(view, proj, context);
+		comp->OnRender(view, proj, context);
 	}
 }
 
 void GameObject::OnDestroy()
 {
-	for (auto component : components)
-	{
-		component->OnDestroy();
-	}
-
+	std::vector<GameObjectComponent*> result;
+	auto reg = &scene->registry;
+	auto handle = entt::handle(*reg, entityId);
+	handle.visit([this, &result](entt::id_type compTypeId, const auto& storage)
+		{
+			switch (compTypeId)
+			{
+			case entt::type_hash<LightComponent>():
+				result.push_back(&scene->registry.get<LightComponent>(entityId));
+				break;
+			case entt::type_hash<MeshRenderer>():
+				result.push_back(&scene->registry.get<MeshRenderer>(entityId));
+				break;
+			default:
+				break;
+			}
+		});
 }
 
 void GameObject::OnGizmo()
@@ -79,7 +99,7 @@ void GameObject::OnGizmo()
 	{
 		transform.SetWorld(world);
 	}
-	for (auto component : components)
+	for (auto component : GetComponents())
 	{
 		component->OnGizmo();
 	}
@@ -140,6 +160,7 @@ void GameObject::OnInspector()
 	}
 
 	// GameObject components
+	auto components = GetComponents();
 	for (auto component : components)
 	{
 		ImGui::Spacing();
@@ -149,7 +170,7 @@ void GameObject::OnInspector()
 		ImGui::Spacing();
 		if (ImGui::CollapsingHeader(component->GetName().c_str(), ImGuiTreeNodeFlags_DefaultOpen))
 			ImGui::Spacing();
-			component->OnInspector();
+		component->OnInspector();
 	}
 
 	ImGui::Spacing();
@@ -170,45 +191,30 @@ void GameObject::OnInspector()
 		ImGui::Separator();
 		if (ImGui::Selectable("Mesh Renderer"))
 		{
-			this->AddComponent(new MeshRenderer());
+			//this->AddComponent(new MeshRenderer());
+			this->AttachComponent<MeshRenderer>();
 		}
 		if (ImGui::Selectable("Light"))
 		{
-			this->AddComponent(new LightComponent());
+			//this->AddComponent(new LightComponent());
+			this->AttachComponent<LightComponent>();
 		}
 		ImGui::EndPopup();
 	}
 }
 
-void GameObject::AddComponent(GameObjectComponent* component)
+template<class T>
+T& GameObject::AttachComponent()
 {
-	for (auto comp : components)
-	{
-		if (comp.get() == component)
-			return;
-	}
-	components.push_back(std::shared_ptr<GameObjectComponent>(component));
-	component->gameObject = this;
-	component->OnStart();
-	if (isAwake)
-		component->OnAwake();
+	auto& comp = scene->registry.emplace<T>(entityId);
+	static_cast<GameObjectComponent&>(comp).gameObject = this;
+	return comp;
 }
 
-void GameObject::DeleteComponent(GameObjectComponent* component)
+template<class T>
+void GameObject::DeleteComponent()
 {
-	auto index = -1;
-	for (int i = 0; i < components.size(); i++)
-	{
-		if (component == components.at(i).get())
-		{
-			index = i;
-			break;
-		}
-	}
-	if (index == -1)
-		return;
-	component->gameObject = nullptr;
-	components.erase(components.begin() + index);
+	scene->registry.remove<T>(entityId);
 }
 
 void GameObject::SetName(std::string name)
@@ -220,4 +226,26 @@ void GameObject::SetName(std::string name)
 std::string GameObject::GetName()
 {
 	return this->name;
+}
+
+std::vector<GameObjectComponent*> GameObject::GetComponents()
+{
+	std::vector<GameObjectComponent*> result;
+	auto reg = &scene->registry;
+	auto handle = entt::handle(*reg, entityId);
+	handle.visit([this, &result](entt::id_type compTypeId, const auto& storage)
+		{
+			switch (compTypeId)
+			{
+			case entt::type_hash<LightComponent>():
+				result.push_back(&scene->registry.get<LightComponent>(entityId));
+				break;
+			case entt::type_hash<MeshRenderer>():
+				result.push_back(&scene->registry.get<MeshRenderer>(entityId));
+				break;
+			default:
+				break;
+			}
+		});
+	return result;
 }

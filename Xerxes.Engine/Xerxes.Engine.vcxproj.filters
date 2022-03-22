@@ -55,6 +55,9 @@
     <Filter Include="Source\Public\GameResources">
       <UniqueIdentifier>{70550e9d-7b32-46db-9d65-664fb1c61cdd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Libs\EnTT">
+      <UniqueIdentifier>{cbda7f09-06c6-4ed6-a5a6-f988510058c0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -168,6 +171,12 @@
     <ClInclude Include="LightManager.h">
       <Filter>Source\Public\SubsystemManager</Filter>
     </ClInclude>
+    <ClInclude Include="Scene.h">
+      <Filter>Source\Public\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Libs\EnTT\entt.hpp">
+      <Filter>Libs\EnTT</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Xerxes.Engine.cpp">
@@ -259,6 +268,9 @@
     </ClCompile>
     <ClCompile Include="LightManager.cpp">
       <Filter>Source\Private\SubsystemManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene.cpp">
+      <Filter>Source\Private\Core</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

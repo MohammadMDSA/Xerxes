@@ -21,9 +21,10 @@ void HierarchyWindow::OnGUI()
 {
 	auto sceneManager = RootManager::GetInstance()->GetSceneManager();
 	auto selection = RootManager::GetInstance()->GetSelectionManager();
-	auto allObjs = sceneManager->GetGameObjects();
+	auto scene = sceneManager->GetCurrentScene();
+	auto allObjs = scene->GetGameObjects();
 	std::vector<GameObject*> rootObjects;
-	std::copy_if(allObjs->begin(), allObjs->end(), std::back_inserter(rootObjects), [](GameObject* obj)
+	std::copy_if(allObjs.begin(), allObjs.end(), std::back_inserter(rootObjects), [](GameObject* obj)
 		{
 			return !obj->transform.GetParent();
 		});

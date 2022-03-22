@@ -7,14 +7,17 @@
 using namespace DirectX;
 using namespace std;
 
+XCOMP_GENERATE_DEFINITION(MeshRenderer)
+
 MeshRenderer::MeshRenderer() :
 	meshResourceId(-1),
 	usingPrimitives(true),
 	effectResourceId(-1)
 {
+	XCOMP_GENERATE_CONSTRUCTOR(MeshRenderer)
 }
 
-void MeshRenderer::OnRender(DirectX::SimpleMath::Matrix view, DirectX::SimpleMath::Matrix proj, ID3D11DeviceContext* context)
+void MeshRenderer::OnRender(const DirectX::SimpleMath::Matrix& view, const DirectX::SimpleMath::Matrix& proj, ID3D11DeviceContext* context)
 {
 	auto resourceManager = RootManager::GetInstance()->GetResourceManager();
 	auto world = gameObject->transform.GetWorldMatrix();

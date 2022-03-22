@@ -13,6 +13,7 @@
 #include "Libs/imgui/ImGuizmo.h"
 #include "Camera.h"
 #include "MeshRenderer.h"
+#include "Scene.h"
 #include "Libs/ImGuiFileDialog/ImGuiFileDialog.h"
 
 extern void ExitGame() noexcept;
@@ -371,9 +372,9 @@ void Editor::AppBarMenus()
 			}
 			if (ImGui::MenuItem("New GameObject"))
 			{
-				auto obj = new GameObject();
+				auto currentScene = rootManager->GetSceneManager()->GetCurrentScene();
+				auto obj = new GameObject(currentScene);
 				obj->OnStart();
-				rootManager->GetSceneManager()->AddGameObject(obj);
 			}
 			ImGui::EndMenu();
 		}
@@ -389,12 +390,7 @@ void Editor::AddItem()
 		{
 			std::string filePathName = ImGuiFileDialog::Instance()->GetFilePathName();
 
-			auto goo = new GameObject();
 			int modelId = rootManager->GetResourceManager()->CreateModel(std::wstring(filePathName.begin(), filePathName.end()));
-			auto mesh = new MeshRenderer();
-			goo->AddComponent(mesh);
-			goo->OnStart();
-			rootManager->GetSceneManager()->AddGameObject(goo);
 		}
 
 		ImGuiFileDialog::Instance()->Close();

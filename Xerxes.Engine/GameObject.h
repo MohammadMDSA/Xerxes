@@ -5,38 +5,51 @@
 #include "IInspectorDrawer.h"
 
 #include "GameObjectComponent.h"
+#include "Scene.h"
 
 #include "Libs/imgui/imgui.h"
 #include "Libs/imgui/ImGuizmo.h"
+#include "Libs/EnTT/entt.hpp"
 
 class GameObjectComponent;
+class Scene;
+
+template<typename Type>
+Type& getEntityComponent(entt::registry& registry, entt::entity entity) {
+	return registry.template get<Type>(entity);
+}
+
 
 class GameObject : public IInspectorDrawer
 {
 public:
-	GameObject();
+	GameObject(Scene* scene);
+	~GameObject();
 
 	Transform transform;
 
 	void					OnStart();
 	void					OnAwake();
 	void					OnUpdate(float deltaTime);
-	void					OnRender(DirectX::SimpleMath::Matrix view, DirectX::SimpleMath::Matrix proj, ID3D11DeviceContext* context);
+	void					OnRender(const DirectX::SimpleMath::Matrix& view, const DirectX::SimpleMath::Matrix& proj, ID3D11DeviceContext* context);
 	void					OnDestroy();
 
 	void					OnGizmo();
 	virtual void			OnInspector() override;
 
-	void					AddComponent(GameObjectComponent* component);
-	void					DeleteComponent(GameObjectComponent* component);
+	template<class T>
+	T&						AttachComponent();
+
+	template<class T>
+	void					DeleteComponent();
 
 	void					SetName(std::string name);
 	std::string				GetName();
 
 private:
 
-	std::vector<std::shared_ptr<GameObjectComponent>>	components;
-	
+	std::vector<GameObjectComponent*>	GetComponents();
+
 	ImGuizmo::OPERATION			manipulationOperation;
 	ImGuizmo::MODE				manipulationMode;
 	std::string					name;
@@ -44,5 +57,8 @@ private:
 
 	bool						isAwake;
 	bool						isStarted;
+
+	entt::entity				entityId;
+	Scene*						scene;
 };
 

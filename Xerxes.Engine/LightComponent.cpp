@@ -3,11 +3,15 @@
 #include "RootManager.h"
 
 using namespace DirectX;
+using namespace entt::literals;
+
+XCOMP_GENERATE_DEFINITION(LightComponent)
 
 LightComponent::LightComponent() :
 	color(Colors::Blue),
 	specular(Colors::White)
 {
+	XCOMP_GENERATE_CONSTRUCTOR(LightComponent)
 	RootManager::GetInstance()->GetLightManager()->AddDirectionalLight(this);
 }
 
@@ -15,7 +19,7 @@ LightComponent::~LightComponent()
 {
 }
 
-void LightComponent::OnRender(DirectX::SimpleMath::Matrix view, DirectX::SimpleMath::Matrix proj, ID3D11DeviceContext* context)
+void LightComponent::OnRender(const DirectX::SimpleMath::Matrix& view, const DirectX::SimpleMath::Matrix& proj, ID3D11DeviceContext* context)
 {
 }
 

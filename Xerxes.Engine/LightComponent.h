@@ -1,15 +1,18 @@
 #pragma once
 #include "GameObjectComponent.h"
 
+using namespace entt::literals;
+
 class LightComponent : public GameObjectComponent
 {
-public:
+	XCOMP_GENERATE_BODY()
 
+public:
 	LightComponent();
 	~LightComponent();
 
 	// Inherited via GameObjectComponent
-	virtual void OnRender(DirectX::SimpleMath::Matrix view, DirectX::SimpleMath::Matrix proj, ID3D11DeviceContext* context) override;
+	virtual void OnRender(const DirectX::SimpleMath::Matrix& view, const DirectX::SimpleMath::Matrix& proj, ID3D11DeviceContext* context) override;
 	virtual void OnStart() override;
 	virtual void OnAwake() override;
 	virtual void OnUpdate(float deltaTime) override;

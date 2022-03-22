@@ -1,13 +1,18 @@
 #include "pch.h"
 #include "SceneManager.h"
 #include "RootManager.h"
+#include "Libs/EnTT/entt.hpp"
+
+using namespace entt::literals;
 
 SceneManager::SceneManager()
 {
+	scene = new Scene();
 }
 
 SceneManager::~SceneManager()
 {
+	delete scene;
 }
 
 void SceneManager::Update(float deltaTime)
@@ -21,7 +26,7 @@ void SceneManager::Update(float deltaTime)
 void SceneManager::OnRender(DirectX::SimpleMath::Matrix view, DirectX::SimpleMath::Matrix proj)
 {
 	auto context = RootManager::GetInstance()->GetResourceManager()->GetDeviceContext();
-	for (auto gameObject : gameObjects)
+	for (auto gameObject : GetCurrentScene()->GetGameObjects())
 	{
 		gameObject->OnRender(view, proj, context);
 	}
@@ -47,19 +52,7 @@ void SceneManager::OnShutdown()
 {
 }
 
-std::vector<GameObject*>* SceneManager::GetGameObjects()
+Scene* SceneManager::GetCurrentScene()
 {
-	return &gameObjects;
-}
-
-void SceneManager::AddGameObject(GameObject* obj)
-{
-	if (std::find(gameObjects.begin(), gameObjects.end(), obj) != gameObjects.end())
-		return;
-	this->gameObjects.push_back(obj);
-}
-
-void SceneManager::RemoveGameObject(GameObject* obj)
-{
-	std::remove(gameObjects.begin(), gameObjects.end(), obj);
+	return scene;
 }
