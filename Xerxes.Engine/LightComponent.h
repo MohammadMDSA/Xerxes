@@ -16,7 +16,7 @@ public:
 	virtual void OnStart() override;
 	virtual void OnAwake() override;
 	virtual void OnUpdate(float deltaTime) override;
-	virtual void OnGizmo() override;
+	virtual void OnGizmo(ImGuizmo::OPERATION manipulationOperation, ImGuizmo::MODE manipulationMode) override;
 	virtual void OnInspector() override;
 	virtual void OnDestroy() override;
 	virtual std::string GetName() override;

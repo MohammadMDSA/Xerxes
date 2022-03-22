@@ -9,7 +9,9 @@ using namespace DirectX::SimpleMath;
 SceneWindow::SceneWindow(int id) :
 	EditorWindow(id, "Scene"),
 	moveingCamera(false),
-	camera(nullptr)
+	camera(nullptr),
+	manipulationOperation(ImGuizmo::OPERATION::TRANSLATE),
+	manipulationMode(ImGuizmo::MODE::LOCAL)
 {
 	backgroundAlpha = 1.f;
 	auto resourceManager = RootManager::GetInstance()->GetResourceManager();
@@ -32,12 +34,45 @@ Camera* SceneWindow::GetCamera()
 
 void SceneWindow::OnGUI()
 {
+
+	ImGui::SetNextWindowBgAlpha(0.7);
+	ImGui::BeginChild("Tools", ImVec2(0, 40), true, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoBringToFrontOnFocus);
+	
+	// Creating table layout
+	ImGui::BeginTable("tab", 2, ImGuiTableFlags_SizingFixedSame | ImGuiTableFlags_NoHostExtendX | ImGuiTableFlags_BordersInnerV);
+
+	ImGui::TableNextRow();
+	ImGui::TableSetColumnIndex(0);
+
+	ImGui::RadioButton("World", (int*)&manipulationMode, ImGuizmo::MODE::WORLD);
+	ImGui::SameLine();
+	ImGui::RadioButton("Local", (int*)&manipulationMode, ImGuizmo::MODE::LOCAL);
+	
+	ImGui::TableSetColumnIndex(1);
+	ImGui::RadioButton("Position", (int*)&manipulationOperation, ImGuizmo::OPERATION::TRANSLATE);
+	ImGui::SameLine();
+	ImGui::RadioButton("Rotation", (int*)&manipulationOperation, ImGuizmo::OPERATION::ROTATE);
+	ImGui::SameLine();
+	ImGui::RadioButton("Scale", (int*)&manipulationOperation, ImGuizmo::OPERATION::SCALE);
+	
+	ImGui::EndTable();
+	ImGui::EndChild();
 }
 
 int SceneWindow::GetCustomWindowFlags()
 {
 	return 0; /*ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove;*/
 
+}
+
+ImGuizmo::OPERATION SceneWindow::GetManipulationOperation()
+{
+	return manipulationOperation;
+}
+
+ImGuizmo::MODE SceneWindow::GetManipulationMode()
+{
+	return manipulationMode;
 }
 
 void SceneWindow::Update(float deltaTime)

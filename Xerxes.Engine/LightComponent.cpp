@@ -35,7 +35,7 @@ void LightComponent::OnUpdate(float deltaTime)
 {
 }
 
-void LightComponent::OnGizmo()
+void LightComponent::OnGizmo(ImGuizmo::OPERATION manipulationOperation, ImGuizmo::MODE manipulationMode)
 {
 }
 

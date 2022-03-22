@@ -4,6 +4,9 @@
 #include <string>
 
 #include "GameObject.h"
+
+#include "Libs/imgui/imgui.h"
+#include "Libs/imgui/ImGuizmo.h"
 #include "Libs/EnTT/entt.hpp"
 
 #define XCOMP_REGISTER(COMP) \
@@ -40,14 +43,14 @@ class GameObject;
 class GameObjectComponent : public IInspectorDrawer
 {
 public:
-	virtual void OnRender(const DirectX::SimpleMath::Matrix& view, const DirectX::SimpleMath::Matrix& proj, ID3D11DeviceContext* context) {};
-	virtual void OnStart() {};
-	virtual void OnAwake() {};
-	virtual void OnUpdate(float deltaTime) {};
-	virtual void OnGizmo() {};
-	virtual void OnInspector() {};
-	virtual void OnDestroy() {};
-	virtual std::string GetName() { return ""; };
+	virtual void OnRender(const DirectX::SimpleMath::Matrix& view, const DirectX::SimpleMath::Matrix& proj, ID3D11DeviceContext* context) = 0;
+	virtual void OnStart() = 0;
+	virtual void OnAwake() = 0;
+	virtual void OnUpdate(float deltaTime) = 0;
+	virtual void OnGizmo(ImGuizmo::OPERATION manipulationOperation, ImGuizmo::MODE manipulationMode) = 0;
+	virtual void OnInspector() = 0;
+	virtual void OnDestroy() = 0;
+	virtual std::string GetName() = 0;
 
 protected:
 	friend class GameObject;

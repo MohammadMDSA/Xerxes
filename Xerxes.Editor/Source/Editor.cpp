@@ -169,10 +169,18 @@ void Editor::Render()
 	auto selected = selectionManager->GetSelectedInspectorDrawer();
 
 	sceneWindow->BeginWindow();
+	
+	// Drawing scene texture
+	auto curPos = ImGui::GetCursorPos();
 	ImGui::Image((void*)windowResource->GetShaderResourceView(), ImVec2(sceneWidth, sceneHeight));
+	ImGui::SetCursorPos(curPos);
+
+	// Drawing scene gizmo
 	auto min = ImGui::GetWindowContentRegionMin();
 	ImGuizmo::SetRect(sceneWindow->GetPosX() + min.x, sceneWindow->GetPosY() + min.y, sceneWidth, sceneHeight);
-	sceneManager->OnGizmo();
+	sceneManager->OnGizmo(sceneWindow->GetManipulationOperation(), sceneWindow->GetManipulationMode());
+
+
 	sceneWindow->EndWindow();
 
 	// Drawing Inspector

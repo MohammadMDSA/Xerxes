@@ -34,7 +34,7 @@ public:
 	void					OnRender(const DirectX::SimpleMath::Matrix& view, const DirectX::SimpleMath::Matrix& proj, ID3D11DeviceContext* context);
 	void					OnDestroy();
 
-	void					OnGizmo();
+	void					OnGizmo(ImGuizmo::OPERATION manipulationOperation, ImGuizmo::MODE manipulationMode);
 	virtual void			OnInspector() override;
 
 	template<class T>
@@ -50,8 +50,6 @@ private:
 
 	std::vector<GameObjectComponent*>	GetComponents();
 
-	ImGuizmo::OPERATION			manipulationOperation;
-	ImGuizmo::MODE				manipulationMode;
 	std::string					name;
 	std::string					editName;
 

@@ -1,6 +1,8 @@
 #pragma once
 #include "EditorWindow.h"
 #include "Camera.h"
+#include "Libs/imgui/imgui.h"
+#include "Libs/imgui/ImGuizmo.h"
 
 class SceneWindow : public EditorWindow
 {
@@ -13,6 +15,9 @@ public:
 	virtual void			OnGUI() override;
 	virtual void			Update(float deltaTime) override;
 	void					OnRender(DirectX::SimpleMath::Matrix view, DirectX::SimpleMath::Matrix proj);
+
+	ImGuizmo::OPERATION		GetManipulationOperation();
+	ImGuizmo::MODE			GetManipulationMode();
 
 protected:
 	// Inherited via EditorWindow
@@ -30,5 +35,8 @@ private:
 	bool					moveingCamera;
 	int						effectId;
 	std::unique_ptr<DirectX::CommonStates> states;
+
+	ImGuizmo::OPERATION		manipulationOperation;
+	ImGuizmo::MODE			manipulationMode;
 };
 

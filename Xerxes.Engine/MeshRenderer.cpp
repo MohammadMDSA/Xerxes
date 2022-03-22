@@ -76,7 +76,7 @@ void MeshRenderer::OnUpdate(float deltaTime)
 {
 }
 
-void MeshRenderer::OnGizmo()
+void MeshRenderer::OnGizmo(ImGuizmo::OPERATION manipulationOperation, ImGuizmo::MODE manipulationMode)
 {
 }
 

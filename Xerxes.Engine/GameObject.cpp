@@ -11,8 +11,6 @@ using namespace std;
 using namespace entt::literals;
 
 GameObject::GameObject(Scene* scn) :
-	manipulationOperation(ImGuizmo::OPERATION::TRANSLATE),
-	manipulationMode(ImGuizmo::MODE::LOCAL),
 	name("GameObject"),
 	editName("GameObject"),
 	isAwake(false),
@@ -88,7 +86,7 @@ void GameObject::OnDestroy()
 		});
 }
 
-void GameObject::OnGizmo()
+void GameObject::OnGizmo(ImGuizmo::OPERATION manipulationOperation, ImGuizmo::MODE manipulationMode)
 {
 	auto camera = RootManager::GetInstance()->GetCameraManager()->GetActiveCamera();
 	auto view = camera->GetView();
@@ -101,7 +99,7 @@ void GameObject::OnGizmo()
 	}
 	for (auto component : GetComponents())
 	{
-		component->OnGizmo();
+		component->OnGizmo(manipulationOperation, manipulationMode);
 	}
 }
 
@@ -121,24 +119,6 @@ void GameObject::OnInspector()
 	// GameObject Transformation
 	if (ImGui::CollapsingHeader("Transform", ImGuiTreeNodeFlags_DefaultOpen))
 	{
-
-		ImGui::Text("Manipulation Mode");
-		ImGui::RadioButton("World", (int*)&manipulationMode, ImGuizmo::MODE::WORLD);
-		ImGui::SameLine();
-		ImGui::RadioButton("Local", (int*)&manipulationMode, ImGuizmo::MODE::LOCAL);
-
-		ImGui::Separator();
-
-		// Manipulation operation selection
-		ImGui::Text("Manipulation Operation");
-		ImGui::RadioButton("Position", (int*)&manipulationOperation, ImGuizmo::OPERATION::TRANSLATE);
-		ImGui::SameLine();
-		ImGui::RadioButton("Rotation", (int*)&manipulationOperation, ImGuizmo::OPERATION::ROTATE);
-		ImGui::SameLine();
-		ImGui::RadioButton("Scale", (int*)&manipulationOperation, ImGuizmo::OPERATION::SCALE);
-
-		ImGui::Separator();
-
 		// Transform properties
 		ImGui::Text("Transform");
 		auto pos = transform.GetPosition();

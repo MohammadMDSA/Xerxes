@@ -11,7 +11,7 @@ public:
 
 	void			Update(float deltaTime);
 	void			OnRender(DirectX::SimpleMath::Matrix view, DirectX::SimpleMath::Matrix proj);
-	void			OnGizmo();
+	void			OnGizmo(ImGuizmo::OPERATION manipulationOperation, ImGuizmo::MODE manipulationMode);
 
 	// Inherited via IManager
 	virtual void	OnInit() override;

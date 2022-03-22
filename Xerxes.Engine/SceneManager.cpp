@@ -32,7 +32,7 @@ void SceneManager::OnRender(DirectX::SimpleMath::Matrix view, DirectX::SimpleMat
 	}
 }
 
-void SceneManager::OnGizmo()
+void SceneManager::OnGizmo(ImGuizmo::OPERATION manipulationOperation, ImGuizmo::MODE manipulationMode)
 {
 	auto selection = RootManager::GetInstance()->GetSelectionManager();
 
@@ -40,7 +40,7 @@ void SceneManager::OnGizmo()
 	{
 		auto obj = dynamic_cast<GameObject*>(selection->GetSelectedInspectorDrawer());
 		if (obj)
-			obj->OnGizmo();
+			obj->OnGizmo(manipulationOperation, manipulationMode);
 	}
 }
 

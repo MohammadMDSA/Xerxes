@@ -86,11 +86,11 @@ void EditorWindow::BeginWindow()
 		hasFocus = ImGui::IsWindowFocused();
 		isHovered = ImGui::IsWindowHovered();
 	}
-	OnGUI();
 }
 
 void EditorWindow::EndWindow()
 {
+	OnGUI();
 	ImGui::End();
 }
 
