@@ -67,5 +67,5 @@ const DirectX::SimpleMath::Vector3& LightComponent::GetColor() const
 
 const DirectX::SimpleMath::Vector3& LightComponent::GetDirection() const
 {
-	return gameObject->transform.Forward();
+	return gameObject->transform().Forward();
 }

@@ -6,6 +6,7 @@
 #include "pch.h"
 #include "Editor.h"
 #include <stdexcept>
+#include <fstream>
 
 #include "Libs/imgui/imgui.h"
 #include "Libs/imgui/imgui_impl_win32.h"
@@ -15,6 +16,7 @@
 #include "MeshRenderer.h"
 #include "Scene.h"
 #include "Libs/ImGuiFileDialog/ImGuiFileDialog.h"
+#include "boost/archive/text_oarchive.hpp"
 
 extern void ExitGame() noexcept;
 
@@ -380,10 +382,19 @@ void Editor::AppBarMenus()
 			}
 			if (ImGui::MenuItem("New GameObject"))
 			{
-				auto currentScene = rootManager->GetSceneManager()->GetCurrentScene();
-				auto obj = new GameObject(currentScene);
+				auto obj = GameObject::Create();
 				obj->OnStart();
 			}
+			if (ImGui::MenuItem("Save"))
+			{
+				std::ofstream ofs("filename");
+				auto scene = rootManager->GetSceneManager()->GetCurrentScene();
+				{
+					boost::archive::text_oarchive oa(ofs);
+					oa << scene;
+				}
+			}
+
 			ImGui::EndMenu();
 		}
 		ImGui::EndMainMenuBar();

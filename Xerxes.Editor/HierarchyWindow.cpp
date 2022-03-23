@@ -26,7 +26,7 @@ void HierarchyWindow::OnGUI()
 	std::vector<GameObject*> rootObjects;
 	std::copy_if(allObjs.begin(), allObjs.end(), std::back_inserter(rootObjects), [](GameObject* obj)
 		{
-			return !obj->transform.GetParent();
+			return !obj->transform().GetParent();
 		});
 	DrawNodesHierarchy(&rootObjects, selection);
 }
@@ -43,7 +43,7 @@ void HierarchyWindow::DrawNodesHierarchy(std::vector<GameObject*>* objects, Sele
 	{
 		ImGuiTreeNodeFlags nodeFlags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_SpanAvailWidth;
 		i++;
-		auto hasChildren = go->transform.GetChildren()->size() > 0;
+		auto hasChildren = go->transform().GetChildren()->size() > 0;
 
 		if (!hasChildren)
 			nodeFlags |= ImGuiTreeNodeFlags_Leaf;
@@ -69,11 +69,11 @@ void HierarchyWindow::DrawNodesHierarchy(std::vector<GameObject*>* objects, Sele
 				if (payload->IsDataType(typeid(GameObject*).name()))
 				{
 					GameObject* payloadGo = *(GameObject**)payload->Data;
-					if (!IsGameObjectInTargetHierarchy(payloadGo, &go->transform))
+					if (!IsGameObjectInTargetHierarchy(payloadGo, &go->transform()))
 					{
 						if (payload = (ImGui::AcceptDragDropPayload(typeid(GameObject*).name())))
 						{
-							payloadGo->transform.SetParent(&go->transform);
+							payloadGo->transform().SetParent(&go->transform());
 						}
 					}
 				}
@@ -90,7 +90,7 @@ void HierarchyWindow::DrawNodesHierarchy(std::vector<GameObject*>* objects, Sele
 		if (nodeOpen)
 		{
 			std::vector<GameObject*> childGameObjects;
-			auto children = go->transform.GetChildren();
+			auto children = go->transform().GetChildren();
 			std::transform(children->begin(), children->end(), back_inserter(childGameObjects), [](Transform* t)
 				{
 					return t->GetGameObject();
@@ -111,7 +111,7 @@ void HierarchyWindow::DrawNodesHierarchy(std::vector<GameObject*>* objects, Sele
 
 bool HierarchyWindow::IsGameObjectInTargetHierarchy(GameObject* obj, Transform* target)
 {
-	auto sourceTransform = &obj->transform;
+	auto sourceTransform = &obj->transform();
 	while (target)
 	{
 		if (target == sourceTransform)

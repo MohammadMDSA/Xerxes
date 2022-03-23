@@ -10,6 +10,7 @@
 #include "Libs/imgui/imgui.h"
 #include "Libs/imgui/ImGuizmo.h"
 #include "Libs/EnTT/entt.hpp"
+#include "boost/serialization/access.hpp"
 
 class GameObjectComponent;
 class Scene;
@@ -23,10 +24,8 @@ Type& getEntityComponent(entt::registry& registry, entt::entity entity) {
 class GameObject : public IInspectorDrawer
 {
 public:
-	GameObject(Scene* scene);
-	~GameObject();
 
-	Transform transform;
+	Transform&				transform();
 
 	void					OnStart();
 	void					OnAwake();
@@ -46,8 +45,21 @@ public:
 	void					SetName(std::string name);
 	std::string				GetName();
 
-private:
+	template<typename T>
+	T&						GetComponent();
 
+	static GameObject*		Create();
+	static void				Destroy(GameObject* obj);
+
+private:
+	friend class boost::serialization::access;
+	friend struct std::default_delete<GameObject>;
+	friend class Scene;
+
+	GameObject() = default;
+	GameObject(Scene* scene);
+	GameObject(const GameObject& other);
+	~GameObject() = default;
 	std::vector<GameObjectComponent*>	GetComponents();
 
 	std::string					name;
@@ -55,8 +67,12 @@ private:
 
 	bool						isAwake;
 	bool						isStarted;
+	bool						destroyed;
 
 	entt::entity				entityId;
 	Scene*						scene;
+
+	template<class Archive>
+	void serialize(Archive& ar, const unsigned int version) {}
 };
 

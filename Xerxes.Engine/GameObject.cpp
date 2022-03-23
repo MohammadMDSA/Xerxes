@@ -15,15 +15,26 @@ GameObject::GameObject(Scene* scn) :
 	editName("GameObject"),
 	isAwake(false),
 	isStarted(false),
-	transform(Transform(this)),
-	scene(scn)
+	scene(scn),
+	destroyed(false)
 {
-	this->entityId = scn->AddGameObject(this);
 }
 
-GameObject::~GameObject()
+GameObject::GameObject(const GameObject& other)
 {
-	scene->registry.destroy(entityId);
+	this->name = other.name;
+	this->isAwake = other.isAwake;
+	this->isStarted = other.isStarted;
+}
+
+GameObject* GameObject::Create()
+{
+	return RootManager::GetInstance()->GetSceneManager()->GetCurrentScene()->CreateGameObject();
+}
+
+Transform& GameObject::transform()
+{
+	return scene->registry.get<Transform>(entityId);
 }
 
 void GameObject::OnStart()
@@ -92,10 +103,10 @@ void GameObject::OnGizmo(ImGuizmo::OPERATION manipulationOperation, ImGuizmo::MO
 	auto view = camera->GetView();
 	auto projection = camera->GetProjection();
 	ImGuizmo::SetDrawlist();
-	auto world = transform.GetWorldMatrix();
+	auto world = transform().GetWorldMatrix();
 	if (ImGuizmo::Manipulate((float*)&view, (float*)&projection, manipulationOperation, manipulationMode, (float*)&(world)))
 	{
-		transform.SetWorld(world);
+		transform().SetWorld(world);
 	}
 	for (auto component : GetComponents())
 	{
@@ -121,22 +132,22 @@ void GameObject::OnInspector()
 	{
 		// Transform properties
 		ImGui::Text("Transform");
-		auto pos = transform.GetPosition();
+		auto pos = transform().GetPosition();
 		if (ImGui::DragFloat3("Position", (float*)&(pos), 0.01f))
-			transform.SetPositionV(pos);
+			transform().SetPositionV(pos);
 
-		float rotations[3] = { transform.GetRotationX(), transform.GetRotationY(), transform.GetRotationZ() };
+		float rotations[3] = { transform().GetRotationX(), transform().GetRotationY(), transform().GetRotationZ() };
 
 		if (ImGui::DragFloat3("Rotation", (float*)&rotations, 0.1f))
 		{
-			transform.SetRotationX(rotations[0]);
-			transform.SetRotationY(rotations[1]);
-			transform.SetRotationZ(rotations[2]);
+			transform().SetRotationX(rotations[0]);
+			transform().SetRotationY(rotations[1]);
+			transform().SetRotationZ(rotations[2]);
 		}
 
-		auto scl = transform.GetScale();
+		auto scl = transform().GetScale();
 		if (ImGui::DragFloat3("Scale", (float*)&(scl), 0.01f))
-			transform.SetScaleV(scl);
+			transform().SetScaleV(scl);
 	}
 
 	// GameObject components
@@ -204,6 +215,21 @@ void GameObject::DeleteComponent()
 	scene->registry.remove<T>(entityId);
 }
 
+template<typename T>
+T& GameObject::GetComponent()
+{
+	return scene->registry.get<T>(entityId);
+}
+//
+//template<class Archive>
+//inline void GameObject::serialize(Archive& ar, const unsigned int version)
+//{
+//	/*ar& name;
+//	ar& isAwake;
+//	ar& isStarted;
+//	ar& entityId;*/
+//}
+
 void GameObject::SetName(std::string name)
 {
 	if (!name.empty())
@@ -213,6 +239,13 @@ void GameObject::SetName(std::string name)
 std::string GameObject::GetName()
 {
 	return this->name;
+}
+
+void GameObject::Destroy(GameObject* obj)
+{
+	auto scene = RootManager::GetInstance()->GetSceneManager()->GetCurrentScene();
+	obj->destroyed = true;
+	scene->RemoveGameObject(obj);
 }
 
 std::vector<GameObjectComponent*> GameObject::GetComponents()

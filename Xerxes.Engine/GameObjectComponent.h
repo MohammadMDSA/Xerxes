@@ -54,7 +54,7 @@ public:
 
 protected:
 	friend class GameObject;
-	GameObject*			gameObject;
+	GameObject*			gameObject = nullptr;
 
 };
 

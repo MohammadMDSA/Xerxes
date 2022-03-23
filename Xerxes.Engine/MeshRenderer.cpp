@@ -20,7 +20,7 @@ MeshRenderer::MeshRenderer() :
 void MeshRenderer::OnRender(const DirectX::SimpleMath::Matrix& view, const DirectX::SimpleMath::Matrix& proj, ID3D11DeviceContext* context)
 {
 	auto resourceManager = RootManager::GetInstance()->GetResourceManager();
-	auto world = gameObject->transform.GetWorldMatrix();
+	auto world = gameObject->transform().GetWorldMatrix();
 	auto lightManager = RootManager::GetInstance()->GetLightManager();
 	if (usingPrimitives)
 	{
