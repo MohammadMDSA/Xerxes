@@ -41,6 +41,7 @@ void MeshRenderer::OnRender(const DirectX::SimpleMath::Matrix& view, const Direc
 			auto effectLight = dynamic_cast<IEffectLights*>(effectRes);
 			if (effectLight)
 				lightManager->ApplyToEffect(effectLight);
+
 			resource->GetResource()->Draw(effectRes, effect->GetInputLayout());
 		}
 		else

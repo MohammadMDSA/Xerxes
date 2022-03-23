@@ -30,6 +30,7 @@ public:
 
 	// Effect vertext input type enums
 	static const std::string XEffectVertexType_VertexPositionColor;
+	static const std::string XEffectVertexType_VertexPositionNormal;
 	static const std::string XEffectVertexType_VertexPositionNormalTexture;
 
 private:
@@ -37,7 +38,9 @@ private:
 	std::string vertexType;
 
 	DirectX::SimpleMath::Vector4 diffuseColor;
+	DirectX::SimpleMath::Vector3 emmisiveColor;
 	DirectX::SimpleMath::Vector3 specularColor;
+	float specularPower;
 
 	bool vertextColorEnabled = false;
 

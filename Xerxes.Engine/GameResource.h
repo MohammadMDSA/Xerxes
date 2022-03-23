@@ -11,6 +11,7 @@ public:
 	const boost::filesystem::path& GetPath() const { return path; }
 	const std::string		GetType() const { return type; }
 	inline bool				IsSystemResource() { return systemResource; }
+	inline void				SetSystemResource(bool val) { systemResource = val; }
 
 	virtual void			OnInspector() = 0;
 	virtual void			Initialize(ID3D11DeviceContext* context) = 0;

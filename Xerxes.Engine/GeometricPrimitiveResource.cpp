@@ -44,7 +44,7 @@ void GeometricPrimitiveResource::Initialize(ID3D11DeviceContext* context)
 	}
 	else if (name == "Sphere")
 	{
-		this->resource = GeometricPrimitive::CreateSphere(context);
+		this->resource = GeometricPrimitive::CreateSphere(context, 1.f, 64);
 	}
 	else if (name == "Teapot")
 	{

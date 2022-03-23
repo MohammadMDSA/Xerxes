@@ -176,6 +176,7 @@ void ResourceManager::AddDefaultEffects()
 	gre->type = EffectResource::XEffectResourceType_Basic;
 	gre->SetVertexType(EffectResource::XEffectVertexType_VertexPositionColor);
 	gre->SetVertextColorEnabled(true);
+	gre->SetSystemResource(true);
 	auto eff = dynamic_cast<BasicEffect*>(gre->resource.get());
 	ResourceGroup<EffectResource>::group.insert({ gre->id, gre });
 }

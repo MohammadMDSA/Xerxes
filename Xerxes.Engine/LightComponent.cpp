@@ -8,8 +8,7 @@ using namespace entt::literals;
 XCOMP_GENERATE_DEFINITION(LightComponent)
 
 LightComponent::LightComponent() :
-	color(Colors::Blue),
-	specular(Colors::White)
+	color(Colors::Blue)
 {
 	XCOMP_GENERATE_CONSTRUCTOR(LightComponent)
 	RootManager::GetInstance()->GetLightManager()->AddDirectionalLight(this);
@@ -41,12 +40,10 @@ void LightComponent::OnGizmo(ImGuizmo::OPERATION manipulationOperation, ImGuizmo
 
 void LightComponent::OnInspector()
 {
-	ImGui::Text("Color");
+	ImGui::Text("Color:");
 	ImGui::SameLine();
-	ImGui::ColorEdit4("Color", (float*)&color, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoLabel);
-	ImGui::Text("Specular");
-	ImGui::SameLine();
-	ImGui::ColorEdit4("Specular", (float*)&specular, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoLabel);
+	ImGui::ColorEdit3("Color", (float*)&color, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoLabel | ImGuiColorEditFlags_NoAlpha);
+
 }
 
 void LightComponent::OnDestroy()
@@ -58,47 +55,17 @@ std::string LightComponent::GetName()
 	return "Light";
 }
 
-void LightComponent::SetColor(DirectX::SimpleMath::Vector4 color)
+void LightComponent::SetColor(DirectX::SimpleMath::Vector3 color)
 {
 	this->color = color;
 }
 
-void LightComponent::SetSpecular(DirectX::SimpleMath::Vector4 color)
-{
-	this->specular = color;
-}
-
-void LightComponent::SetIndirectMultiplier(float coef)
-{
-	this->indirectMultiplier = coef;
-}
-
-void LightComponent::SetIntencity(float intencity)
-{
-	this->intencity = intencity;
-}
-
-DirectX::SimpleMath::Vector4 LightComponent::GetColor()
+const DirectX::SimpleMath::Vector3& LightComponent::GetColor() const
 {
 	return color;
 }
 
-DirectX::SimpleMath::Vector4 LightComponent::GetSpecular()
-{
-	return specular;
-}
-
-DirectX::SimpleMath::Vector3 LightComponent::GetDirection()
+const DirectX::SimpleMath::Vector3& LightComponent::GetDirection() const
 {
 	return gameObject->transform.Forward();
-}
-
-float LightComponent::GetIndirectMultiplier()
-{
-	return indirectMultiplier;
-}
-
-float LightComponent::GetIntencity()
-{
-	return intencity;
 }

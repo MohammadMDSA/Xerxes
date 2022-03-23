@@ -7,11 +7,12 @@ using namespace DirectX;
 const std::string EffectResource::XEffectResourceType_Basic = "BasicEffect";
 const std::string EffectResource::XEffectResourceType_NormalMap = "NormalMapEffect";
 const std::string EffectResource::XEffectVertexType_VertexPositionColor = "VertexPositionColor";
+const std::string EffectResource::XEffectVertexType_VertexPositionNormal = "VertexPositionNormal";
 const std::string EffectResource::XEffectVertexType_VertexPositionNormalTexture = "VertexPositionNormalTexture";
 
 EffectResource::EffectResource() :
 	diffuseColor(DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f)),
-	specularColor(DirectX::SimpleMath::Vector3(1.f, 1.f, 1.f)),
+	specularPower(16),
 	vertexType(XEffectVertexType_VertexPositionNormalTexture)
 {
 }
@@ -27,12 +28,20 @@ void EffectResource::OnInspector()
 		basicEff->SetColorAndAlpha(diffuseColor);
 	}
 
-	ImGui::Text("Specular Color:");
+	ImGui::Text("Emmisive Color:");
 	ImGui::SameLine();
-	if (ImGui::ColorEdit3("Specular Color", (float*)&specularColor, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoLabel))
+	if (ImGui::ColorEdit3("Emmisive Color", (float*)&emmisiveColor, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoLabel | ImGuiColorEditFlags_NoAlpha))
 	{
-		//basicEff->SetSpecularColor(specularColor);
+		basicEff->SetEmissiveColor(emmisiveColor);
 	}
+
+	ImGui::Text("Smoothness:");
+	ImGui::SameLine();
+	if (ImGui::SliderFloat("Specular Power", (float*)&specularPower, 0, 1, "%.3f", ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoLabel))
+	{
+		basicEff->SetSpecularPower(specularPower * 1000 + 0.01);
+	}
+
 
 }
 
@@ -48,6 +57,9 @@ void EffectResource::CreateInputLayout(ID3D11Device* device)
 		DirectX::CreateInputLayoutFromEffect<DirectX::VertexPositionNormalTexture>(device, effect, inputLayout.ReleaseAndGetAddressOf());
 	else if (vertexType == XEffectVertexType_VertexPositionColor)
 		DirectX::CreateInputLayoutFromEffect<DirectX::VertexPositionColor>(device, effect, inputLayout.ReleaseAndGetAddressOf());
+	else if (vertexType == XEffectVertexType_VertexPositionNormal)
+		DirectX::CreateInputLayoutFromEffect<DirectX::VertexPositionNormal>(device, effect, inputLayout.ReleaseAndGetAddressOf());
+
 }
 
 void EffectResource::Initialize(ID3D11DeviceContext* context)
@@ -64,6 +76,15 @@ void EffectResource::Initialize(ID3D11DeviceContext* context)
 	{
 		basic->SetVertexColorEnabled(vertextColorEnabled);
 	}
+
+	auto light = dynamic_cast<IEffectLights*>(resource.get());
+	if (!vertextColorEnabled && light)
+	{
+		light->SetLightingEnabled(true);
+		light->SetLightEnabled(0, true);
+		SetVertexType(XEffectVertexType_VertexPositionNormal);
+	}
+
 	CreateInputLayout(device);
 }
 
