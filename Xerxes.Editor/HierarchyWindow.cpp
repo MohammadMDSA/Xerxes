@@ -38,15 +38,17 @@ int HierarchyWindow::GetCustomWindowFlags()
 
 void HierarchyWindow::DrawNodesHierarchy(std::vector<GameObject*>* objects, SelectionManager* selection)
 {
-	ImGuiTreeNodeFlags nodeFlags = ImGuiTreeNodeFlags_OpenOnArrow |  ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_Selected;
 	int i = 0;
 	for (auto go : *objects)
 	{
+		ImGuiTreeNodeFlags nodeFlags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_SpanAvailWidth;
 		i++;
 		auto hasChildren = go->transform.GetChildren()->size() > 0;
 
 		if (!hasChildren)
 			nodeFlags |= ImGuiTreeNodeFlags_Leaf;
+		if (selection->GetSelectedInspectorDrawer() == go)
+			nodeFlags |= ImGuiTreeNodeFlags_Selected;
 
 		bool nodeOpen = ImGui::TreeNodeEx((void*)(intptr_t)i, nodeFlags, go->GetName().c_str());
 
