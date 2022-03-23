@@ -29,6 +29,6 @@ void ModelResource::LoadSDKMESHModel(ID3D11Device* device)
 		device,
 		path.wstring().c_str(),
 		*effectFactory,
-		DirectX::ModelLoader_IncludeBones
+		DirectX::ModelLoader_IncludeBones | DirectX::ModelLoader_Clockwise
 	);
 }

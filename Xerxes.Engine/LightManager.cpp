@@ -54,18 +54,16 @@ void LightManager::ApplyToEffect(DirectX::IEffectLights* effect)
 {
 	auto light = GetActiveLight();
 	auto basicEffect = dynamic_cast<DirectX::BasicEffect*>(effect);
-	if (!light && !basicEffect)
+	if (!light)
 	{
-		//effect->SetLightingEnabled(false);
+		effect->EnableDefaultLighting();
 		return;
 	}
-	else if (!light)
-		return;
 	auto color = light->GetColor();
-	basicEffect->SetLightDiffuseColor(0, color);
-	basicEffect->SetLightDirection(0, light->GetDirection());
-	basicEffect->SetLightSpecularColor(0, color);
-	basicEffect->SetAmbientLightColor(color * 0.1);
+	effect->SetLightDiffuseColor(0, color);
+	effect->SetLightDirection(0, light->GetDirection());
+	effect->SetLightSpecularColor(0, color);
+	effect->SetAmbientLightColor(color * 0.1);
 }
 
 void LightManager::OnInit()

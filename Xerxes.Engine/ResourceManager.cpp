@@ -89,6 +89,7 @@ int ResourceManager::CreateSDKMESHModel(boost::filesystem::path path)
 	modelResource->path = path;
 	modelResource->type = ModelResource::XModelResourceType_SDKMESH;
 	ResourceGroup<ModelResource>::group.insert({ modelResource->id, modelResource });
+	modelResource->Initialize(context);
 	return modelResource->id;
 }
 
