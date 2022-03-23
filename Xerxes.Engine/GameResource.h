@@ -10,8 +10,11 @@ public:
 	bool					IsLoaded() { return isLoaded; }
 	const boost::filesystem::path& GetPath() const { return path; }
 	const std::string		GetType() const { return type; }
+	inline bool				IsSystemResource() { return systemResource; }
 
 	virtual void			OnInspector() = 0;
+	virtual void			Initialize(ID3D11DeviceContext* context) = 0;
+	virtual void			Shutdown() = 0;
 
 protected:
 	int						id;
@@ -20,6 +23,7 @@ protected:
 	bool					isLoaded;
 	boost::filesystem::path	path;
 	bool					isDefault = false;
+	bool					systemResource = false;
 };
 
 class ResourceManager;
@@ -28,6 +32,8 @@ template<class M>
 struct GameResource : public GameResourceBase
 {
 public:
+	~GameResource();
+
 	M* GetResource() { return resource.get(); }
 
 	// Inherited via GameResourceBase
@@ -38,3 +44,9 @@ protected:
 	std::unique_ptr<M>		resource;
 
 };
+
+template<class M>
+inline GameResource<M>::~GameResource()
+{
+	resource.release();
+}

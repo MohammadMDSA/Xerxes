@@ -181,7 +181,8 @@ void SceneWindow::OnRender(DirectX::SimpleMath::Matrix view, DirectX::SimpleMath
 	auto resourceManager = RootManager::GetInstance()->GetResourceManager();
 	auto context = resourceManager->GetDeviceContext();
 	auto batch = resourceManager->GetDefaultBatch();
-	auto effect = resourceManager->ResourceGroup<EffectResource>::GetById(effectId)->GetResource();
+	auto res = resourceManager->ResourceGroup<EffectResource>::GetById(effectId);
+	auto effect = dynamic_cast<BasicEffect*>(res->GetResource());
 
 	context->OMSetBlendState(states->Opaque(), nullptr, 0xFFFFFFFF);
 	context->RSSetState(states->CullNone());
@@ -191,7 +192,7 @@ void SceneWindow::OnRender(DirectX::SimpleMath::Matrix view, DirectX::SimpleMath
 	effect->SetWorld(DirectX::SimpleMath::Matrix::Identity);
 	effect->Apply(context);
 
-	context->IASetInputLayout(resourceManager->GetVertexPositionColorInputLayout());
+	context->IASetInputLayout(res->GetInputLayout());
 
 	batch->Begin();
 

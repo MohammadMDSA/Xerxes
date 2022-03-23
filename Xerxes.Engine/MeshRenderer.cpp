@@ -31,9 +31,17 @@ void MeshRenderer::OnRender(const DirectX::SimpleMath::Matrix& view, const Direc
 		if (effect)
 		{
 			auto effectRes = effect->GetResource();
-			effectRes->SetMatrices(world, view, proj);
-			lightManager->ApplyToEffect(effectRes);
-			resource->GetResource()->Draw(effect->GetResource(), resourceManager->GetDefaultInputLayout());
+
+			// Updating matrix effects
+			auto effectMat = dynamic_cast<IEffectMatrices*>(effectRes);
+			if (effectMat)
+				effectMat->SetMatrices(world, view, proj);
+
+			// Updating light effect
+			auto effectLight = dynamic_cast<IEffectLights*>(effectRes);
+			if (effectLight)
+				lightManager->ApplyToEffect(effectLight);
+			resource->GetResource()->Draw(effectRes, effect->GetInputLayout());
 		}
 		else
 			resource->GetResource()->Draw(world, view, proj);
@@ -50,7 +58,7 @@ void MeshRenderer::OnRender(const DirectX::SimpleMath::Matrix& view, const Direc
 				{
 					lightManager->ApplyToEffect(lightEffect);
 				}
-				
+
 				auto matrixEffect = dynamic_cast<IEffectMatrices*>(effect);
 				if (matrixEffect)
 				{

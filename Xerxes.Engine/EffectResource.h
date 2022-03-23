@@ -2,12 +2,44 @@
 #include "GameResource.h"
 #include "Effects.h"
 
-class EffectResource : public GameResource<DirectX::BasicEffect>
+class EffectResource : public GameResource<DirectX::IEffect>
 {
-	// Inherited via GameResource
+public:
+	EffectResource();
+	EffectResource(const EffectResource& other) = default;
+	~EffectResource() = default;
+
 	virtual void OnInspector() override;
+	ID3D11InputLayout* GetInputLayout();
+
+	void CreateInputLayout(ID3D11Device* device);
+
+	virtual void Initialize(ID3D11DeviceContext* device) override;
+	virtual void Shutdown() override;
+
+	inline const std::string& GetVertextType() const { return vertexType; }
+	inline void SetVertexType(std::string type) { vertexType = type; }
+
+	inline void SetVertextColorEnabled(bool enabled) { vertextColorEnabled = enabled; }
+
+	// Enums
+
+	// Effect types enums
+	static const std::string XEffectResourceType_Basic;
+	static const std::string XEffectResourceType_NormalMap;
+
+	// Effect vertext input type enums
+	static const std::string XEffectVertexType_VertexPositionColor;
+	static const std::string XEffectVertexType_VertexPositionNormalTexture;
 
 private:
-	DirectX::SimpleMath::Vector4 diffuseColor = DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f);
+	Microsoft::WRL::ComPtr<ID3D11InputLayout> inputLayout;
+	std::string vertexType;
+
+	DirectX::SimpleMath::Vector4 diffuseColor;
+	DirectX::SimpleMath::Vector3 specularColor;
+
+	bool vertextColorEnabled = false;
+
 };
 

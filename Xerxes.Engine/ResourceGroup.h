@@ -13,10 +13,12 @@ public:
 		return group[id];
 	}
 
-	inline std::vector<T*> GetAll()
+	inline std::vector<T*> GetAll(bool userOnly = true)
 	{
 		std::vector<T*> result;
 		for (auto& it : group) {
+			if (userOnly && it.second->IsSystemResource())
+				continue;
 			result.push_back(it.second);
 		}
 		return result;
