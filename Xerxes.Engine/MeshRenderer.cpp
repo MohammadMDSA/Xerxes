@@ -10,11 +10,20 @@ using namespace std;
 XCOMP_GENERATE_DEFINITION(MeshRenderer)
 
 MeshRenderer::MeshRenderer() :
+	GameObjectComponent(XNameOf(MeshRenderer)),
 	meshResourceId(-1),
 	usingPrimitives(true),
 	effectResourceId(-1)
 {
 	XCOMP_GENERATE_CONSTRUCTOR(MeshRenderer)
+}
+
+MeshRenderer::MeshRenderer(const MeshRenderer& other) :
+	GameObjectComponent(other)
+{
+	this->meshResourceId = other.meshResourceId;
+	this->usingPrimitives = other.usingPrimitives;
+	this->effectResourceId = other.effectResourceId;
 }
 
 void MeshRenderer::OnRender(const DirectX::SimpleMath::Matrix& view, const DirectX::SimpleMath::Matrix& proj, ID3D11DeviceContext* context)
@@ -173,14 +182,19 @@ void MeshRenderer::OnDestroy()
 {
 }
 
-std::string MeshRenderer::GetName()
-{
-	return "Mesh Renderer";
-}
-
 void MeshRenderer::SetModelResourceId(int id)
 {
 	this->meshResourceId = id;
+}
+
+MeshRenderer& MeshRenderer::operator=(const MeshRenderer& other)
+{
+	this->name = other.name;
+	this->gameObject = other.gameObject;
+	this->meshResourceId = other.meshResourceId;
+	this->usingPrimitives = other.usingPrimitives;
+	this->effectResourceId = other.effectResourceId;
+	return *this;
 }
 
 void MeshRenderer::RenderPrimitive()

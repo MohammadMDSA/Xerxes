@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "Camera.h"
 #include "Libs/imgui/imgui.h"
+#include "XPreprocessors.h"
 
 using namespace DirectX::SimpleMath;
 
@@ -11,7 +12,7 @@ Camera::Camera() :
 	isPerspective(true),
 	outputWidth(1500.f),
 	outputHeight(900.f),
-	transform(Transform(nullptr)),
+	transform(Transform()),
 	orthoGraphicSize(10)
 {
 }
@@ -93,8 +94,8 @@ void Camera::OnGui()
 
 void Camera::CreateProjection()
 {
-	auto width = max(outputWidth, 1.f);
-	auto height = max(outputHeight, 1.f);
+	auto width = xmax(outputWidth, 1.f);
+	auto height = xmax(outputHeight, 1.f);
 	if (isPerspective)
 		projection = Matrix::CreatePerspectiveFieldOfView(DirectX::XMConvertToRadians(fieldOfView), width / height, nearPlane, farPlane);
 	else

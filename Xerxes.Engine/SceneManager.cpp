@@ -56,3 +56,8 @@ Scene* SceneManager::GetCurrentScene()
 {
 	return scene;
 }
+
+void SceneManager::SetCurrentScene(Scene* scene)
+{
+	this->scene = scene;
+}

@@ -17,6 +17,7 @@
 #include "Scene.h"
 #include "Libs/ImGuiFileDialog/ImGuiFileDialog.h"
 #include "boost/archive/text_oarchive.hpp"
+#include "boost/archive/text_iarchive.hpp"
 
 extern void ExitGame() noexcept;
 
@@ -394,7 +395,19 @@ void Editor::AppBarMenus()
 					oa << scene;
 				}
 			}
-
+			if (ImGui::MenuItem("Load"))
+			{
+				std::ifstream ifs("filename");
+				Scene* scene;
+				{
+					boost::archive::text_iarchive ia(ifs);
+					ia >> scene;
+					if (scene)
+					{
+						rootManager->GetSceneManager()->SetCurrentScene(scene);
+					}
+				}
+			}
 			ImGui::EndMenu();
 		}
 		ImGui::EndMainMenuBar();

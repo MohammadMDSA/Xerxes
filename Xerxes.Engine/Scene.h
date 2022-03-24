@@ -6,6 +6,7 @@
 
 #include "boost/serialization/access.hpp"
 #include "boost/serialization/split_member.hpp"
+#include "cereal/archives/json.hpp"
 
 class Scene
 {
@@ -13,8 +14,9 @@ public:
 	Scene(const Scene& other) = default;
 
 	std::vector<GameObject*>		GetGameObjects();
-	GameObject*						CreateGameObject();
-	GameObject*						Instantiate(const GameObject& other);
+	GameObject* CreateGameObject();
+	GameObject* Instantiate(const GameObject& other);
+	GameObject* GetGameObjectById(entt::entity id);
 	void							RemoveGameObject(GameObject* gameObejct);
 
 private:
@@ -31,6 +33,17 @@ private:
 	template<class Archive>
 	void save(Archive& ar, const unsigned int version) const
 	{
+
+		std::stringstream storage;
+		{
+			cereal::JSONOutputArchive output(storage);
+
+			entt::snapshot{ registry }
+			.entities(output);
+		}
+
+		ar& storage.str();
+
 		ar& objects.size();
 		for (auto& pair : objects)
 		{
@@ -38,11 +51,26 @@ private:
 			ar& pair.second.get();
 		}
 		ar& name;
+
 	}
 
-    template<class Archive>
+	template<class Archive>
 	void load(Archive& ar, const unsigned int version)
 	{
+		registry.clear();
+		objects.clear();
+
+		std::string serializedRegistry;
+		ar& serializedRegistry;
+
+		std::stringstream storage(serializedRegistry);
+		{
+			cereal::JSONInputArchive input(storage);
+
+			entt::snapshot_loader{ registry }
+			.entities(input);
+		}
+
 		int size;
 		ar& size;
 
@@ -54,9 +82,10 @@ private:
 			ar& key;
 			ar& obj;
 			objects[key] = std::unique_ptr<GameObject>(obj);
-			//obj->scene = this;
+			objects[key].get()->scene = this;
 		}
 		ar& name;
+
 	}
 
 	BOOST_SERIALIZATION_SPLIT_MEMBER()

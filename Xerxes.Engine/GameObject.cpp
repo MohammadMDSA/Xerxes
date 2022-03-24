@@ -16,7 +16,8 @@ GameObject::GameObject(Scene* scn) :
 	isAwake(false),
 	isStarted(false),
 	scene(scn),
-	destroyed(false)
+	destroyed(false),
+	entityId((entt::entity) (-1))
 {
 }
 
@@ -27,9 +28,20 @@ GameObject::GameObject(const GameObject& other)
 	this->isStarted = other.isStarted;
 }
 
+void GameObject::SetTransform(const Transform& trans)
+{
+	auto& transform = scene->registry.emplace<Transform>(entityId, trans);
+	transform.gameObjectId = entityId;
+}
+
 GameObject* GameObject::Create()
 {
 	return RootManager::GetInstance()->GetSceneManager()->GetCurrentScene()->CreateGameObject();
+}
+
+Transform& GameObject::transform() const
+{
+	return scene->registry.get<Transform>(entityId);
 }
 
 Transform& GameObject::transform()
@@ -183,18 +195,20 @@ void GameObject::OnInspector()
 		if (!scene->registry.try_get<MeshRenderer>(entityId))
 			if (ImGui::Selectable("Mesh Renderer"))
 			{
-				//this->AddComponent(new MeshRenderer());
 				this->AttachComponent<MeshRenderer>();
 			}
 		if (!scene->registry.try_get<LightComponent>(entityId))
 			if (ImGui::Selectable("Light"))
 			{
-				//this->AddComponent(new LightComponent());
 				this->AttachComponent<LightComponent>();
 			}
 		ImGui::EndPopup();
 	}
 }
+//
+//template<class T>
+//T& GameObject::AttachCopiedComponent(T* copyFrom)
+
 
 template<class T>
 T& GameObject::AttachComponent()
@@ -220,15 +234,6 @@ T& GameObject::GetComponent()
 {
 	return scene->registry.get<T>(entityId);
 }
-//
-//template<class Archive>
-//inline void GameObject::serialize(Archive& ar, const unsigned int version)
-//{
-//	/*ar& name;
-//	ar& isAwake;
-//	ar& isStarted;
-//	ar& entityId;*/
-//}
 
 void GameObject::SetName(std::string name)
 {
@@ -248,7 +253,7 @@ void GameObject::Destroy(GameObject* obj)
 	scene->RemoveGameObject(obj);
 }
 
-std::vector<GameObjectComponent*> GameObject::GetComponents()
+std::vector<GameObjectComponent*> GameObject::GetComponents() const
 {
 	std::vector<GameObjectComponent*> result;
 	auto reg = &scene->registry;

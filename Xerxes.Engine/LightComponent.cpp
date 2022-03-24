@@ -8,10 +8,17 @@ using namespace entt::literals;
 XCOMP_GENERATE_DEFINITION(LightComponent)
 
 LightComponent::LightComponent() :
+	GameObjectComponent(XNameOf(LightComponent)),
 	color(Colors::Blue)
 {
 	XCOMP_GENERATE_CONSTRUCTOR(LightComponent)
-	RootManager::GetInstance()->GetLightManager()->AddDirectionalLight(this);
+	RootManager::GetInstance()->GetLightManager()->SetDirectionalLight(this);
+}
+
+LightComponent::LightComponent(const LightComponent& other) :
+	GameObjectComponent(other)
+{
+	this->color = other.color;
 }
 
 LightComponent::~LightComponent()
@@ -48,11 +55,6 @@ void LightComponent::OnInspector()
 
 void LightComponent::OnDestroy()
 {
-}
-
-std::string LightComponent::GetName()
-{
-	return "Light";
 }
 
 void LightComponent::SetColor(DirectX::SimpleMath::Vector3 color)

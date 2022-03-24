@@ -177,6 +177,9 @@
     <ClInclude Include="Libs\EnTT\entt.hpp">
       <Filter>Libs\EnTT</Filter>
     </ClInclude>
+    <ClInclude Include="XPreprocessors.h">
+      <Filter>Source\Public\Utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Xerxes.Engine.cpp">

@@ -1,5 +1,6 @@
 #pragma once
 #include "GameObjectComponent.h"
+#include "boost/serialization/access.hpp"
 
 using namespace entt::literals;
 
@@ -9,6 +10,7 @@ class LightComponent : public GameObjectComponent
 
 public:
 	LightComponent();
+	LightComponent(const LightComponent& other);
 	~LightComponent();
 
 	// Inherited via GameObjectComponent
@@ -19,14 +21,24 @@ public:
 	virtual void OnGizmo(ImGuizmo::OPERATION manipulationOperation, ImGuizmo::MODE manipulationMode) override;
 	virtual void OnInspector() override;
 	virtual void OnDestroy() override;
-	virtual std::string GetName() override;
 
 	void							SetColor(DirectX::SimpleMath::Vector3 color);
 	const DirectX::SimpleMath::Vector3&	GetColor() const;
 	const DirectX::SimpleMath::Vector3&	GetDirection() const;
 
 private:
+	friend class boost::serialization::access;
+
 	DirectX::SimpleMath::Vector3	color;
+
+	template<class Archive>
+	void serialize(Archive& ar, const unsigned int version)
+	{
+		ar& boost::serialization::base_object<GameObjectComponent>(*this);
+		ar& color.x;
+		ar& color.y;
+		ar& color.z;
+	}
 
 };
 

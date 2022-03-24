@@ -1,13 +1,14 @@
 #pragma once
+#include "Libs/EnTT/entt.hpp"
+#include "boost/serialization/access.hpp"
+#include "boost/serialization/split_member.hpp"
 
 class GameObject;
 struct Transform
 {
 
 public:
-	Transform(GameObject*);
-
-	//Delegate<float, float>				OnWorldCreated;
+	Transform();
 
 	DirectX::SimpleMath::Matrix			GetWorldMatrix() const;
 	DirectX::SimpleMath::Matrix			GetUnscaledWorld() const;
@@ -22,8 +23,8 @@ public:
 	float								GetWorldRotationZ();
 	DirectX::SimpleMath::Vector3		GetWorldScale();
 
-	const DirectX::SimpleMath::Quaternion&	GetRotation() const;
-	const DirectX::SimpleMath::Quaternion&	GetWorldRotation() const;
+	const DirectX::SimpleMath::Quaternion& GetRotation() const;
+	const DirectX::SimpleMath::Quaternion& GetWorldRotation() const;
 
 	void								SetRotation(DirectX::SimpleMath::Quaternion quat);
 	void								SetWorldRotation(DirectX::SimpleMath::Quaternion quat);
@@ -39,17 +40,20 @@ public:
 	void								SetScale(float x, float y, float z, bool updateWorld = true);
 
 
-	const DirectX::SimpleMath::Vector3&		Forward() const;
-	const DirectX::SimpleMath::Vector3&		Right() const;
-	const DirectX::SimpleMath::Vector3&		Up() const;
+	const DirectX::SimpleMath::Vector3& Forward() const;
+	const DirectX::SimpleMath::Vector3& Right() const;
+	const DirectX::SimpleMath::Vector3& Up() const;
 
 	void									SetParent(Transform* parent);
-	Transform*								GetParent();
-	const std::vector<Transform*>*			GetChildren() const;
+	Transform* GetParent();
+	const std::vector<Transform*>* GetChildren() const;
 
 	GameObject* const						GetGameObject();
 
 private:
+	friend class boost::serialization::access;
+	friend class GameObject;
+
 	inline void								CreateWorld();
 	void									DecomposeParent(DirectX::SimpleMath::Vector3& scale, DirectX::SimpleMath::Quaternion& rotation, DirectX::SimpleMath::Vector3& translation);
 
@@ -63,9 +67,60 @@ private:
 	float									rotationZ;
 
 	DirectX::SimpleMath::Matrix				world;
-	Transform*								parent;
+	Transform* parent;
 	std::vector<Transform*>					children;
 
-	GameObject*								gameObject;
+	entt::entity							gameObjectId;
+
+	template<class Archive>
+	void save(Archive& ar, const unsigned int version) const
+	{
+		ar& position.x;
+		ar& position.y;
+		ar& position.z;
+		ar& scale.x;
+		ar& scale.y;
+		ar& scale.z;
+		ar& rotation.x;
+		ar& rotation.y;
+		ar& rotation.z;
+		ar& gameObjectId;
+		ar& parent;
+		ar& children.size();
+		for (auto child : children)
+		{
+			ar& child;
+		}
+	}
+	template<class Archive>
+	void load(Archive& ar, const unsigned int version)
+	{
+		ar& position.x;
+		ar& position.y;
+		ar& position.z;
+		ar& scale.x;
+		ar& scale.y;
+		ar& scale.z;
+		ar& rotation.x;
+		ar& rotation.y;
+		ar& rotation.z;
+		ar& gameObjectId;
+
+		ar& parent;
+		int childrenCount;
+		ar& childrenCount;
+		
+		children.clear();
+		for (size_t i = 0; i < childrenCount; i++)
+		{
+			Transform* child;
+			ar& child;
+			children.push_back(child);
+		}
+
+		CreateWorld();
+		SetEulerAngels();
+	}
+	BOOST_SERIALIZATION_SPLIT_MEMBER()
 };
 

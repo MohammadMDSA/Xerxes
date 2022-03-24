@@ -1,9 +1,10 @@
 #include "pch.h"
 #include "Transform.h"
+#include "RootManager.h"
 
 using namespace DirectX::SimpleMath;
 
-Transform::Transform(GameObject* obj) :
+Transform::Transform() :
 	position(Vector3::Zero),
 	scale(Vector3::One),
 	rotation(Quaternion::Identity),
@@ -11,8 +12,7 @@ Transform::Transform(GameObject* obj) :
 	rotationX(0.f),
 	rotationY(0.f),
 	rotationZ(0.f),
-	parent(nullptr),
-	gameObject(obj)
+	parent(nullptr)
 {
 }
 
@@ -287,5 +287,5 @@ void Transform::SetEulerAngels()
 
 GameObject* const Transform::GetGameObject()
 {
-	return this->gameObject;
+	return RootManager::GetInstance()->GetSceneManager()->GetCurrentScene()->GetGameObjectById(gameObjectId);
 }

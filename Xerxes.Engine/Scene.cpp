@@ -33,7 +33,7 @@ GameObject* Scene::CreateGameObject()
 	objects[entity] = std::unique_ptr<GameObject>(new GameObject(this));
 	auto go = objects[entity].get();
 	go->entityId = entity;
-	registry.emplace<Transform>(entity, go);
+	go->SetTransform(Transform());
 	return go;
 }
 
@@ -49,6 +49,13 @@ GameObject* Scene::Instantiate(const GameObject& other)
 		}
 	}
 	return go;
+}
+
+GameObject* Scene::GetGameObjectById(entt::entity id)
+{
+	if (!objects.contains(id))
+		return nullptr;
+	return objects[id].get();
 }
 
 void Scene::RemoveGameObject(GameObject* gameObejct)

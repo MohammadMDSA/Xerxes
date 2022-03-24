@@ -41,6 +41,7 @@ public:
 			if (resource->GetName() == name)
 				return res.second;
 		}
+		return nullptr;
 	}
 
 private:

@@ -18,6 +18,7 @@ public:
 	virtual void	OnShutdown() override;
 
 	Scene*								GetCurrentScene();
+	void								SetCurrentScene(Scene* scene);
 
 private:
 
