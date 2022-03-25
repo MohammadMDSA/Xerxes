@@ -42,9 +42,8 @@ public:
 	virtual void			OnInspector() override;
 
 	template<class T>
-	inline T&						AttachCopiedComponent(T* copyFrom) {
-		auto& comp = GetScene()->registry.emplace<T>(entityId);
-		comp = *copyFrom;
+	inline T&						AttachCopiedComponent(const T& copyFrom) {
+		auto& comp = GetScene()->registry.emplace<T>(entityId, copyFrom);
 		auto& goComp = static_cast<GameObjectComponent&>(comp);
 		goComp.gameObject = this;
 		if (isStarted)
@@ -110,11 +109,12 @@ private:
 		auto components = GetComponents();
 		ar & components.size();
 
-		for (const auto comp : components)
+		for (auto comp : components)
 		{
 			const auto cname = comp->GetName();
 			ar& cname;
-			if (cname == XNameOf(LightComponent))
+			ar& (*comp);
+			/*if (cname == XNameOf(LightComponent))
 			{
 				ar& dynamic_cast<LightComponent*>(comp);
 			}
@@ -122,7 +122,7 @@ private:
 			{
 				ar& dynamic_cast<MeshRenderer*>(comp);
 
-			}
+			}*/
 		}
 	}
 	template<class Archive>
@@ -147,13 +147,13 @@ private:
 			ar& cname;
 			if (cname == XNameOf(LightComponent))
 			{
-				LightComponent* cmp;
+				LightComponent cmp;
 				ar& cmp;
 				AttachCopiedComponent<LightComponent>(cmp);
 			}
 			else if (cname == XNameOf(MeshRenderer))
 			{
-				MeshRenderer* msh;
+				MeshRenderer msh;
 				ar& msh;
 				AttachCopiedComponent<MeshRenderer>(msh);
 			}
