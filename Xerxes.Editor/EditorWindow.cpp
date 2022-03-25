@@ -1,6 +1,8 @@
 #include "EditorWindow.h"
 #include "Libs/imgui/imgui.h"
 
+using namespace Xerxes::Editor::Panels;
+
 EditorWindow::EditorWindow(int id, std::string title) :
 	firstFrame(true),
 	alwaysFullscreen(false),

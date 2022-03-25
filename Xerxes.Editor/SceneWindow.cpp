@@ -6,6 +6,8 @@
 using namespace DirectX;
 using namespace DirectX::SimpleMath;
 
+using namespace Xerxes::Editor::Panels;
+
 SceneWindow::SceneWindow(int id) :
 	EditorWindow(id, "Scene"),
 	moveingCamera(false),

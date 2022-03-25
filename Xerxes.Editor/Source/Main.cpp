@@ -8,6 +8,7 @@
 #include "Libs/imgui/imgui.h"
 
 using namespace DirectX;
+using namespace Xerxes::Editor;
 
 #ifdef __clang__
 #pragma clang diagnostic ignored "-Wcovered-switch-default"

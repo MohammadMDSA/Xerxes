@@ -1,20 +1,29 @@
 #pragma once
 #include "EditorWindow.h"
 
-class InspectorWindow : public EditorWindow
+namespace Xerxes
 {
-public:
-	InspectorWindow(int id);
+	namespace Editor
+	{
+		namespace Panels
+		{
+			class InspectorWindow : public EditorWindow
+			{
+			public:
+				InspectorWindow(int id);
 
 
 
-	// Inherited via EditorWindow
-	virtual void OnGUI() override;
-	virtual int GetCustomWindowFlags() override;
+				// Inherited via EditorWindow
+				virtual void OnGUI() override;
+				virtual int GetCustomWindowFlags() override;
 
 
-	// Inherited via EditorWindow
-	virtual void Update(float deltaTime) override;
+				// Inherited via EditorWindow
+				virtual void Update(float deltaTime) override;
 
-};
+			};
 
+		}
+	}
+}

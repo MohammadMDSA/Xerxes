@@ -2,23 +2,32 @@
 #include "EditorWindow.h"
 #include "ResourceManager.h"
 
-class ResourceWindow : public EditorWindow
+namespace Xerxes
 {
+	namespace Editor
+	{
+		namespace Panels
+		{
+			class ResourceWindow : public EditorWindow
+			{
 
-public:
-	ResourceWindow(int id);
-	~ResourceWindow();
+			public:
+				ResourceWindow(int id);
+				~ResourceWindow();
 
 
-	// Inherited via EditorWindow
-	virtual void Update(float deltaTime) override;
+				// Inherited via EditorWindow
+				virtual void Update(float deltaTime) override;
 
-	virtual void OnGUI() override;
+				virtual void OnGUI() override;
 
-	virtual int GetCustomWindowFlags() override;
+				virtual int GetCustomWindowFlags() override;
 
-private:
+			private:
 
-	GameResourceBase* selectedResource;
-};
+				GameResourceBase* selectedResource;
+			};
 
+		}
+	}
+}

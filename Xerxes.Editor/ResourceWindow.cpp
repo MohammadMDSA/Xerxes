@@ -3,6 +3,8 @@
 #include "Libs/imgui/imgui.h"
 #include "RootManager.h"
 
+using namespace Xerxes::Editor::Panels;
+
 ResourceWindow::ResourceWindow(int id):
 	EditorWindow(id, "Resources"),
 	selectedResource(nullptr)

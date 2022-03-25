@@ -3,6 +3,8 @@
 #include "RootManager.h"
 #include <algorithm>
 
+using namespace Xerxes::Editor::Panels;
+
 HierarchyWindow::HierarchyWindow(int id)
 	: EditorWindow(id, "Hierarchy")
 {

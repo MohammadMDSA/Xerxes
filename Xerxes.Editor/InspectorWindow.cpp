@@ -1,6 +1,8 @@
 #include "InspectorWindow.h"
 #include "Libs/imgui/imgui.h"
 
+using namespace Xerxes::Editor::Panels;
+
 InspectorWindow::InspectorWindow(int id) : 
 	EditorWindow(id, "Inspector")
 {

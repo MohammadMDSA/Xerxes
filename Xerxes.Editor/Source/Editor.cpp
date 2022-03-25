@@ -23,10 +23,14 @@ extern void ExitGame() noexcept;
 
 using namespace DirectX;
 using namespace DirectX::SimpleMath;
+using namespace DX;
+using namespace Xerxes;
+using namespace Xerxes::Editor::Device;
+using namespace Xerxes::Editor::Panels;
 
 using Microsoft::WRL::ComPtr;
 
-Editor::Editor() noexcept :
+Xerxes::Editor::Editor::Editor() noexcept :
 	m_window(nullptr),
 	m_outputWidth(1500),
 	m_outputHeight(900),
@@ -36,12 +40,12 @@ Editor::Editor() noexcept :
 	sceneWidth(1),
 	sceneHeight(1)
 {
-	m_deviceResources = std::make_unique<DX::DeviceResources>();
+	m_deviceResources = std::make_unique<DeviceResources>();
 	m_deviceResources->RegisterDeviceNotify(this);
 	windowResource = new EditorWindowGraphicResource();
 }
 
-Editor::~Editor()
+Xerxes::Editor::Editor::~Editor()
 {
 	rootManager->Destroy();
 	delete sceneWindow;
@@ -49,7 +53,7 @@ Editor::~Editor()
 }
 
 // Initialize the Direct3D resources required to run.
-void Editor::Initialize(HWND window, int width, int height)
+void Xerxes::Editor::Editor::Initialize(HWND window, int width, int height)
 {
 	m_window = window;
 	m_outputWidth = std::max(width, 1);
@@ -95,7 +99,7 @@ void Editor::Initialize(HWND window, int width, int height)
 }
 
 // Executes the basic game loop.
-void Editor::Tick()
+void Xerxes::Editor::Editor::Tick()
 {
 	m_timer.Tick([&]()
 		{
@@ -106,7 +110,7 @@ void Editor::Tick()
 }
 
 // Updates the world.
-void Editor::Update(DX::StepTimer const& timer)
+void Xerxes::Editor::Editor::Update(StepTimer const& timer)
 {
 	float elapsedTime = float(timer.GetElapsedSeconds());
 
@@ -129,7 +133,7 @@ void Editor::Update(DX::StepTimer const& timer)
 }
 
 // Draws the scene.
-void Editor::Render()
+void Xerxes::Editor::Editor::Render()
 {
 	// Don't try to render anything before the first Update.
 	if (m_timer.GetFrameCount() == 0)
@@ -230,7 +234,7 @@ void Editor::Render()
 }
 
 // Helper method to clear the back buffers.
-void Editor::Clear()
+void Xerxes::Editor::Editor::Clear()
 {
 	auto context = m_deviceResources->GetD3DDeviceContext();
 	auto renderTarget = m_deviceResources->GetRenderTargetView();
@@ -257,35 +261,35 @@ void Editor::Clear()
 }
 
 // Message handlers
-void Editor::OnActivated()
+void Xerxes::Editor::Editor::OnActivated()
 {
 	// TODO: Game is becoming active window.
 }
 
-void Editor::OnDeactivated()
+void Xerxes::Editor::Editor::OnDeactivated()
 {
 	// TODO: Game is becoming background window.
 }
 
-void Editor::OnSuspending()
+void Xerxes::Editor::Editor::OnSuspending()
 {
 	// TODO: Game is being power-suspended (or minimized).
 }
 
-void Editor::OnResuming()
+void Xerxes::Editor::Editor::OnResuming()
 {
 	m_timer.ResetElapsedTime();
 
 	// TODO: Game is being power-resumed (or returning from minimize).
 }
 
-void Editor::OnWindowMoved()
+void Xerxes::Editor::Editor::OnWindowMoved()
 {
 	auto r = m_deviceResources->GetOutputSize();
 	m_deviceResources->WindowSizeChanged(r.right, r.bottom);
 }
 
-void Editor::OnWindowSizeChanged(int width, int height)
+void Xerxes::Editor::Editor::OnWindowSizeChanged(int width, int height)
 {
 	if (!m_deviceResources->WindowSizeChanged(width, height))
 		return;
@@ -296,14 +300,14 @@ void Editor::OnWindowSizeChanged(int width, int height)
 }
 
 // Properties
-void Editor::GetDefaultSize(int& width, int& height) const noexcept
+void Xerxes::Editor::Editor::GetDefaultSize(int& width, int& height) const noexcept
 {
 	// TODO: Change to desired default window size (note minimum size is 320x200).
 	width = 1500;
 	height = 900;
 }
 
-void Editor::OnDeviceLost()
+void Xerxes::Editor::Editor::OnDeviceLost()
 {
 	// Cleaning up imgui
 	ImGui_ImplDX11_Shutdown();
@@ -313,20 +317,20 @@ void Editor::OnDeviceLost()
 
 }
 
-void Editor::OnDeviceRestored()
+void Xerxes::Editor::Editor::OnDeviceRestored()
 {
 	CreateDeviceDependentResources();
 	CreateWindowSizeDependentResources();
 }
 
-void Editor::CreateDeviceDependentResources()
+void Xerxes::Editor::Editor::CreateDeviceDependentResources()
 {
 	auto device = m_deviceResources->GetD3DDevice();
 
 	device;
 }
 
-void Editor::CreateWindowSizeDependentResources()
+void Xerxes::Editor::Editor::CreateWindowSizeDependentResources()
 {
 	InitializeImgui();
 	auto context = m_deviceResources->GetD3DDeviceContext();
@@ -337,7 +341,7 @@ void Editor::CreateWindowSizeDependentResources()
 	windowResource->Initialize(device, sceneWidth, sceneHeight);
 }
 
-void Editor::InitializeImgui()
+void Xerxes::Editor::Editor::InitializeImgui()
 {
 	if (m_imguiActive)
 		return;
@@ -371,7 +375,7 @@ void Editor::InitializeImgui()
 	m_imguiActive = true;
 }
 
-void Editor::AppBarMenus()
+void Xerxes::Editor::Editor::AppBarMenus()
 {
 	if (ImGui::BeginMainMenuBar())
 	{
@@ -414,7 +418,7 @@ void Editor::AppBarMenus()
 	}
 	AddItem();
 }
-void Editor::AddItem()
+void Xerxes::Editor::Editor::AddItem()
 {
 	if (ImGuiFileDialog::Instance()->Display("ChooseFileDlgKey"))
 	{
@@ -429,7 +433,7 @@ void Editor::AddItem()
 	}
 }
 
-void Editor::MakeDockSpace()
+void Xerxes::Editor::Editor::MakeDockSpace()
 {
 	ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
 	static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;

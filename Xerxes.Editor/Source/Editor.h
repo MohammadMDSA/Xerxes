@@ -14,86 +14,95 @@
 #include "ResourceWindow.h"
 #include "EditorWindowGraphicResource.h"
 
-//class EditorWindow;
+using namespace DX;
+using namespace Xerxes::Editor::Device;
 
-// A basic game implementation that creates a D3D11 device and
-// provides a game loop.
-class Editor final : public DX::IDeviceNotify
+namespace Xerxes
 {
-public:
+    namespace Editor
+    {
+        //class EditorWindow;
 
-    Editor() noexcept;
-    ~Editor();
+        // A basic game implementation that creates a D3D11 device and
+        // provides a game loop.
+        class Editor final : public IDeviceNotify
+        {
+        public:
 
-    Editor(Editor&&) = default;
-    Editor& operator= (Editor&&) = default;
+            Editor() noexcept;
+            ~Editor();
 
-    Editor(Editor const&) = delete;
-    Editor& operator= (Editor const&) = delete;
+            Editor(Editor&&) = default;
+            Editor& operator= (Editor&&) = default;
 
-    // Initialization and management
-    void Initialize(HWND window, int width, int height);
+            Editor(Editor const&) = delete;
+            Editor& operator= (Editor const&) = delete;
 
-    // Basic game loop
-    void Tick();
+            // Initialization and management
+            void Initialize(HWND window, int width, int height);
 
-    // IDeviceNotify
-    void OnDeviceLost() override;
-    void OnDeviceRestored() override;
+            // Basic game loop
+            void Tick();
 
-    // Messages
-    void OnActivated();
-    void OnDeactivated();
-    void OnSuspending();
-    void OnResuming();
-    void OnWindowMoved();
-    void OnWindowSizeChanged(int width, int height);
+            // IDeviceNotify
+            void OnDeviceLost() override;
+            void OnDeviceRestored() override;
 
-    // Properties
-    void GetDefaultSize( int& width, int& height ) const noexcept;
+            // Messages
+            void OnActivated();
+            void OnDeactivated();
+            void OnSuspending();
+            void OnResuming();
+            void OnWindowMoved();
+            void OnWindowSizeChanged(int width, int height);
 
-private:
+            // Properties
+            void GetDefaultSize(int& width, int& height) const noexcept;
 
-    void Update(DX::StepTimer const& timer);
-    void Render();
+        private:
 
-    void Clear();
-    
-    void CreateDeviceDependentResources();
-    void CreateWindowSizeDependentResources();
+            void Update(StepTimer const& timer);
+            void Render();
 
-    void InitializeImgui();
-    void AppBarMenus();
-    void AddItem();
+            void Clear();
 
-    void MakeDockSpace();
+            void CreateDeviceDependentResources();
+            void CreateWindowSizeDependentResources();
 
-    // Device resources.
-    HWND                                            m_window;
-    int                                             m_outputWidth;
-    int                                             m_outputHeight;
-    int                                             sceneWidth;
-    int                                             sceneHeight;
+            void InitializeImgui();
+            void AppBarMenus();
+            void AddItem();
 
-    // Device resources.
-    std::unique_ptr<DX::DeviceResources>    m_deviceResources;
+            void MakeDockSpace();
 
-    // Rendering loop timer.
-    DX::StepTimer                                   m_timer;
-    bool                                            m_imguiActive;
+            // Device resources.
+            HWND                                            m_window;
+            int                                             m_outputWidth;
+            int                                             m_outputHeight;
+            int                                             sceneWidth;
+            int                                             sceneHeight;
 
-    bool                                            showDemo;
-    bool                                            showCameraInspector;
+            // Device resources.
+            std::unique_ptr<DeviceResources>                m_deviceResources;
 
-    float                                           clear_color[3];
+            // Rendering loop timer.
+            StepTimer                                       m_timer;
+            bool                                            m_imguiActive;
 
-    RootManager*                                    rootManager;
+            bool                                            showDemo;
+            bool                                            showCameraInspector;
 
-    SceneWindow*                                    sceneWindow;
-    InspectorWindow*                                inspectorWindow;
-    HierarchyWindow*                                hierarchyWindow;
-    ResourceWindow*                                 resourceWindow;
+            float                                           clear_color[3];
 
-    EditorWindowGraphicResource*                    windowResource;
+            RootManager* rootManager;
 
-};
+            Panels::SceneWindow* sceneWindow;
+            Panels::InspectorWindow* inspectorWindow;
+            Panels::HierarchyWindow* hierarchyWindow;
+            Panels::ResourceWindow* resourceWindow;
+
+            Device::EditorWindowGraphicResource* windowResource;
+
+        };
+    }
+}

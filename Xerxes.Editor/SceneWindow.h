@@ -4,39 +4,49 @@
 #include "Libs/imgui/imgui.h"
 #include "Libs/imgui/ImGuizmo.h"
 
-class SceneWindow : public EditorWindow
+
+namespace Xerxes
 {
-public:
-	SceneWindow(int id);
+	namespace Editor
+	{
+		namespace Panels
+		{
+			class SceneWindow : public EditorWindow
+			{
+			public:
+				SceneWindow(int id);
 
-	void					SetCamera(Camera* camera);
-	Camera*					GetCamera();
+				void					SetCamera(Camera* camera);
+				Camera* GetCamera();
 
-	virtual void			OnGUI() override;
-	virtual void			Update(float deltaTime) override;
-	void					OnRender(DirectX::SimpleMath::Matrix view, DirectX::SimpleMath::Matrix proj);
+				virtual void			OnGUI() override;
+				virtual void			Update(float deltaTime) override;
+				void					OnRender(DirectX::SimpleMath::Matrix view, DirectX::SimpleMath::Matrix proj);
 
-	ImGuizmo::OPERATION		GetManipulationOperation();
-	ImGuizmo::MODE			GetManipulationMode();
+				ImGuizmo::OPERATION		GetManipulationOperation();
+				ImGuizmo::MODE			GetManipulationMode();
 
-protected:
-	// Inherited via EditorWindow
-	virtual int				GetCustomWindowFlags() override;
+			protected:
+				// Inherited via EditorWindow
+				virtual int				GetCustomWindowFlags() override;
 
-private:
+			private:
 
-	Camera*					camera;
-	const float				ROTATION_GAIN = 1.f;
-	const float				MOVEMENT_GAIN = 5.f;
-	const float				ROTATION_AROUND_FORWARD = 2.f;
-	const float				ROTATION_AROUND_ROTATION_GAIN = 0.1f;
-	const float				PAN_GAIN = 6.f;
+				Camera* camera;
+				const float				ROTATION_GAIN = 1.f;
+				const float				MOVEMENT_GAIN = 5.f;
+				const float				ROTATION_AROUND_FORWARD = 2.f;
+				const float				ROTATION_AROUND_ROTATION_GAIN = 0.1f;
+				const float				PAN_GAIN = 6.f;
 
-	bool					moveingCamera;
-	int						effectId;
-	std::unique_ptr<DirectX::CommonStates> states;
+				bool					moveingCamera;
+				int						effectId;
+				std::unique_ptr<DirectX::CommonStates> states;
 
-	ImGuizmo::OPERATION		manipulationOperation;
-	ImGuizmo::MODE			manipulationMode;
-};
+				ImGuizmo::OPERATION		manipulationOperation;
+				ImGuizmo::MODE			manipulationMode;
+			};
 
+		}
+	}
+}

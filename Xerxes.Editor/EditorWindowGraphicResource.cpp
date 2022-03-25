@@ -1,6 +1,9 @@
 #include "pch.h"
 #include "EditorWindowGraphicResource.h"
 
+using namespace Xerxes::Editor::Device;
+
+
 EditorWindowGraphicResource::EditorWindowGraphicResource()
 {
 	m_windowRenderTargetTexture.Reset();

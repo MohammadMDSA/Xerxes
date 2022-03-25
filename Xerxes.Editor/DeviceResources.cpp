@@ -8,6 +8,7 @@
 
 using namespace DirectX;
 using namespace DX;
+using namespace Xerxes::Editor::Device;
 
 using Microsoft::WRL::ComPtr;
 
