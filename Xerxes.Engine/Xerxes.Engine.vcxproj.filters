@@ -58,6 +58,12 @@
     <Filter Include="Libs\EnTT">
       <UniqueIdentifier>{cbda7f09-06c6-4ed6-a5a6-f988510058c0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Private\Graphics">
+      <UniqueIdentifier>{44b446b3-8ca5-4c96-b41e-6b26c4ad9d83}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Public\Graphics">
+      <UniqueIdentifier>{a46ebfc7-4bf3-4a46-8ae5-0ec1d328dc71}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -180,6 +186,9 @@
     <ClInclude Include="XPreprocessors.h">
       <Filter>Source\Public\Utils</Filter>
     </ClInclude>
+    <ClInclude Include="ParticleSystem.h">
+      <Filter>Source\Public\Graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Xerxes.Engine.cpp">
@@ -274,6 +283,9 @@
     </ClCompile>
     <ClCompile Include="Scene.cpp">
       <Filter>Source\Private\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="ParticleSystem.cpp">
+      <Filter>Source\Private\Graphics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -14,10 +14,21 @@
 class ResourceManager : public IManager, public ResourceGroup<EffectResource>, public ResourceGroup<ModelResource>, public ResourceGroup<TextureResource>, public ResourceGroup<GeometricPrimitiveResource>
 {
 public:
+
+	enum ResourceType
+	{
+		ResourceType_None = 0x0,
+		ResourceType_Texture = 0x1,
+		ResourceType_Model = 0x2,
+		ResourceType_Effect = 0x4
+	};
+
 	ResourceManager();
 
-	int CreateModel(std::wstring path);
-	int CreateEffect(std::string type, std::string name);
+	GameResourceBase* CreateResource(std::string path, ResourceType type);
+	GameResourceBase* CreateModel(std::string path);
+	GameResourceBase* CreateEffect(std::string type, std::string name);
+	GameResourceBase* CreateTexture(std::string path);
 
 	void SetDeviceContext(ID3D11DeviceContext* context);
 	void SetDevice(ID3D11Device* device);
@@ -30,10 +41,11 @@ public:
 
 	DirectX::PrimitiveBatch<DirectX::VertexPositionColor>* GetDefaultBatch();
 
+	void LoadAllSubdirectoriesResources(std::string root);
 private:
-	int CreateSDKMESHModel(boost::filesystem::path path);
-	int CreateNormalMapEffect(std::string name);
-	int CreateBasicEffect(std::string name);
+
+	GameResourceBase* CreateNormalMapEffect(std::string name);
+	GameResourceBase* CreateBasicEffect(std::string name);
 
 	int GetNewId();
 	GeometricPrimitiveResource* AddPrimitive(std::string name);
@@ -41,6 +53,10 @@ private:
 	void AddDefaultGeometricPrimitives();
 	void AddDefaultEffects();
 	void AddDefaultBatcch();
+
+	void LoadAllDirectoryResources(boost::filesystem::path path);
+
+	ResourceType IsResourceSupported(std::string extension);
 
 	int lastId;
 	bool createdResources;

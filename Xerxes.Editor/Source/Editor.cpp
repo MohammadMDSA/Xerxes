@@ -87,6 +87,8 @@ void Xerxes::Editor::Editor::Initialize(HWND window, int width, int height)
 	m_timer.SetFixedTimeStep(true);
 	m_timer.SetTargetElapsedSeconds(1.0 / 60);
 
+	rootManager->GetResourceManager()->LoadAllSubdirectoriesResources("assets");
+
 	rootManager->GetInputManager()->GetMouse()->SetWindow(window);
 
 	rootManager->GetCameraManager()->CraeteCamera();
@@ -426,7 +428,7 @@ void Xerxes::Editor::Editor::AddItem()
 		{
 			std::string filePathName = ImGuiFileDialog::Instance()->GetFilePathName();
 
-			int modelId = rootManager->GetResourceManager()->CreateModel(std::wstring(filePathName.begin(), filePathName.end()));
+			rootManager->GetResourceManager()->CreateModel(filePathName);
 		}
 
 		ImGuiFileDialog::Instance()->Close();

@@ -9,6 +9,7 @@ void GeometricPrimitiveResource::OnInspector()
 
 void GeometricPrimitiveResource::Initialize(ID3D11DeviceContext* context)
 {
+	loaded = false;
 	this->resource.reset();
 	if (name == "Box")
 	{
@@ -59,9 +60,12 @@ void GeometricPrimitiveResource::Initialize(ID3D11DeviceContext* context)
 		this->resource = GeometricPrimitive::CreateTorus(context);
 	}
 
+	loaded = true;
+
 }
 
 void GeometricPrimitiveResource::Shutdown()
 {
+	loaded = false;
 	resource.release();
 }

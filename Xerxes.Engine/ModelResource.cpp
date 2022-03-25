@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "ModelResource.h"
 
-const std::string ModelResource::XModelResourceType_SDKMESH = "SDKMeshModel";
+const std::string ModelResource::XModelResourceType_SDKMESH = "SDKMESHModel";
 
 void ModelResource::OnInspector()
 {
@@ -9,16 +9,19 @@ void ModelResource::OnInspector()
 
 void ModelResource::Initialize(ID3D11DeviceContext* context)
 {
-	if (resource)
+	if (loaded)
 		return;
 	ID3D11Device* device;
 	context->GetDevice(&device);
 	if (type == XModelResourceType_SDKMESH)
 		LoadSDKMESHModel(device);
+	loaded = true;
 }
 
 void ModelResource::Shutdown()
 {
+	loaded = false;
+	resource.release();
 }
 
 void ModelResource::LoadSDKMESHModel(ID3D11Device* device)

@@ -7,7 +7,7 @@ struct GameResourceBase : public IInspectorDrawer
 public:
 	int						GetId() { return id; }
 	const std::string		GetName() const { return name; }
-	bool					IsLoaded() { return isLoaded; }
+	bool					IsLoaded() { return loaded; }
 	const boost::filesystem::path& GetPath() const { return path; }
 	const std::string		GetType() const { return type; }
 	inline bool				IsSystemResource() { return systemResource; }
@@ -21,7 +21,7 @@ protected:
 	int						id;
 	std::string				name;
 	std::string				type;
-	bool					isLoaded;
+	bool					loaded = false;
 	boost::filesystem::path	path;
 	bool					isDefault = false;
 	bool					systemResource = false;

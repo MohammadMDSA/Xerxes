@@ -64,7 +64,7 @@ void EffectResource::CreateInputLayout(ID3D11Device* device)
 
 void EffectResource::Initialize(ID3D11DeviceContext* context)
 {
-	if (resource)
+	if (loaded)
 		return;
 	ID3D11Device* device;
 	context->GetDevice(&device);
@@ -86,10 +86,12 @@ void EffectResource::Initialize(ID3D11DeviceContext* context)
 	}
 
 	CreateInputLayout(device);
+	loaded = true;
 }
 
 void EffectResource::Shutdown()
 {
+	loaded = false;
 	resource.release();
 	inputLayout.Reset();
 }
