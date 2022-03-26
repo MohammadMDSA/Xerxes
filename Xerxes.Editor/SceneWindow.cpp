@@ -41,23 +41,25 @@ void SceneWindow::OnGUI()
 	ImGui::BeginChild("Tools", ImVec2(0, 40), true, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoBringToFrontOnFocus);
 	
 	// Creating table layout
-	ImGui::BeginTable("tab", 2, ImGuiTableFlags_SizingFixedSame | ImGuiTableFlags_NoHostExtendX | ImGuiTableFlags_BordersInnerV);
+	if (ImGui::BeginTable("tab", 2, ImGuiTableFlags_SizingFixedSame | ImGuiTableFlags_NoHostExtendX | ImGuiTableFlags_BordersInnerV))
+	{
 
-	ImGui::TableNextRow();
-	ImGui::TableSetColumnIndex(0);
+		ImGui::TableNextRow();
+		ImGui::TableSetColumnIndex(0);
 
-	ImGui::RadioButton("World", (int*)&manipulationMode, ImGuizmo::MODE::WORLD);
-	ImGui::SameLine();
-	ImGui::RadioButton("Local", (int*)&manipulationMode, ImGuizmo::MODE::LOCAL);
-	
-	ImGui::TableSetColumnIndex(1);
-	ImGui::RadioButton("Position", (int*)&manipulationOperation, ImGuizmo::OPERATION::TRANSLATE);
-	ImGui::SameLine();
-	ImGui::RadioButton("Rotation", (int*)&manipulationOperation, ImGuizmo::OPERATION::ROTATE);
-	ImGui::SameLine();
-	ImGui::RadioButton("Scale", (int*)&manipulationOperation, ImGuizmo::OPERATION::SCALE);
-	
-	ImGui::EndTable();
+		ImGui::RadioButton("World", (int*)&manipulationMode, ImGuizmo::MODE::WORLD);
+		ImGui::SameLine();
+		ImGui::RadioButton("Local", (int*)&manipulationMode, ImGuizmo::MODE::LOCAL);
+
+		ImGui::TableSetColumnIndex(1);
+		ImGui::RadioButton("Position", (int*)&manipulationOperation, ImGuizmo::OPERATION::TRANSLATE);
+		ImGui::SameLine();
+		ImGui::RadioButton("Rotation", (int*)&manipulationOperation, ImGuizmo::OPERATION::ROTATE);
+		ImGui::SameLine();
+		ImGui::RadioButton("Scale", (int*)&manipulationOperation, ImGuizmo::OPERATION::SCALE);
+
+		ImGui::EndTable();
+	}
 	ImGui::EndChild();
 }
 
