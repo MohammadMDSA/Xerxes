@@ -27,9 +27,11 @@ public:
 	// Effect types enums
 	static const std::string XEffectResourceType_Basic;
 	static const std::string XEffectResourceType_NormalMap;
+	static const std::string XEffectResourceType_Particle;
 
 	// Effect vertext input type enums
 	static const std::string XEffectVertexType_VertexPositionColor;
+	static const std::string XEffectVertexType_VertexPositionColorTexture;
 	static const std::string XEffectVertexType_VertexPositionNormal;
 	static const std::string XEffectVertexType_VertexPositionNormalTexture;
 

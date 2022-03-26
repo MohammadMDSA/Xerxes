@@ -44,7 +44,7 @@ struct GameResource : public GameResourceBase
 public:
 	~GameResource();
 
-	M* GetResource() { return resource.get(); }
+	virtual M* GetResource() { return resource.get(); }
 
 	// Inherited via GameResourceBase
 	virtual void OnInspector() = 0;
