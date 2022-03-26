@@ -2,9 +2,11 @@
 #include "ParticleSystem.h"
 #include "RootManager.h"
 #include "ResourceGroup.h"
+#include "ParticleEffect.h"
 
 using namespace DirectX;
 using namespace DirectX::SimpleMath;
+using namespace Xerxes::Engine::Graphics::Effects;
 
 Xerxes::Engine::Graphics::ParticleSystem::ParticleSystem() :
 	textureReourceId(-1),
@@ -76,7 +78,12 @@ void Xerxes::Engine::Graphics::ParticleSystem::Render(ID3D11DeviceContext* conte
 
 	context->IASetInputLayout(effectRes->GetInputLayout());
 
-	effectRes->GetResource()->Apply(context);
+	if (auto particleEffect = dynamic_cast<ParticleEffect*>(effectRes->GetResource()); particleEffect)
+	{
+		particleEffect->SetTexture(textureReourceId);
+		particleEffect->Apply(context);
+	}
+
 	context->DrawIndexed(indexCount, 0, 0);
 }
 
