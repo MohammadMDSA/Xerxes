@@ -1,5 +1,6 @@
 #pragma once
 #include "TextureResource.h"
+#include "EffectResource.h"
 
 using VertexType = DirectX::VertexPositionColorTexture;
 
@@ -20,7 +21,7 @@ namespace Xerxes
 				bool						Initialize(ID3D11Device* device);
 				void						Shutdown();
 				bool						Update(float time, ID3D11DeviceContext* context);
-				void						Render(ID3D11DeviceContext* context);
+				void						Render(ID3D11DeviceContext* context, EffectResource* effectRes);
 
 				ID3D11ShaderResourceView*	GetTexture();
 				int							GetIndexCount();
@@ -34,6 +35,7 @@ namespace Xerxes
 					DirectX::SimpleMath::Vector3 color;
 					float velocity;
 					bool active;
+					float creationTime;
 				};
 
 				bool						InitializeParticleSystem();
@@ -56,8 +58,10 @@ namespace Xerxes
 				float						particleSize;
 				float						particlePerSecond;
 				int							maxParticles;
+				float						lifeTime;
 
 				int							currentParticleCount;
+				float						emitAccumulatedTime;
 				float						accumulatedTime;
 
 				GameResourceId				textureReourceId;

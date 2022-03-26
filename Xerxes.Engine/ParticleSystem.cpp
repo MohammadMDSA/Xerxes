@@ -11,7 +11,9 @@ Xerxes::Engine::Graphics::ParticleSystem::ParticleSystem() :
 	particleList(nullptr),
 	vertices(nullptr),
 	vertexBuffer(nullptr),
-	indexBuffer(nullptr)
+	indexBuffer(nullptr),
+	accumulatedTime(0.f),
+	emitAccumulatedTime(0.f)
 {
 
 }
@@ -48,6 +50,8 @@ bool Xerxes::Engine::Graphics::ParticleSystem::Update(float time, ID3D11DeviceCo
 {
 	bool result;
 
+	accumulatedTime += time;
+
 	// Release old particles
 	KillParticles();
 
@@ -65,12 +69,15 @@ bool Xerxes::Engine::Graphics::ParticleSystem::Update(float time, ID3D11DeviceCo
 	return true;
 }
 
-void Xerxes::Engine::Graphics::ParticleSystem::Render(ID3D11DeviceContext* context)
+void Xerxes::Engine::Graphics::ParticleSystem::Render(ID3D11DeviceContext* context, EffectResource* effectRes)
 {
 	// Put the vertex and index buffers on the graphic pipeline to prepare them for drawing
 	RenderBuffers(context);
 
-	return;
+	context->IASetInputLayout(effectRes->GetInputLayout());
+
+	effectRes->GetResource()->Apply(context);
+	context->DrawIndexed(indexCount, 0, 0);
 }
 
 ID3D11ShaderResourceView* Xerxes::Engine::Graphics::ParticleSystem::GetTexture()
@@ -96,10 +103,10 @@ bool Xerxes::Engine::Graphics::ParticleSystem::InitializeParticleSystem()
 	int i;
 
 	// Set the random deviation ofwhere the particles can be located when emitted
-	particleDeviation = Vector3(.5f, .1f, 2.f);
+	particleDeviation = Vector3(2.f, 2.f, 2.f);
 
 	// Set the speed and speed variation of particles
-	particleVelocity = 1.f;
+	particleVelocity = 2.f;
 	particleVelocityVariation = .2f;
 
 	// Set the physical size of the particles
@@ -111,8 +118,11 @@ bool Xerxes::Engine::Graphics::ParticleSystem::InitializeParticleSystem()
 	// Set the maximum number of particles allowed in the particle system
 	maxParticles = 5000;
 
+	lifeTime = 1;
+
 	// Create the particle list
 	particleList = new ParticleType[maxParticles];
+	memset(particleList, 0, maxParticles * sizeof(ParticleType));
 	if (!particleList)
 		return false;
 
@@ -124,7 +134,7 @@ bool Xerxes::Engine::Graphics::ParticleSystem::InitializeParticleSystem()
 
 	// Initialize the current particle count to zero since none are emitted yet
 	currentParticleCount = 0;
-	accumulatedTime = 0.f;
+	emitAccumulatedTime = 0.f;
 
 	return true;
 }
@@ -147,10 +157,10 @@ bool Xerxes::Engine::Graphics::ParticleSystem::InitializeBuffers(ID3D11Device* d
 	HRESULT result;
 
 	// Set the maximum number of vertices in the vertex array
-	vertexCount = maxParticles * 6;
+	vertexCount = maxParticles * 4;
 
 	// Set the maximum number of indices in the index array
-	indexCount = vertexCount;
+	indexCount = maxParticles * 6;
 
 	// Create the vertex array for the particle that will be rendered
 	vertices = new VertexType[vertexCount];
@@ -166,9 +176,15 @@ bool Xerxes::Engine::Graphics::ParticleSystem::InitializeBuffers(ID3D11Device* d
 	memset(vertices, 0, (sizeof(VertexType) * vertexCount));
 
 	// Initialize the index array
-	for (int i = 0; i < indexCount; i++)
+	for (int i = 0; i < maxParticles; i++)
 	{
-		indices[i] = i;
+		int index = i * 6;
+		indices[index++] = i * 4;
+		indices[index++] = i * 4 + 1;
+		indices[index++] = i * 4 + 2;
+		indices[index++] = i * 4 + 2;
+		indices[index++] = i * 4 + 1;
+		indices[index++] = i * 4 + 3;
 	}
 
 	// Setup the description of the dynamic vertex buffer
@@ -215,7 +231,8 @@ bool Xerxes::Engine::Graphics::ParticleSystem::InitializeBuffers(ID3D11Device* d
 void Xerxes::Engine::Graphics::ParticleSystem::ShutdownBuffers()
 {
 	// Release the index buffer
-	if (indexBuffer) {
+	if (indexBuffer)
+	{
 		indexBuffer->Release();
 		indexBuffer = nullptr;
 	}
@@ -230,19 +247,15 @@ void Xerxes::Engine::Graphics::ParticleSystem::ShutdownBuffers()
 
 void Xerxes::Engine::Graphics::ParticleSystem::EmitParticles(float time)
 {
-	bool emitParticle;
-	bool found;
-	int index, i, j;
-
 	// Increment the frame time
-	accumulatedTime += time;
+	emitAccumulatedTime += time;
 
 	// Set emit particle to false for now
-	emitParticle = false;
+	bool emitParticle = false;
 
-	if (accumulatedTime > (1000.f / particlePerSecond))
+	if (emitAccumulatedTime > (1.f / particlePerSecond))
 	{
-		accumulatedTime = 0.f;
+		emitAccumulatedTime = 0.f;
 		emitParticle = true;
 	}
 
@@ -272,8 +285,8 @@ void Xerxes::Engine::Graphics::ParticleSystem::EmitParticles(float time)
 
 		// Now since the particles neede to be rendered from back to front for blending we have to sort the particle array
 		// We will sort using Z depth so we need to find where in the list the particle should be inserted
-		index = 0;
-		found = false;
+		int index = 0;
+		bool found = false;
 		while (!found)
 		{
 			if (!particleList[index].active || (particleList[index].position.z < part.position.z))
@@ -283,15 +296,16 @@ void Xerxes::Engine::Graphics::ParticleSystem::EmitParticles(float time)
 		}
 
 		// Now that we know the location to insert into we need to copy the array over by one position from the index to make room for the new particles
-		i = currentParticleCount;
-		j = i - 1;
+		int i = currentParticleCount;
+		int j = i - 1;
 		
-		while (i != index)
+		while (i > index)
 		{
 			particleList[i].position = particleList[j].position;
 			particleList[i].color = particleList[j].color;
 			particleList[i].velocity = particleList[j].velocity;
 			particleList[i].active = particleList[j].active;
+			particleList[i].creationTime = particleList[j].creationTime;
 			i--;
 			j--;
 		}
@@ -301,6 +315,7 @@ void Xerxes::Engine::Graphics::ParticleSystem::EmitParticles(float time)
 		particleList[index].color = part.color;
 		particleList[index].velocity = part.velocity;
 		particleList[index].active = true;
+		particleList[index].creationTime = accumulatedTime;
 	}
 }
 
@@ -309,7 +324,7 @@ void Xerxes::Engine::Graphics::ParticleSystem::UpdateParticles(float time)
 	// Each frame we update all the particles by making them move downwards using their position, velocity and the frame time
 	for (int i = 0; i < currentParticleCount; i++)
 	{
-		particleList[i].position.y -= particleList[i].velocity * time * .001f;
+		particleList[i].position.y -= particleList[i].velocity * time;
 	}
 }
 
@@ -318,19 +333,21 @@ void Xerxes::Engine::Graphics::ParticleSystem::KillParticles()
 	// Kill all the particles that have gone below a certain height range
 	for (int i = 0; i < maxParticles; i++)
 	{
-		if (particleList[i].active && (particleList->position.y < -3.f))
+		if (particleList[i].active && (particleList[i].position.y < -3.f || (accumulatedTime - xmax(particleList[i].creationTime, 0)) > lifeTime))
 		{
 			particleList[i].active = false;
 			currentParticleCount--;
 
 			// Now shift all the live particles back up the array to erase the destroyed paticle and keep the array sorted correctly
-			for (int j = i = 0; j < maxParticles; j++)
+			for (int j = i; j < maxParticles  - 1; j++)
 			{
 				particleList[j].position = particleList[j + 1].position;
 				particleList[j].color = particleList[j + 1].color;
 				particleList[j].velocity = particleList[j + 1].velocity;
 				particleList[j].active = particleList[j + 1].active;
+				particleList[j].creationTime = particleList[j + 1].creationTime;
 			}
+			i--;
 		}
 	}
 }
@@ -368,22 +385,11 @@ bool Xerxes::Engine::Graphics::ParticleSystem::UpdateBuffers(ID3D11DeviceContext
 		vertices[index].color = Vector4(particleList[i].color.x, particleList[i].color.y, particleList[i].color.z, 1.f);
 		index++;
 
-		// Bottom right
-		vertices[index].position = particleList[i].position + Vector3(particleSize, -particleSize, 0.f);
-		vertices[index].textureCoordinate = Vector2(1.f, 1.f);
-		vertices[index].color = Vector4(particleList[i].color.x, particleList[i].color.y, particleList[i].color.z, 1.f);
-		index++;
-
-		// Top left
-		vertices[index].position = particleList[i].position + Vector3(-particleSize, particleSize, 0.f);
-		vertices[index].textureCoordinate = Vector2(0.f, 0.f);
-		vertices[index].color = Vector4(particleList[i].color.x, particleList[i].color.y, particleList[i].color.z, 1.f);
-		index++;
-
 		// Top right
 		vertices[index].position = particleList[i].position + Vector3(particleSize, particleSize, 0.f);
 		vertices[index].textureCoordinate = Vector2(1.f, 0.f);
 		vertices[index].color = Vector4(particleList[i].color.x, particleList[i].color.y, particleList[i].color.z, 1.f);
+		index++;
 	}
 
 	// Lock the vertex buffer
@@ -398,6 +404,8 @@ bool Xerxes::Engine::Graphics::ParticleSystem::UpdateBuffers(ID3D11DeviceContext
 
 	// Unlock the vertex buffer
 	context->Unmap(vertexBuffer, 0);
+
+	return true;
 }
 
 void Xerxes::Engine::Graphics::ParticleSystem::RenderBuffers(ID3D11DeviceContext* context)
