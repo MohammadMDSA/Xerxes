@@ -2,10 +2,19 @@
 #include "boost/filesystem.hpp"
 #include "IInspectorDrawer.h"
 
+#ifndef GAME_RESOURCE_ID_TYPE
+#    include <cstdint>
+#    define GAME_RESOURCE_ID_TYPE std::int32_t
+#endif
+
+using GameResourceIdType = GAME_RESOURCE_ID_TYPE;
+
+typedef GameResourceIdType GameResourceId;
+
 struct GameResourceBase : public IInspectorDrawer
 {
 public:
-	int						GetId() { return id; }
+	GameResourceId			GetId() { return id; }
 	const std::string		GetName() const { return name; }
 	bool					IsLoaded() { return loaded; }
 	const boost::filesystem::path& GetPath() const { return path; }
@@ -18,7 +27,7 @@ public:
 	virtual void			Shutdown() = 0;
 
 protected:
-	int						id;
+	GameResourceId			id;
 	std::string				name;
 	std::string				type;
 	bool					loaded = false;

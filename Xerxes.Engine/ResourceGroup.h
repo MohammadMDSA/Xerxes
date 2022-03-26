@@ -6,7 +6,7 @@ template<class T>
 class ResourceGroup
 {
 public:
-	inline T* GetById(int id)
+	inline T* GetById(GameResourceId id)
 	{
 		if (!group.contains(id))
 			return nullptr;
@@ -46,5 +46,5 @@ public:
 
 private:
 	friend class ResourceManager;
-	std::unordered_map<int, T*> group;
+	std::unordered_map<GameResourceId, T*> group;
 };
