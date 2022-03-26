@@ -1,0 +1,420 @@
+#include "pch.h"
+#include "ParticleSystem.h"
+#include "RootManager.h"
+#include "ResourceGroup.h"
+
+using namespace DirectX;
+using namespace DirectX::SimpleMath;
+
+Xerxes::Engine::Graphics::ParticleSystem::ParticleSystem() :
+	textureReourceId(-1),
+	particleList(nullptr),
+	vertices(nullptr),
+	vertexBuffer(nullptr),
+	indexBuffer(nullptr)
+{
+
+}
+
+bool Xerxes::Engine::Graphics::ParticleSystem::Initialize(ID3D11Device* device)
+{
+	bool result;
+
+	// Initialize the particle system
+	result = InitializeParticleSystem();
+	if (!result)
+		return false;
+
+	// Create the buffers that will be usesd to render the particle with
+	result = InitializeBuffers(device);
+	if (!result)
+		return false;
+
+	return true;
+}
+
+void Xerxes::Engine::Graphics::ParticleSystem::Shutdown()
+{
+	// Release buffers
+	ShutdownBuffers();
+
+	// Release the particle system
+	ShutdownParticleSystem();
+
+	return;
+}
+
+bool Xerxes::Engine::Graphics::ParticleSystem::Update(float time, ID3D11DeviceContext* context)
+{
+	bool result;
+
+	// Release old particles
+	KillParticles();
+
+	// Emit new particles
+	EmitParticles(time);
+
+	// Update the position of the particles
+	UpdateParticles(time);
+
+	// Update the dynamic vertex buffer with the new position of each particle
+	result = UpdateBuffers(context);
+	if (!result)
+		return false;
+
+	return true;
+}
+
+void Xerxes::Engine::Graphics::ParticleSystem::Render(ID3D11DeviceContext* context)
+{
+	// Put the vertex and index buffers on the graphic pipeline to prepare them for drawing
+	RenderBuffers(context);
+
+	return;
+}
+
+ID3D11ShaderResourceView* Xerxes::Engine::Graphics::ParticleSystem::GetTexture()
+{
+	auto textureResource = RootManager::GetInstance()->GetResourceManager()->ResourceGroup<TextureResource>::GetById(textureReourceId);
+	if (!textureResource)
+		return nullptr;
+	return textureResource->GetResource();
+}
+
+int Xerxes::Engine::Graphics::ParticleSystem::GetIndexCount()
+{
+	return indexCount;
+}
+
+void Xerxes::Engine::Graphics::ParticleSystem::SetTextureId(GameResourceId id)
+{
+	this->textureReourceId = id;
+}
+
+bool Xerxes::Engine::Graphics::ParticleSystem::InitializeParticleSystem()
+{
+	int i;
+
+	// Set the random deviation ofwhere the particles can be located when emitted
+	particleDeviation = Vector3(.5f, .1f, 2.f);
+
+	// Set the speed and speed variation of particles
+	particleVelocity = 1.f;
+	particleVelocityVariation = .2f;
+
+	// Set the physical size of the particles
+	particleSize = .2f;
+
+	// Set number of particles to emit per second
+	particlePerSecond = 250.f;
+
+	// Set the maximum number of particles allowed in the particle system
+	maxParticles = 5000;
+
+	// Create the particle list
+	particleList = new ParticleType[maxParticles];
+	if (!particleList)
+		return false;
+
+	// Initialize the partile list
+	for (int i = 0; i < maxParticles; i++)
+	{
+		particleList->active = false;
+	}
+
+	// Initialize the current particle count to zero since none are emitted yet
+	currentParticleCount = 0;
+	accumulatedTime = 0.f;
+
+	return true;
+}
+
+void Xerxes::Engine::Graphics::ParticleSystem::ShutdownParticleSystem()
+{
+	// Release the partile list
+	if (particleList)
+	{
+		delete[] particleList;
+		particleList = 0;
+	}
+}
+
+bool Xerxes::Engine::Graphics::ParticleSystem::InitializeBuffers(ID3D11Device* device)
+{
+	unsigned long* indices;
+	D3D11_BUFFER_DESC vertexBufferDesc, indexBufferDesc;
+	D3D11_SUBRESOURCE_DATA vertexData, indexData;
+	HRESULT result;
+
+	// Set the maximum number of vertices in the vertex array
+	vertexCount = maxParticles * 6;
+
+	// Set the maximum number of indices in the index array
+	indexCount = vertexCount;
+
+	// Create the vertex array for the particle that will be rendered
+	vertices = new VertexType[vertexCount];
+	if (!vertices)
+		return false;
+
+	// Create the index array
+	indices = new unsigned long[indexCount];
+	if (!indices)
+		return false;
+
+	// Initialize vertex array to zeros at first
+	memset(vertices, 0, (sizeof(VertexType) * vertexCount));
+
+	// Initialize the index array
+	for (int i = 0; i < indexCount; i++)
+	{
+		indices[i] = i;
+	}
+
+	// Setup the description of the dynamic vertex buffer
+	vertexBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
+	vertexBufferDesc.ByteWidth = sizeof(VertexType) * vertexCount;
+	vertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+	vertexBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	vertexBufferDesc.MiscFlags = 0;
+	vertexBufferDesc.StructureByteStride = 0;
+
+	// Give the subresource structure a pointer to the vertex data
+	vertexData.pSysMem = vertices;
+	vertexData.SysMemPitch = 0;
+	vertexData.SysMemSlicePitch = 0;
+
+	// Now finaly create the vetex buffer
+	result = device->CreateBuffer(&vertexBufferDesc, &vertexData, &vertexBuffer);
+	DX::ThrowIfFailed(result);
+
+	// Setup the description of the static index buffer
+	indexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
+	indexBufferDesc.ByteWidth = sizeof(unsigned long) * indexCount;
+	indexBufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
+	indexBufferDesc.CPUAccessFlags = 0;
+	indexBufferDesc.MiscFlags = 0;
+	indexBufferDesc.StructureByteStride = 0;
+
+	// Give the subresource structure a pointer to the index data
+	indexData.pSysMem = indices;
+	indexData.SysMemPitch = 0;
+	indexData.SysMemSlicePitch = 0;
+
+	// Create the index buffer
+	result = device->CreateBuffer(&indexBufferDesc, &indexData, &indexBuffer);
+	DX::ThrowIfFailed(result);
+
+	// Release the index array since it is no longer needed
+	delete[] indices;
+	indices = nullptr;
+
+	return true;
+}
+
+void Xerxes::Engine::Graphics::ParticleSystem::ShutdownBuffers()
+{
+	// Release the index buffer
+	if (indexBuffer) {
+		indexBuffer->Release();
+		indexBuffer = nullptr;
+	}
+
+	// Release the vetex buffer
+	if (vertexBuffer)
+	{
+		vertexBuffer->Release();
+		vertexBuffer = nullptr;
+	}
+}
+
+void Xerxes::Engine::Graphics::ParticleSystem::EmitParticles(float time)
+{
+	bool emitParticle;
+	bool found;
+	int index, i, j;
+
+	// Increment the frame time
+	accumulatedTime += time;
+
+	// Set emit particle to false for now
+	emitParticle = false;
+
+	if (accumulatedTime > (1000.f / particlePerSecond))
+	{
+		accumulatedTime = 0.f;
+		emitParticle = true;
+	}
+
+	// If there are particles to emit then emit one per time
+	if (emitParticle && (currentParticleCount < (maxParticles - 1)))
+	{
+		currentParticleCount++;
+
+		// Now generate the randomized particle properties
+		ParticleType part;
+		Vector3 pos(
+			((float)rand() - (float)rand()) / RAND_MAX,
+			((float)rand() - (float)rand()) / RAND_MAX,
+			((float)rand() - (float)rand()) / RAND_MAX
+		); 
+		pos *= particleDeviation;
+		part.position = pos;
+
+		part.velocity = particleVelocity + (((float)rand() - (float)rand()) / RAND_MAX) * particleVelocityVariation;
+
+		Vector3 color(
+			((float)rand() - (float)rand()) / RAND_MAX + .5f,
+			((float)rand() - (float)rand()) / RAND_MAX + .5f,
+			((float)rand() - (float)rand()) / RAND_MAX + .5f
+		);
+		part.color = color;
+
+		// Now since the particles neede to be rendered from back to front for blending we have to sort the particle array
+		// We will sort using Z depth so we need to find where in the list the particle should be inserted
+		index = 0;
+		found = false;
+		while (!found)
+		{
+			if (!particleList[index].active || (particleList[index].position.z < part.position.z))
+				found = true;
+			else
+				index++;
+		}
+
+		// Now that we know the location to insert into we need to copy the array over by one position from the index to make room for the new particles
+		i = currentParticleCount;
+		j = i - 1;
+		
+		while (i != index)
+		{
+			particleList[i].position = particleList[j].position;
+			particleList[i].color = particleList[j].color;
+			particleList[i].velocity = particleList[j].velocity;
+			particleList[i].active = particleList[j].active;
+			i--;
+			j--;
+		}
+
+		// Now insert it into the particle array in the correct depth order
+		particleList[index].position = part.position;
+		particleList[index].color = part.color;
+		particleList[index].velocity = part.velocity;
+		particleList[index].active = true;
+	}
+}
+
+void Xerxes::Engine::Graphics::ParticleSystem::UpdateParticles(float time)
+{
+	// Each frame we update all the particles by making them move downwards using their position, velocity and the frame time
+	for (int i = 0; i < currentParticleCount; i++)
+	{
+		particleList[i].position.y -= particleList[i].velocity * time * .001f;
+	}
+}
+
+void Xerxes::Engine::Graphics::ParticleSystem::KillParticles()
+{
+	// Kill all the particles that have gone below a certain height range
+	for (int i = 0; i < maxParticles; i++)
+	{
+		if (particleList[i].active && (particleList->position.y < -3.f))
+		{
+			particleList[i].active = false;
+			currentParticleCount--;
+
+			// Now shift all the live particles back up the array to erase the destroyed paticle and keep the array sorted correctly
+			for (int j = i = 0; j < maxParticles; j++)
+			{
+				particleList[j].position = particleList[j + 1].position;
+				particleList[j].color = particleList[j + 1].color;
+				particleList[j].velocity = particleList[j + 1].velocity;
+				particleList[j].active = particleList[j + 1].active;
+			}
+		}
+	}
+}
+
+bool Xerxes::Engine::Graphics::ParticleSystem::UpdateBuffers(ID3D11DeviceContext* context)
+{
+	int index;
+	HRESULT result;
+	D3D11_MAPPED_SUBRESOURCE mappedResource;
+	VertexType* verticesPtr;
+
+	// Initialize vertex array to zeros at first
+	memset(vertices, 0, (sizeof(VertexType) * vertexCount));
+
+	// Now build the vertex array from the particle list array
+	// Each particle is a quat made out of two triangle
+	index = 0;
+	for (int i = 0; i < currentParticleCount; i++)
+	{
+		// Bottom left
+		vertices[index].position = particleList[i].position + Vector3(-particleSize, -particleSize, 0.f);
+		vertices[index].textureCoordinate = Vector2(0.f, 1.f);
+		vertices[index].color = Vector4(particleList[i].color.x, particleList[i].color.y, particleList[i].color.z, 1.f);
+		index++;
+
+		// Top left
+		vertices[index].position = particleList[i].position + Vector3(-particleSize, particleSize, 0.f);
+		vertices[index].textureCoordinate = Vector2(0.f, 0.f);
+		vertices[index].color = Vector4(particleList[i].color.x, particleList[i].color.y, particleList[i].color.z, 1.f);
+		index++;
+
+		// Bottom right
+		vertices[index].position = particleList[i].position + Vector3(particleSize, -particleSize, 0.f);
+		vertices[index].textureCoordinate = Vector2(1.f, 1.f);
+		vertices[index].color = Vector4(particleList[i].color.x, particleList[i].color.y, particleList[i].color.z, 1.f);
+		index++;
+
+		// Bottom right
+		vertices[index].position = particleList[i].position + Vector3(particleSize, -particleSize, 0.f);
+		vertices[index].textureCoordinate = Vector2(1.f, 1.f);
+		vertices[index].color = Vector4(particleList[i].color.x, particleList[i].color.y, particleList[i].color.z, 1.f);
+		index++;
+
+		// Top left
+		vertices[index].position = particleList[i].position + Vector3(-particleSize, particleSize, 0.f);
+		vertices[index].textureCoordinate = Vector2(0.f, 0.f);
+		vertices[index].color = Vector4(particleList[i].color.x, particleList[i].color.y, particleList[i].color.z, 1.f);
+		index++;
+
+		// Top right
+		vertices[index].position = particleList[i].position + Vector3(particleSize, particleSize, 0.f);
+		vertices[index].textureCoordinate = Vector2(1.f, 0.f);
+		vertices[index].color = Vector4(particleList[i].color.x, particleList[i].color.y, particleList[i].color.z, 1.f);
+	}
+
+	// Lock the vertex buffer
+	result = context->Map(vertexBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
+	DX::ThrowIfFailed(result);
+
+	// Get a pointer to the data in the vertex buffer
+	verticesPtr = (VertexType*)mappedResource.pData;
+
+	// Copy the data into the vertex buffer
+	memcpy(verticesPtr, (void*)vertices, (sizeof(VertexType) * vertexCount));
+
+	// Unlock the vertex buffer
+	context->Unmap(vertexBuffer, 0);
+}
+
+void Xerxes::Engine::Graphics::ParticleSystem::RenderBuffers(ID3D11DeviceContext* context)
+{
+	unsigned int stride;
+	unsigned int offset;
+
+	// Set vertex buffer stride and offset
+	stride = sizeof(VertexType);
+	offset = 0;
+
+	// Set the vertex buffer to active in the input assembler so it can be rendered
+	context->IASetVertexBuffers(0, 1, &vertexBuffer, &stride, &offset);
+
+	// Set the index buffer to activev in the input assembler so it can be rendered
+	context->IASetIndexBuffer(indexBuffer, DXGI_FORMAT_R32_UINT, 0);
+
+	// Set the type of primitive that should be rendered from this vertex buffer
+	context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+}

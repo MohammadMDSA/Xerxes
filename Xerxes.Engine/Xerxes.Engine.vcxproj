@@ -177,6 +177,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="Shaders\Particle.vs" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Xerxes.Engine.rc" />

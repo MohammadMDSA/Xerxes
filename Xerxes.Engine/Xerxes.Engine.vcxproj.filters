@@ -64,6 +64,9 @@
     <Filter Include="Source\Public\Graphics">
       <UniqueIdentifier>{a46ebfc7-4bf3-4a46-8ae5-0ec1d328dc71}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resources\Shaders">
+      <UniqueIdentifier>{ce1cbb2f-5690-4d98-815f-b571ec58699e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -290,6 +293,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="Shaders\Particle.vs">
+      <Filter>Resources\Shaders</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Xerxes.Engine.rc">
