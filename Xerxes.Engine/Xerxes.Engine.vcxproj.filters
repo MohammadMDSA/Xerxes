@@ -67,6 +67,12 @@
     <Filter Include="Resources\Shaders">
       <UniqueIdentifier>{ce1cbb2f-5690-4d98-815f-b571ec58699e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Public\Graphics\Effects">
+      <UniqueIdentifier>{3067e9dc-36f3-44b5-ad07-0c8edae3e793}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Private\Graphics\Effects">
+      <UniqueIdentifier>{8d713a67-5df4-47bc-b414-c1c975581a83}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -192,6 +198,12 @@
     <ClInclude Include="ParticleSystem.h">
       <Filter>Source\Public\Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="ParticleEffect.h">
+      <Filter>Source\Public\Graphics\Effects</Filter>
+    </ClInclude>
+    <ClInclude Include="ReadData.h">
+      <Filter>Source\Public\Utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Xerxes.Engine.cpp">
@@ -290,16 +302,24 @@
     <ClCompile Include="ParticleSystem.cpp">
       <Filter>Source\Private\Graphics</Filter>
     </ClCompile>
+    <ClCompile Include="ParticleEffect.cpp">
+      <Filter>Source\Private\Graphics\Effects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="Shaders\Particle.vs">
-      <Filter>Resources\Shaders</Filter>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Xerxes.Engine.rc">
       <Filter>Resources</Filter>
     </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Shaders\Particle_PS.hlsl">
+      <Filter>Resources\Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="Shaders\Particle_VS.hlsl">
+      <Filter>Resources\Shaders</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>
