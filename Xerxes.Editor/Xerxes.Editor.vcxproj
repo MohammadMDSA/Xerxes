@@ -35,7 +35,6 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
     <Import Project="$(VCTargetsPath)\BuildCustomizations\ImageContentTask.props" />
-    <Import Project="$(VCTargetsPath)\BuildCustomizations\MeshContentTask.props" />
     <Import Project="$(VCTargetsPath)\BuildCustomizations\ShaderGraphContentTask.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
@@ -201,7 +200,6 @@
   <ImportGroup Label="ExtensionTargets">
     <Import Project="..\packages\directxtk_desktop_win10.2021.11.8.1\build\native\directxtk_desktop_win10.targets" Condition="Exists('..\packages\directxtk_desktop_win10.2021.11.8.1\build\native\directxtk_desktop_win10.targets')" />
     <Import Project="$(VCTargetsPath)\BuildCustomizations\ImageContentTask.targets" />
-    <Import Project="$(VCTargetsPath)\BuildCustomizations\MeshContentTask.targets" />
     <Import Project="$(VCTargetsPath)\BuildCustomizations\ShaderGraphContentTask.targets" />
     <Import Project="..\packages\boost.1.78.0\build\boost.targets" Condition="Exists('..\packages\boost.1.78.0\build\boost.targets')" />
     <Import Project="..\packages\boost_filesystem-vc143.1.78.0\build\boost_filesystem-vc143.targets" Condition="Exists('..\packages\boost_filesystem-vc143.1.78.0\build\boost_filesystem-vc143.targets')" />
