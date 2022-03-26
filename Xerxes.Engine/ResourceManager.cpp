@@ -204,28 +204,42 @@ void ResourceManager::AddDefaultGeometricPrimitives()
 
 void ResourceManager::AddDefaultEffects()
 {
-	// Default shape effect
-	auto gr = new EffectResource();
-	gr->isDefault = true;
-	gr->id = GetNewId();
-	gr->name = "Default Effect";
-	gr->path = "";
-	gr->type = EffectResource::XEffectResourceType_Basic;
-	auto effect = dynamic_cast<BasicEffect*>(gr->resource.get());
+	{
+		// Default shape effect
+		auto gr = new EffectResource();
+		gr->isDefault = true;
+		gr->id = GetNewId();
+		gr->name = "Default Effect";
+		gr->path = "";
+		gr->type = EffectResource::XEffectResourceType_Basic;
+		ResourceGroup<EffectResource>::group.insert({ gr->id, gr });
+	}
 
-	ResourceGroup<EffectResource>::group.insert({ gr->id, gr });
+	{
+		// Default position color effect
+		auto gre = new EffectResource();
+		gre->id = GetNewId();
+		gre->name = "Position Color Effect";
+		gre->path = "";
+		gre->type = EffectResource::XEffectResourceType_Basic;
+		gre->SetVertexType(EffectResource::XEffectVertexType_VertexPositionColor);
+		gre->SetVertextColorEnabled(true);
+		gre->SetSystemResource(true);
+		ResourceGroup<EffectResource>::group.insert({ gre->id, gre });
+	}
 
-	// Default position color effect
-	auto gre = new EffectResource();
-	gre->id = GetNewId();
-	gre->name = "Position Color Effect";
-	gre->path = "";
-	gre->type = EffectResource::XEffectResourceType_Basic;
-	gre->SetVertexType(EffectResource::XEffectVertexType_VertexPositionColor);
-	gre->SetVertextColorEnabled(true);
-	gre->SetSystemResource(true);
-	auto eff = dynamic_cast<BasicEffect*>(gre->resource.get());
-	ResourceGroup<EffectResource>::group.insert({ gre->id, gre });
+	{
+		// Particle effect
+		auto greParticle = new EffectResource();
+		greParticle->id = GetNewId();
+		greParticle->name = "Particle Effect";
+		greParticle->path = "";
+		greParticle->type = EffectResource::XEffectResourceType_Particle;
+		greParticle->SetVertexType(EffectResource::XEffectVertexType_VertexPositionColorTexture);
+		greParticle->SetVertextColorEnabled(true);
+		greParticle->SetSystemResource(true);
+		ResourceGroup<EffectResource>::group.insert({ greParticle->id, greParticle });
+	}
 }
 
 void ResourceManager::AddDefaultBatcch()
