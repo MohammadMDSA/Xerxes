@@ -88,6 +88,7 @@ void Xerxes::Editor::Editor::Initialize(HWND window, int width, int height)
 	m_timer.SetTargetElapsedSeconds(1.0 / 60);
 
 	rootManager->GetResourceManager()->LoadAllSubdirectoriesResources("assets");
+	ResourceM()->InitializeResources();
 
 	rootManager->GetInputManager()->GetMouse()->SetWindow(window);
 
@@ -119,10 +120,11 @@ void Xerxes::Editor::Editor::Update(StepTimer const& timer)
 	rootManager->Update(elapsedTime);
 	sceneWindow->Update(elapsedTime);
 	inspectorWindow->Update(elapsedTime);
+	SceneM()->Update(elapsedTime);
 
 	// Handling layout
-	int newSceneWidth = sceneWindow->GetWidth();
-	int newSceneHeight = sceneWindow->GetHeight();
+	int newSceneWidth = xmax(sceneWindow->GetWidth(), 1);
+	int newSceneHeight = xmax(sceneWindow->GetHeight(), 1);
 	if (newSceneWidth != sceneWidth || newSceneHeight != sceneHeight)
 	{
 		sceneHeight = newSceneHeight;
@@ -130,7 +132,6 @@ void Xerxes::Editor::Editor::Update(StepTimer const& timer)
 		RootManager::GetInstance()->GetCameraManager()->SetOutputSize(sceneWidth, sceneHeight);
 		windowResource->Initialize(RootManager::GetInstance()->GetResourceManager()->GetDevice(), sceneWidth, sceneHeight);
 	}
-
 	elapsedTime;
 }
 
@@ -160,7 +161,7 @@ void Xerxes::Editor::Editor::Render()
 
 	sceneManager->OnRender(view, proj);
 	sceneWindow->OnRender(view, proj);
-
+	
 	m_deviceResources->PIXEndEvent();
 
 
@@ -217,11 +218,6 @@ void Xerxes::Editor::Editor::Render()
 	// 
 	// Rendering
 	ImGui::Render();
-
-
-
-
-
 
 
 
