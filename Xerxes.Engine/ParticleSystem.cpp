@@ -208,7 +208,7 @@ bool Xerxes::Engine::Graphics::ParticleSystem::InitializeBuffers(ID3D11Device* d
 	vertexData.SysMemSlicePitch = 0;
 
 	// Now finaly create the vetex buffer
-	result = device->CreateBuffer(&vertexBufferDesc, &vertexData, &vertexBuffer);
+	result = device->CreateBuffer(&vertexBufferDesc, &vertexData, vertexBuffer.ReleaseAndGetAddressOf());
 	DX::ThrowIfFailed(result);
 
 	// Setup the description of the static index buffer
@@ -225,7 +225,7 @@ bool Xerxes::Engine::Graphics::ParticleSystem::InitializeBuffers(ID3D11Device* d
 	indexData.SysMemSlicePitch = 0;
 
 	// Create the index buffer
-	result = device->CreateBuffer(&indexBufferDesc, &indexData, &indexBuffer);
+	result = device->CreateBuffer(&indexBufferDesc, &indexData, indexBuffer.ReleaseAndGetAddressOf());
 	DX::ThrowIfFailed(result);
 
 	// Release the index array since it is no longer needed
@@ -240,14 +240,14 @@ void Xerxes::Engine::Graphics::ParticleSystem::ShutdownBuffers()
 	// Release the index buffer
 	if (indexBuffer)
 	{
-		indexBuffer->Release();
+		indexBuffer.Reset();
 		indexBuffer = nullptr;
 	}
 
 	// Release the vetex buffer
 	if (vertexBuffer)
 	{
-		vertexBuffer->Release();
+		vertexBuffer.Reset();
 		vertexBuffer = nullptr;
 	}
 }
@@ -400,7 +400,7 @@ bool Xerxes::Engine::Graphics::ParticleSystem::UpdateBuffers(ID3D11DeviceContext
 	}
 
 	// Lock the vertex buffer
-	result = context->Map(vertexBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
+	result = context->Map(vertexBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
 	DX::ThrowIfFailed(result);
 
 	// Get a pointer to the data in the vertex buffer
@@ -410,7 +410,7 @@ bool Xerxes::Engine::Graphics::ParticleSystem::UpdateBuffers(ID3D11DeviceContext
 	memcpy(verticesPtr, (void*)vertices, (sizeof(VertexType) * vertexCount));
 
 	// Unlock the vertex buffer
-	context->Unmap(vertexBuffer, 0);
+	context->Unmap(vertexBuffer.Get(), 0);
 
 	return true;
 }
@@ -425,10 +425,10 @@ void Xerxes::Engine::Graphics::ParticleSystem::RenderBuffers(ID3D11DeviceContext
 	offset = 0;
 
 	// Set the vertex buffer to active in the input assembler so it can be rendered
-	context->IASetVertexBuffers(0, 1, &vertexBuffer, &stride, &offset);
+	context->IASetVertexBuffers(0, 1, vertexBuffer.GetAddressOf(), &stride, &offset);
 
 	// Set the index buffer to activev in the input assembler so it can be rendered
-	context->IASetIndexBuffer(indexBuffer, DXGI_FORMAT_R32_UINT, 0);
+	context->IASetIndexBuffer(indexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
 
 	// Set the type of primitive that should be rendered from this vertex buffer
 	context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);

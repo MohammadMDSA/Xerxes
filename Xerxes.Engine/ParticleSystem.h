@@ -2,6 +2,8 @@
 #include "TextureResource.h"
 #include "EffectResource.h"
 
+using namespace Microsoft::WRL;
+
 using VertexType = DirectX::VertexPositionColorTexture;
 
 namespace Xerxes
@@ -71,8 +73,9 @@ namespace Xerxes
 				int							vertexCount;
 				int							indexCount;
 				VertexType*					vertices;
-				ID3D11Buffer*				vertexBuffer;
-				ID3D11Buffer*				indexBuffer;
+				
+				ComPtr<ID3D11Buffer>		vertexBuffer;
+				ComPtr<ID3D11Buffer>		indexBuffer;
 
 			};
 
