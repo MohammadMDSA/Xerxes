@@ -21,7 +21,7 @@ ParticleSystemComponent::ParticleSystemComponent(const ParticleSystemComponent& 
 
 void ParticleSystemComponent::OnRender(const DirectX::SimpleMath::Matrix& view, const DirectX::SimpleMath::Matrix& proj, ID3D11DeviceContext* context)
 {
-	auto effectRes = ResourceMEffect()::GetById(effectId);
+	auto effectRes = XResourceMEffect()::GetById(effectId);
 	if (auto particleEffect = dynamic_cast<ParticleEffect*>(effectRes->GetResource()); particleEffect)
 	{
 		particleEffect->SetView(view);
@@ -32,9 +32,9 @@ void ParticleSystemComponent::OnRender(const DirectX::SimpleMath::Matrix& view, 
 
 void ParticleSystemComponent::OnStart()
 {
-	auto resourceManager = ResourceM();
+	auto resourceManager = XResourceM();
 	particleSystem = std::make_unique<Xerxes::Engine::Graphics::ParticleSystem>();
-	auto textureResource = resourceManager->ResourceGroup<TextureResource>::GetByName("pants_norm.dds");
+	auto textureResource = resourceManager->ResourceGroup<TextureResource>::GetByName("star.dds");
 	particleSystem->SetTextureId(textureResource->GetId());
 	effectId = resourceManager->ResourceGroup<EffectResource>::GetByName("Particle Effect")->GetId();
 
@@ -52,7 +52,7 @@ void ParticleSystemComponent::OnUpdate(float deltaTime)
 	auto camera = root->GetCameraManager()->GetActiveCamera();
 	particleSystem->Update(deltaTime, resourceManager->GetDeviceContext(), camera->GetView());
 
-	auto effectRes = ResourceMEffect()::GetById(effectId);
+	auto effectRes = XResourceMEffect()::GetById(effectId);
 	if (auto particleEffect = dynamic_cast<ParticleEffect*>(effectRes->GetResource()); particleEffect)
 	{
 		particleEffect->SetWorld(gameObject->transform().GetWorldMatrix());

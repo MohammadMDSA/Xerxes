@@ -87,8 +87,8 @@ void Xerxes::Editor::Editor::Initialize(HWND window, int width, int height)
 	m_timer.SetFixedTimeStep(true);
 	m_timer.SetTargetElapsedSeconds(1.0 / 60);
 
-	rootManager->GetResourceManager()->LoadAllSubdirectoriesResources("assets");
-	ResourceM()->InitializeResources();
+	XResourceM()->LoadAllSubdirectoriesResources("assets");
+	XResourceM()->InitializeResources();
 
 	rootManager->GetInputManager()->GetMouse()->SetWindow(window);
 
@@ -120,7 +120,7 @@ void Xerxes::Editor::Editor::Update(StepTimer const& timer)
 	rootManager->Update(elapsedTime);
 	sceneWindow->Update(elapsedTime);
 	inspectorWindow->Update(elapsedTime);
-	SceneM()->Update(elapsedTime);
+	XSceneM()->Update(elapsedTime);
 
 	// Handling layout
 	int newSceneWidth = xmax(sceneWindow->GetWidth(), 1);

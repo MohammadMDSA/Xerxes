@@ -34,6 +34,24 @@ bool Xerxes::Engine::Graphics::ParticleSystem::Initialize(ID3D11Device* device)
 	if (!result)
 		return false;
 
+	D3D11_BLEND_DESC blendStateDescription;
+	// Clear the blend state description.
+	ZeroMemory(&blendStateDescription, sizeof(D3D11_BLEND_DESC));
+
+	// Create an alpha enabled blend state description.
+	blendStateDescription.RenderTarget[0].BlendEnable = TRUE;
+	blendStateDescription.RenderTarget[0].SrcBlend = D3D11_BLEND_ONE;
+	blendStateDescription.RenderTarget[0].DestBlend = D3D11_BLEND_ONE;
+	blendStateDescription.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
+	blendStateDescription.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
+	blendStateDescription.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
+	blendStateDescription.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
+	blendStateDescription.RenderTarget[0].RenderTargetWriteMask = 0x0f;
+
+	// Create the blend state using the description.
+	result = device->CreateBlendState(&blendStateDescription, blend.ReleaseAndGetAddressOf());
+	DX::ThrowIfFailed(result);
+
 	return true;
 }
 
@@ -44,6 +62,7 @@ void Xerxes::Engine::Graphics::ParticleSystem::Shutdown()
 
 	// Release the particle system
 	ShutdownParticleSystem();
+	blend.Reset();
 
 	return;
 }
@@ -77,6 +96,7 @@ void Xerxes::Engine::Graphics::ParticleSystem::Render(ID3D11DeviceContext* conte
 	RenderBuffers(context);
 
 	context->IASetInputLayout(effectRes->GetInputLayout());
+	context->OMSetBlendState(blend.Get(), DirectX::Colors::Black, 0xFFFFFFFF);
 
 	if (auto particleEffect = dynamic_cast<ParticleEffect*>(effectRes->GetResource()); particleEffect)
 	{
@@ -277,7 +297,7 @@ void Xerxes::Engine::Graphics::ParticleSystem::EmitParticles(float time)
 			((float)rand() - (float)rand()) / RAND_MAX,
 			((float)rand() - (float)rand()) / RAND_MAX,
 			((float)rand() - (float)rand()) / RAND_MAX
-		); 
+		);
 		pos *= particleDeviation;
 		part.position = pos;
 
@@ -305,7 +325,7 @@ void Xerxes::Engine::Graphics::ParticleSystem::EmitParticles(float time)
 		// Now that we know the location to insert into we need to copy the array over by one position from the index to make room for the new particles
 		int i = currentParticleCount;
 		int j = i - 1;
-		
+
 		while (i > index)
 		{
 			particleList[i].position = particleList[j].position;
@@ -346,7 +366,7 @@ void Xerxes::Engine::Graphics::ParticleSystem::KillParticles()
 			currentParticleCount--;
 
 			// Now shift all the live particles back up the array to erase the destroyed paticle and keep the array sorted correctly
-			for (int j = i; j < maxParticles  - 1; j++)
+			for (int j = i; j < maxParticles - 1; j++)
 			{
 				particleList[j].position = particleList[j + 1].position;
 				particleList[j].color = particleList[j + 1].color;
