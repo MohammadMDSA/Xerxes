@@ -8,7 +8,7 @@ using namespace boost::filesystem;
 using namespace DirectX;
 
 ResourceManager::ResourceManager() :
-	createdResources(0),
+	createdDefaultResources(0),
 	lastId(-1)
 {
 }
@@ -100,12 +100,32 @@ GameResourceBase* ResourceManager::CreateNormalMapEffect(std::string name)
 void ResourceManager::SetDeviceContext(ID3D11DeviceContext* context)
 {
 	this->context = context;
-	if (!createdResources)
+	InitializeResources();
+}
+
+void ResourceManager::SetDevice(ID3D11Device* device)
+{
+	this->device = device;
+}
+
+ID3D11DeviceContext* ResourceManager::GetDeviceContext()
+{
+	return context;
+}
+
+ID3D11Device* ResourceManager::GetDevice()
+{
+	return device;
+}
+
+void ResourceManager::InitializeResources()
+{
+	if (!createdDefaultResources)
 	{
 		AddDefaultGeometricPrimitives();
 		AddDefaultEffects();
 		AddDefaultBatcch();
-		createdResources = true;
+		createdDefaultResources = true;
 	}
 	for (auto& it : ResourceGroup<ModelResource>::group)
 	{
@@ -123,21 +143,6 @@ void ResourceManager::SetDeviceContext(ID3D11DeviceContext* context)
 	{
 		it.second->Initialize(context);
 	}
-}
-
-void ResourceManager::SetDevice(ID3D11Device* device)
-{
-	this->device = device;
-}
-
-ID3D11DeviceContext* ResourceManager::GetDeviceContext()
-{
-	return context;
-}
-
-ID3D11Device* ResourceManager::GetDevice()
-{
-	return device;
 }
 
 int ResourceManager::GetNewId()

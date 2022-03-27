@@ -35,6 +35,8 @@ public:
 	ID3D11DeviceContext* GetDeviceContext();
 	ID3D11Device* GetDevice();
 
+	void InitializeResources();
+
 	// Inherited via IManager
 	virtual void OnInit() override;
 	virtual void OnShutdown() override;
@@ -59,7 +61,7 @@ private:
 	ResourceType IsResourceSupported(std::string extension);
 
 	int lastId;
-	bool createdResources;
+	bool createdDefaultResources;
 
 	ID3D11Device* device;
 	ID3D11DeviceContext* context;
