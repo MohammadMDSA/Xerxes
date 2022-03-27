@@ -99,6 +99,18 @@ void Xerxes::Engine::Graphics::Effects::ParticleEffect::SetWorld(FXMMATRIX value
 void Xerxes::Engine::Graphics::Effects::ParticleEffect::SetView(FXMMATRIX value)
 {
 	this->view = value;
+	this->view._11 = 1;
+	this->view._12 = 0;
+	this->view._13 = 0;
+
+	this->view._21 = 0;
+	this->view._22 = 1;
+	this->view._23 = 0;
+
+	this->view._31 = 0;
+	this->view._32 = 0;
+	this->view._33 = 1;
+
 	dirtyFlags |= DirtyWVPMatrix;
 }
 
@@ -111,8 +123,8 @@ void Xerxes::Engine::Graphics::Effects::ParticleEffect::SetProjection(FXMMATRIX 
 void XM_CALLCONV Xerxes::Engine::Graphics::Effects::ParticleEffect::SetMatrices(DirectX::FXMMATRIX world, DirectX::CXMMATRIX view, DirectX::CXMMATRIX projection)
 {
 	this->world = world;
-	this->view = view;
-	this->proj = proj;
+	this->SetView(view);
+	this->proj = projection;
 	dirtyFlags |= DirtyWVPMatrix;
 }
 
