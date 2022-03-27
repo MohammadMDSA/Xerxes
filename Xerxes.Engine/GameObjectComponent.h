@@ -3,8 +3,8 @@
 #include <memory>
 #include <string>
 
-#include "GameObject.h"
 #include "XPreprocessors.h"
+#include "IInspectorDrawer.h"
 
 #include "Libs/imgui/imgui.h"
 #include "Libs/imgui/ImGuizmo.h"

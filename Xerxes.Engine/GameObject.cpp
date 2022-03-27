@@ -202,6 +202,11 @@ void GameObject::OnInspector()
 			{
 				this->AttachComponent<LightComponent>();
 			}
+		if (!scene->registry.try_get<ParticleSystemComponent>(entityId))
+			if (ImGui::Selectable("Particle System"))
+			{
+				this->AttachComponent<ParticleSystemComponent>();
+			}
 		ImGui::EndPopup();
 	}
 }
@@ -268,6 +273,8 @@ std::vector<GameObjectComponent*> GameObject::GetComponents() const
 			case entt::type_hash<MeshRenderer>():
 				result.push_back(&scene->registry.get<MeshRenderer>(entityId));
 				break;
+			case entt::type_hash<ParticleSystemComponent>():
+				result.push_back(&scene->registry.get<ParticleSystemComponent>(entityId));
 			default:
 				break;
 			}

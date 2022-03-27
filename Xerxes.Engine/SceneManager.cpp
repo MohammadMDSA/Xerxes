@@ -15,10 +15,16 @@ SceneManager::~SceneManager()
 	delete scene;
 }
 
+void SceneManager::Start()
+{
+	for (auto obj : GetCurrentScene()->GetGameObjects())
+		obj->OnAwake();
+}
+
 void SceneManager::Update(float deltaTime)
 {
 
-	for (auto obj : gameObjects)
+	for (auto obj : GetCurrentScene()->GetGameObjects())
 		obj->OnUpdate(deltaTime);
 
 }

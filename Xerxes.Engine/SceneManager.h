@@ -8,7 +8,8 @@ class SceneManager : public IManager
 public:
 	SceneManager();
 	~SceneManager();
-
+	
+	void			Start();
 	void			Update(float deltaTime);
 	void			OnRender(DirectX::SimpleMath::Matrix view, DirectX::SimpleMath::Matrix proj);
 	void			OnGizmo(ImGuizmo::OPERATION manipulationOperation, ImGuizmo::MODE manipulationMode);
@@ -22,7 +23,6 @@ public:
 
 private:
 
-	std::vector<GameObject*>			gameObjects;
 	Scene*								scene;
 };
 

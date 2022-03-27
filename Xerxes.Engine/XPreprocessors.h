@@ -20,6 +20,25 @@
 #define xmin(a,b)            (((a) < (b)) ? (a) : (b))
 #endif
 
+///////////////////////////////////////
+//----------Engine Common------------//
+///////////////////////////////////////
+
+#define RootM() RootManager::GetInstance()
+
+#define CameraM() RootManager::GetInstance()->GetCameraManager()
+
+#define ResourceM() RootManager::GetInstance()->GetResourceManager()
+
+#define ResourceMTexture() RootManager::GetInstance()->GetResourceManager()->ResourceGroup<TextureResource>
+
+#define ResourceMEffect() RootManager::GetInstance()->GetResourceManager()->ResourceGroup<EffectResource>
+
+#define ResourceMModel() RootManager::GetInstance()->GetResourceManager()->ResourceGroup<ModelResource>
+
+#define ResourceMGeoPri() RootManager::GetInstance()->GetResourceManager()->ResourceGroup<GeometricPrimitiveResource>
+
+#define SceneM() RootManager::GetInstance()->GetSceneManager()
 
 ///////////////////////////////////////
 //-----------Components--------------//

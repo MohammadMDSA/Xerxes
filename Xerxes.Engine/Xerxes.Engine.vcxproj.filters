@@ -204,6 +204,9 @@
     <ClInclude Include="ReadData.h">
       <Filter>Source\Public\Utils</Filter>
     </ClInclude>
+    <ClInclude Include="ParticleSystemComponent.h">
+      <Filter>Source\Public\GameObjectComponent</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Xerxes.Engine.cpp">
@@ -304,6 +307,9 @@
     </ClCompile>
     <ClCompile Include="ParticleEffect.cpp">
       <Filter>Source\Private\Graphics\Effects</Filter>
+    </ClCompile>
+    <ClCompile Include="ParticleSystemComponent.cpp">
+      <Filter>Source\Private\GameObjectComponent</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -7,6 +7,7 @@
 #include "SceneManager.h"
 #include "SelectionManager.h"
 #include "LightManager.h"
+#include "XPreprocessors.h"
 
 class RootManager
 {

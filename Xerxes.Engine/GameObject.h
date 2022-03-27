@@ -14,15 +14,11 @@
 #include "boost/serialization/access.hpp"
 #include "boost/serialization/split_member.hpp"
 
-class GameObjectComponent;
-class LightComponent;
-class MeshRenderer;
-class RootManager;
+#include "MeshRenderer.h"
+#include "LightComponent.h"
+#include "ParticleSystemComponent.h"
 
-template<typename Type>
-Type& getEntityComponent(entt::registry& registry, entt::entity entity) {
-	return registry.template get<Type>(entity);
-}
+class RootManager;
 
 
 class GameObject : public IInspectorDrawer
@@ -42,7 +38,8 @@ public:
 	virtual void			OnInspector() override;
 
 	template<class T>
-	inline T&						AttachCopiedComponent(const T& copyFrom) {
+	inline T&				AttachCopiedComponent(const T& copyFrom)
+	{
 		auto& comp = GetScene()->registry.emplace<T>(entityId, copyFrom);
 		auto& goComp = static_cast<GameObjectComponent&>(comp);
 		goComp.gameObject = this;
@@ -114,15 +111,18 @@ private:
 			const auto cname = comp->GetName();
 			ar& cname;
 			ar& (*comp);
-			/*if (cname == XNameOf(LightComponent))
+			if (cname == XNameOf(LightComponent))
 			{
 				ar& dynamic_cast<LightComponent*>(comp);
 			}
 			else if (cname == XNameOf(MeshRenderer))
 			{
 				ar& dynamic_cast<MeshRenderer*>(comp);
-
-			}*/
+			}
+			else if (cname == XNameOf(ParticleSystemComponent))
+			{
+				ar& dynamic_cast<ParticleSystemComponent*>(comp);
+			}
 		}
 	}
 	template<class Archive>
@@ -156,6 +156,12 @@ private:
 				MeshRenderer msh;
 				ar& msh;
 				AttachCopiedComponent<MeshRenderer>(msh);
+			}
+			else if (cname == XNameOf(ParticleSystemComponent))
+			{
+				ParticleSystemComponent cmp;
+				ar& cmp;
+				AttachCopiedComponent<ParticleSystemComponent>(cmp);
 			}
 		}
 	}
