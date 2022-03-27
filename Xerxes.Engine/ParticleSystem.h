@@ -3,6 +3,7 @@
 #include "EffectResource.h"
 
 using namespace Microsoft::WRL;
+using namespace DirectX::SimpleMath;
 
 using VertexType = DirectX::VertexPositionColorTexture;
 
@@ -22,7 +23,7 @@ namespace Xerxes
 
 				bool						Initialize(ID3D11Device* device);
 				void						Shutdown();
-				bool						Update(float time, ID3D11DeviceContext* context);
+				bool						Update(float time, ID3D11DeviceContext* context, const Matrix& view);
 				void						Render(ID3D11DeviceContext* context, EffectResource* effectRes);
 
 				ID3D11ShaderResourceView*	GetTexture();
@@ -50,7 +51,7 @@ namespace Xerxes
 				void						UpdateParticles(float time);
 				void						KillParticles();
 
-				bool						UpdateBuffers(ID3D11DeviceContext* context);
+				bool						UpdateBuffers(ID3D11DeviceContext* context, const Matrix& view);
 				
 				void						RenderBuffers(ID3D11DeviceContext* context);
 
