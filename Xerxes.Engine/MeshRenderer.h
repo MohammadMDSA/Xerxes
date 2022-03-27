@@ -27,7 +27,7 @@ public:
 private:
 	friend class boost::serialization::access;
 
-	std::unique_ptr<DirectX::CommonStates> m_states;
+	std::unique_ptr<DirectX::CommonStates> states;
 	int meshResourceId;
 	bool usingPrimitives;
 	int effectResourceId;

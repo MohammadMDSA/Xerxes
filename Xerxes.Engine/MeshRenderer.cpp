@@ -76,14 +76,14 @@ void MeshRenderer::OnRender(const DirectX::SimpleMath::Matrix& view, const Direc
 				}
 
 			});
-		resource->GetResource()->Draw(context, *m_states, world, view, proj);
+		resource->GetResource()->Draw(context, *states, world, view, proj);
 	}
 }
 
 void MeshRenderer::OnStart()
 {
 	auto resourceManager = RootManager::GetInstance()->GetResourceManager();
-	m_states = std::make_unique<CommonStates>(resourceManager->GetDevice());
+	states = std::make_unique<CommonStates>(resourceManager->GetDevice());
 }
 
 void MeshRenderer::OnAwake()
@@ -180,6 +180,7 @@ void MeshRenderer::OnInspector()
 
 void MeshRenderer::OnDestroy()
 {
+	states.release();
 }
 
 void MeshRenderer::SetModelResourceId(int id)
