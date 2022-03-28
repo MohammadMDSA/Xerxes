@@ -1,16 +1,19 @@
 #include "pch.h"
 #include "EffectResource.h"
 #include "ParticleEffect.h"
+#include "VertexPositionOffsetColorTexture.h"
 #include "Libs/imgui/imgui.h"
 
 using namespace DirectX;
 using namespace Xerxes::Engine::Graphics::Effects;
+using namespace Xerxes::Engine::Graphics::VertexTypes;
 
 const std::string EffectResource::XEffectResourceType_Basic = "BasicEffect";
 const std::string EffectResource::XEffectResourceType_NormalMap = "NormalMapEffect";
 const std::string EffectResource::XEffectResourceType_Particle = "ParticleEffect";
 const std::string EffectResource::XEffectVertexType_VertexPositionColor = "VertexPositionColor";
 const std::string EffectResource::XEffectVertexType_VertexPositionColorTexture = "VertexPositionColorTexture";
+const std::string EffectResource::XEffectVertexType_VertexPositionOffsetColorTexture = "VertexPositionOffsetColorTexture";
 const std::string EffectResource::XEffectVertexType_VertexPositionNormal = "VertexPositionNormal";
 const std::string EffectResource::XEffectVertexType_VertexPositionNormalTexture = "VertexPositionNormalTexture";
 
@@ -65,7 +68,8 @@ void EffectResource::CreateInputLayout(ID3D11Device* device)
 		DX::ThrowIfFailed(DirectX::CreateInputLayoutFromEffect<DirectX::VertexPositionNormal>(device, effect, inputLayout.ReleaseAndGetAddressOf()));
 	else if (vertexType == XEffectVertexType_VertexPositionColorTexture)
 		DX::ThrowIfFailed(DirectX::CreateInputLayoutFromEffect<DirectX::VertexPositionColorTexture>(device, effect, inputLayout.ReleaseAndGetAddressOf()));
-
+	else if (vertexType == XEffectVertexType_VertexPositionOffsetColorTexture)
+		DX::ThrowIfFailed(DirectX::CreateInputLayoutFromEffect< VertexPositionOffsetColorTexture>(device, effect, inputLayout.ReleaseAndGetAddressOf()));
 }
 
 void EffectResource::Initialize(ID3D11DeviceContext* context)

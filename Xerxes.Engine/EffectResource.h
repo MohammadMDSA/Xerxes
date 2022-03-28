@@ -32,6 +32,7 @@ public:
 	// Effect vertext input type enums
 	static const std::string XEffectVertexType_VertexPositionColor;
 	static const std::string XEffectVertexType_VertexPositionColorTexture;
+	static const std::string XEffectVertexType_VertexPositionOffsetColorTexture;
 	static const std::string XEffectVertexType_VertexPositionNormal;
 	static const std::string XEffectVertexType_VertexPositionNormalTexture;
 

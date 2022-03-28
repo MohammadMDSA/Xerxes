@@ -143,6 +143,7 @@
     <ClInclude Include="SelectionManager.h" />
     <ClInclude Include="TextureResource.h" />
     <ClInclude Include="Transform.h" />
+    <ClInclude Include="VertexPositionOffsetColorTexture.h" />
     <ClInclude Include="XPreprocessors.h" />
   </ItemGroup>
   <ItemGroup>
@@ -182,6 +183,7 @@
     <ClCompile Include="SelectionManager.cpp" />
     <ClCompile Include="TextureResource.cpp" />
     <ClCompile Include="Transform.cpp" />
+    <ClCompile Include="VertexPositionOffsetColorTexture.cpp" />
     <ClCompile Include="Xerxes.Engine.cpp" />
   </ItemGroup>
   <ItemGroup>
