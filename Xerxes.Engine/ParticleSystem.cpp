@@ -49,8 +49,12 @@ bool Xerxes::Engine::Graphics::ParticleSystem::Initialize(ID3D11Device* device)
 	blendStateDescription.RenderTarget[0].RenderTargetWriteMask = 0x0f;
 
 	// Create the blend state using the description.
-	result = device->CreateBlendState(&blendStateDescription, blend.ReleaseAndGetAddressOf());
-	DX::ThrowIfFailed(result);
+	//result = device->CreateBlendState(&blendStateDescription, blend.ReleaseAndGetAddressOf());
+	//DX::ThrowIfFailed(result);
+
+	states = std::make_unique<DirectX::CommonStates>(device);
+	//depthStencil = states->DepthRead();
+
 
 	return true;
 }
@@ -62,7 +66,9 @@ void Xerxes::Engine::Graphics::ParticleSystem::Shutdown()
 
 	// Release the particle system
 	ShutdownParticleSystem();
-	blend.Reset();
+	states.release();
+	//blend.Reset();
+	//delete depthStencil;
 
 	return;
 }
@@ -96,7 +102,9 @@ void Xerxes::Engine::Graphics::ParticleSystem::Render(ID3D11DeviceContext* conte
 	RenderBuffers(context);
 
 	context->IASetInputLayout(effectRes->GetInputLayout());
-	context->OMSetBlendState(blend.Get(), DirectX::Colors::Black, 0xFFFFFFFF);
+	context->OMSetBlendState(states->Additive(), nullptr, 0xFFFFFFFF);
+	context->OMSetDepthStencilState(states->DepthRead(), 0);
+	context->RSSetState(states->CullCounterClockwise());
 
 	if (auto particleEffect = dynamic_cast<ParticleEffect*>(effectRes->GetResource()); particleEffect)
 	{

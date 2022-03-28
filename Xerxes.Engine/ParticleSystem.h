@@ -77,8 +77,7 @@ namespace Xerxes
 				
 				ComPtr<ID3D11Buffer>		vertexBuffer;
 				ComPtr<ID3D11Buffer>		indexBuffer;
-				ComPtr<ID3D11BlendState>	blend;
-
+				std::unique_ptr<DirectX::CommonStates> states;
 			};
 
 		}

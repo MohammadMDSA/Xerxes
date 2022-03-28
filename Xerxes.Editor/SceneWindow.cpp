@@ -188,6 +188,7 @@ void SceneWindow::OnRender(DirectX::SimpleMath::Matrix view, DirectX::SimpleMath
 	auto res = resourceManager->ResourceGroup<EffectResource>::GetById(effectId);
 	auto effect = dynamic_cast<BasicEffect*>(res->GetResource());
 
+	context->OMSetDepthStencilState(states->DepthRead(), 0);
 	context->OMSetBlendState(states->Opaque(), nullptr, 0xFFFFFFFF);
 	context->RSSetState(states->CullNone());
 
