@@ -22,14 +22,18 @@ public:
 	virtual void OnInspector() override;
 	virtual void OnDestroy() override;
 
-	void							SetColor(DirectX::SimpleMath::Vector3 color);
 	const DirectX::SimpleMath::Vector3&	GetColor() const;
 	const DirectX::SimpleMath::Vector3&	GetDirection() const;
+	const float& GetAmbientIntencity() const;
+
+	void SetColor(DirectX::SimpleMath::Vector3 color);
+	void SetAmbientIntencity(float intencity);
 
 private:
 	friend class boost::serialization::access;
 
 	DirectX::SimpleMath::Vector3	color;
+	float							ambientIntencity;
 
 	template<class Archive>
 	void serialize(Archive& ar, const unsigned int version)
@@ -38,6 +42,7 @@ private:
 		ar& color.x;
 		ar& color.y;
 		ar& color.z;
+		ar& ambientIntencity;
 	}
 
 };

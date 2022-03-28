@@ -36,7 +36,7 @@ void LightManager::ApplyToEffect(DirectX::IEffectLights* effect)
 	effect->SetLightDiffuseColor(0, color);
 	effect->SetLightDirection(0, light->GetDirection());
 	effect->SetLightSpecularColor(0, color);
-	effect->SetAmbientLightColor(color * 0.1);
+	effect->SetAmbientLightColor(color * light->GetAmbientIntencity());
 }
 
 void LightManager::OnInit()

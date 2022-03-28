@@ -9,7 +9,8 @@ XCOMP_GENERATE_DEFINITION(LightComponent)
 
 LightComponent::LightComponent() :
 	GameObjectComponent(XNameOf(LightComponent)),
-	color(Colors::Blue)
+	color(Colors::White),
+	ambientIntencity(.2)
 {
 	XCOMP_GENERATE_CONSTRUCTOR(LightComponent)
 	RootManager::GetInstance()->GetLightManager()->SetDirectionalLight(this);
@@ -51,15 +52,11 @@ void LightComponent::OnInspector()
 	ImGui::SameLine();
 	ImGui::ColorEdit3("Color", (float*)&color, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoLabel | ImGuiColorEditFlags_NoAlpha);
 
+	ImGui::DragFloat("Intencity", &ambientIntencity, 0.01, 0, 1);
 }
 
 void LightComponent::OnDestroy()
 {
-}
-
-void LightComponent::SetColor(DirectX::SimpleMath::Vector3 color)
-{
-	this->color = color;
 }
 
 const DirectX::SimpleMath::Vector3& LightComponent::GetColor() const
@@ -70,4 +67,19 @@ const DirectX::SimpleMath::Vector3& LightComponent::GetColor() const
 const DirectX::SimpleMath::Vector3& LightComponent::GetDirection() const
 {
 	return gameObject->transform().Forward();
+}
+
+const float& LightComponent::GetAmbientIntencity() const
+{
+	return this->ambientIntencity;
+}
+
+void LightComponent::SetColor(DirectX::SimpleMath::Vector3 color)
+{
+	this->color = color;
+}
+
+void LightComponent::SetAmbientIntencity(float intencity)
+{
+	this->ambientIntencity = intencity;
 }
