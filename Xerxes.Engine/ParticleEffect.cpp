@@ -56,14 +56,28 @@ void Xerxes::Engine::Graphics::Effects::ParticleEffect::Apply(ID3D11DeviceContex
 	if (dirtyFlags & DirtyWVPMatrix)
 	{
 		worldViewProj = world * view * proj;
+		Vector3 tmp;
+		Quaternion rot;
+		world.Decompose(tmp, rot, tmp);
+		rot.Inverse(inverseRotation);
 		dirtyFlags &= ~DirtyWVPMatrix;
 		dirtyFlags |= DirtyConstantBuffer;
 	}
 
 	if (dirtyFlags & DirtyConstantBuffer)
 	{
+		Matrix iv = this->view.Invert();
+		iv._41 = 0.f;
+		iv._42 = 0.f;
+		iv._43 = 0.f;
+		iv._14 = 0.f;
+		iv._24 = 0.f;
+		iv._34 = 0.f;
+
 		ParticleEffectConstants constants;
 		constants.worldViewProj = worldViewProj.Transpose();
+		constants.iViewRot = iv.Transpose();
+		constants.iRot = Matrix::CreateFromQuaternion(inverseRotation).Transpose();
 		constantBuffer.SetData(context, constants);
 
 		dirtyFlags &= ~DirtyConstantBuffer;

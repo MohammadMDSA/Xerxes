@@ -34,27 +34,7 @@ bool Xerxes::Engine::Graphics::ParticleSystem::Initialize(ID3D11Device* device)
 	if (!result)
 		return false;
 
-	D3D11_BLEND_DESC blendStateDescription;
-	// Clear the blend state description.
-	ZeroMemory(&blendStateDescription, sizeof(D3D11_BLEND_DESC));
-
-	// Create an alpha enabled blend state description.
-	blendStateDescription.RenderTarget[0].BlendEnable = TRUE;
-	blendStateDescription.RenderTarget[0].SrcBlend = D3D11_BLEND_ONE;
-	blendStateDescription.RenderTarget[0].DestBlend = D3D11_BLEND_ONE;
-	blendStateDescription.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
-	blendStateDescription.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
-	blendStateDescription.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
-	blendStateDescription.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
-	blendStateDescription.RenderTarget[0].RenderTargetWriteMask = 0x0f;
-
-	// Create the blend state using the description.
-	//result = device->CreateBlendState(&blendStateDescription, blend.ReleaseAndGetAddressOf());
-	//DX::ThrowIfFailed(result);
-
 	states = std::make_unique<DirectX::CommonStates>(device);
-	//depthStencil = states->DepthRead();
-
 
 	return true;
 }
@@ -73,7 +53,7 @@ void Xerxes::Engine::Graphics::ParticleSystem::Shutdown()
 	return;
 }
 
-bool Xerxes::Engine::Graphics::ParticleSystem::Update(float time, ID3D11DeviceContext* context, const Matrix& view)
+bool Xerxes::Engine::Graphics::ParticleSystem::Update(float time, ID3D11DeviceContext* context)
 {
 	bool result;
 
@@ -89,7 +69,7 @@ bool Xerxes::Engine::Graphics::ParticleSystem::Update(float time, ID3D11DeviceCo
 	UpdateParticles(time);
 
 	// Update the dynamic vertex buffer with the new position of each particle
-	result = UpdateBuffers(context, view);
+	result = UpdateBuffers(context);
 	if (!result)
 		return false;
 
@@ -368,7 +348,7 @@ void Xerxes::Engine::Graphics::ParticleSystem::KillParticles()
 	// Kill all the particles that have gone below a certain height range
 	for (int i = 0; i < maxParticles; i++)
 	{
-		if (particleList[i].active && (particleList[i].position.y < -3.f || (accumulatedTime - xmax(particleList[i].creationTime, 0)) > lifeTime))
+		if (particleList[i].active && (accumulatedTime - xmax(particleList[i].creationTime, 0)) > lifeTime)
 		{
 			particleList[i].active = false;
 			currentParticleCount--;
@@ -387,7 +367,7 @@ void Xerxes::Engine::Graphics::ParticleSystem::KillParticles()
 	}
 }
 
-bool Xerxes::Engine::Graphics::ParticleSystem::UpdateBuffers(ID3D11DeviceContext* context, const Matrix& view)
+bool Xerxes::Engine::Graphics::ParticleSystem::UpdateBuffers(ID3D11DeviceContext* context)
 {
 	int index;
 	HRESULT result;
@@ -397,40 +377,35 @@ bool Xerxes::Engine::Graphics::ParticleSystem::UpdateBuffers(ID3D11DeviceContext
 	// Initialize vertex array to zeros at first
 	memset(vertices, 0, (sizeof(VertexType) * vertexCount));
 
-	Matrix inView;
-	view.Invert(inView);
-	inView._14 = 0;
-	inView._24 = 0;
-	inView._34 = 0;
-	inView._41 = 0;
-	inView._42 = 0;
-	inView._43 = 0;
-
 	// Now build the vertex array from the particle list array
 	// Each particle is a quat made out of two triangle
 	index = 0;
 	for (int i = 0; i < currentParticleCount; i++)
 	{
 		// Bottom left
-		vertices[index].position = particleList[i].position + Vector3::Transform(Vector3(-particleSize, -particleSize, 0.f), inView);
+		vertices[index].position = particleList[i].position;
+		vertices[index].offset = Vector3(-particleSize, -particleSize, 0.f);
 		vertices[index].textureCoordinate = Vector2(0.f, 1.f);
 		vertices[index].color = Vector4(particleList[i].color.x, particleList[i].color.y, particleList[i].color.z, 1.f);
 		index++;
 
 		// Top left
-		vertices[index].position = particleList[i].position + Vector3::Transform(Vector3(-particleSize, particleSize, 0.f), inView);
+		vertices[index].position = particleList[i].position;
+		vertices[index].offset = Vector3(-particleSize, particleSize, 0.f);
 		vertices[index].textureCoordinate = Vector2(0.f, 0.f);
 		vertices[index].color = Vector4(particleList[i].color.x, particleList[i].color.y, particleList[i].color.z, 1.f);
 		index++;
 
 		// Bottom right
-		vertices[index].position = particleList[i].position + Vector3::Transform(Vector3(particleSize, -particleSize, 0.f), inView);
+		vertices[index].position = particleList[i].position;
+		vertices[index].offset = Vector3(particleSize, -particleSize, 0.f);
 		vertices[index].textureCoordinate = Vector2(1.f, 1.f);
 		vertices[index].color = Vector4(particleList[i].color.x, particleList[i].color.y, particleList[i].color.z, 1.f);
 		index++;
 
 		// Top right
-		vertices[index].position = particleList[i].position + Vector3::Transform(Vector3(particleSize, particleSize, 0.f), inView);
+		vertices[index].position = particleList[i].position;
+		vertices[index].offset = Vector3(particleSize, particleSize, 0.f);
 		vertices[index].textureCoordinate = Vector2(1.f, 0.f);
 		vertices[index].color = Vector4(particleList[i].color.x, particleList[i].color.y, particleList[i].color.z, 1.f);
 		index++;

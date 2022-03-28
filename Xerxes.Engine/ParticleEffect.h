@@ -40,6 +40,8 @@ namespace Xerxes
 					struct __declspec(align(16)) ParticleEffectConstants
 					{
 						DirectX::XMMATRIX worldViewProj;
+						DirectX::XMMATRIX iViewRot;
+						DirectX::XMMATRIX iRot;
 					};
 
 					DirectX::ConstantBuffer<ParticleEffectConstants> constantBuffer;
@@ -53,6 +55,7 @@ namespace Xerxes
 					DirectX::SimpleMath::Matrix view;
 					DirectX::SimpleMath::Matrix proj;
 					DirectX::SimpleMath::Matrix worldViewProj;
+					DirectX::SimpleMath::Quaternion inverseRotation;
 
 					ID3D11SamplerState*			sampleState;
 

@@ -2,6 +2,8 @@
 cbuffer MatrixBuffer
 {
 	matrix WorldViewProj;
+	matrix IViewRot;
+	matrix IRot;
 };
 
 
@@ -10,6 +12,7 @@ cbuffer MatrixBuffer
 struct VertexInputType
 {
 	float4 position : SV_POSITION;
+	float4 offset : POSITION;
 	float2 tex : TEXCOORD0;
 	float4 color : COLOR;
 };
@@ -28,10 +31,15 @@ PixelInputType main(VertexInputType input)
 
 
 	// Change the position vector to be 4 units for proper matrix calculations.
-	input.position.w = 1.0f;
+	input.position.w = 0.f;
+	input.offset.w = 1.f;
+
+	output.position = mul(input.offset, IViewRot);
+	output.position = mul(output.position, IRot);
+	output.position += input.position;
 
 	// Calculate the position of the vertex against the world, view, and projection matrices.
-	output.position = mul(input.position, WorldViewProj);
+	output.position = mul(output.position, WorldViewProj);
 
 	// Store the texture coordinates for the pixel shader.
 	output.tex = input.tex;

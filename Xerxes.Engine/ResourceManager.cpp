@@ -240,7 +240,7 @@ void ResourceManager::AddDefaultEffects()
 		greParticle->name = "Particle Effect";
 		greParticle->path = "";
 		greParticle->type = EffectResource::XEffectResourceType_Particle;
-		greParticle->SetVertexType(EffectResource::XEffectVertexType_VertexPositionColorTexture);
+		greParticle->SetVertexType(EffectResource::XEffectVertexType_VertexPositionOffsetColorTexture);
 		greParticle->SetVertextColorEnabled(true);
 		greParticle->SetSystemResource(true);
 		ResourceGroup<EffectResource>::group.insert({ greParticle->id, greParticle });

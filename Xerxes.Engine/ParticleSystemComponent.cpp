@@ -28,6 +28,7 @@ void ParticleSystemComponent::OnRender(const DirectX::SimpleMath::Matrix& view, 
 		particleEffect->SetProjection(proj);
 	}
 	particleSystem->Render(context, effectRes);
+
 }
 
 void ParticleSystemComponent::OnStart()
@@ -50,12 +51,12 @@ void ParticleSystemComponent::OnUpdate(float deltaTime)
 	auto root = RootManager::GetInstance();
 	auto resourceManager = root->GetResourceManager();
 	auto camera = root->GetCameraManager()->GetActiveCamera();
-	particleSystem->Update(deltaTime, resourceManager->GetDeviceContext(), camera->GetView());
+	particleSystem->Update(deltaTime, resourceManager->GetDeviceContext());
 
 	auto effectRes = XResourceMEffect()::GetById(effectId);
 	if (auto particleEffect = dynamic_cast<ParticleEffect*>(effectRes->GetResource()); particleEffect)
 	{
-		particleEffect->SetWorld(gameObject->transform().GetWorldMatrix());
+		particleEffect->SetWorld(gameObject->transform().GetUnscaledWorld());
 	}
 }
 

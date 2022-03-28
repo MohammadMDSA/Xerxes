@@ -1,11 +1,12 @@
 #pragma once
 #include "TextureResource.h"
 #include "EffectResource.h"
+#include "VertexPositionOffsetColorTexture.h"
 
 using namespace Microsoft::WRL;
 using namespace DirectX::SimpleMath;
 
-using VertexType = DirectX::VertexPositionColorTexture;
+using VertexType = Xerxes::Engine::Graphics::VertexTypes::VertexPositionOffsetColorTexture;
 
 namespace Xerxes
 {
@@ -23,7 +24,7 @@ namespace Xerxes
 
 				bool						Initialize(ID3D11Device* device);
 				void						Shutdown();
-				bool						Update(float time, ID3D11DeviceContext* context, const Matrix& view);
+				bool						Update(float time, ID3D11DeviceContext* context);
 				void						Render(ID3D11DeviceContext* context, EffectResource* effectRes);
 
 				ID3D11ShaderResourceView*	GetTexture();
@@ -31,6 +32,7 @@ namespace Xerxes
 				void						SetTextureId(GameResourceId id);
 
 			private:
+				friend class ParticleSystemComponent;
 
 				struct ParticleType
 				{
@@ -51,7 +53,7 @@ namespace Xerxes
 				void						UpdateParticles(float time);
 				void						KillParticles();
 
-				bool						UpdateBuffers(ID3D11DeviceContext* context, const Matrix& view);
+				bool						UpdateBuffers(ID3D11DeviceContext* context);
 				
 				void						RenderBuffers(ID3D11DeviceContext* context);
 
