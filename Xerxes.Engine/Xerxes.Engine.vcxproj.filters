@@ -73,6 +73,12 @@
     <Filter Include="Source\Private\Graphics\Effects">
       <UniqueIdentifier>{8d713a67-5df4-47bc-b414-c1c975581a83}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Private\Graphics\VertexTypes">
+      <UniqueIdentifier>{9fe0313b-4d25-4292-8d6e-cd7124a8856c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Public\Graphics\VertexTypes">
+      <UniqueIdentifier>{cf533b55-9e53-4175-829b-17e45c6ad04f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -207,6 +213,9 @@
     <ClInclude Include="ParticleSystemComponent.h">
       <Filter>Source\Public\GameObjectComponent</Filter>
     </ClInclude>
+    <ClInclude Include="VertexPositionOffsetColorTexture.h">
+      <Filter>Source\Public\Graphics\VertexTypes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Xerxes.Engine.cpp">
@@ -310,6 +319,9 @@
     </ClCompile>
     <ClCompile Include="ParticleSystemComponent.cpp">
       <Filter>Source\Private\GameObjectComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="VertexPositionOffsetColorTexture.cpp">
+      <Filter>Source\Private\Graphics\VertexTypes</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
