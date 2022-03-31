@@ -17,7 +17,7 @@ GameObject::GameObject(Scene* scn) :
 	isStarted(false),
 	scene(scn),
 	destroyed(false),
-	entityId((entt::entity) (-1))
+	entityId((entt::entity)(-1))
 {
 }
 
@@ -143,7 +143,6 @@ void GameObject::OnInspector()
 	if (ImGui::CollapsingHeader("Transform", ImGuiTreeNodeFlags_DefaultOpen))
 	{
 		// Transform properties
-		ImGui::Text("Transform");
 		auto pos = transform().GetPosition();
 		if (ImGui::DragFloat3("Position", (float*)&(pos), 0.01f))
 			transform().SetPositionV(pos);
@@ -162,6 +161,10 @@ void GameObject::OnInspector()
 			transform().SetScaleV(scl);
 	}
 
+	ImGuiStyle& style = ImGui::GetStyle();
+	float originalIndentSpace = style.IndentSpacing;
+	style.IndentSpacing = 10;
+
 	// GameObject components
 	auto components = GetComponents();
 	for (auto component : components)
@@ -172,9 +175,14 @@ void GameObject::OnInspector()
 		ImGui::Spacing();
 		ImGui::Spacing();
 		if (ImGui::CollapsingHeader(component->GetName().c_str(), ImGuiTreeNodeFlags_DefaultOpen))
+		{
+			ImGui::Indent();
 			ImGui::Spacing();
-		component->OnInspector();
+			component->OnInspector();
+			ImGui::Unindent();
+		}
 	}
+	style.IndentSpacing = originalIndentSpace;
 
 	ImGui::Spacing();
 	ImGui::Spacing();
