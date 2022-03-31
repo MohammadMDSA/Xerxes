@@ -8,7 +8,8 @@ using namespace Xerxes::Engine::Graphics::Effects;
 XCOMP_GENERATE_DEFINITION(ParticleSystemComponent)
 
 ParticleSystemComponent::ParticleSystemComponent() :
-	GameObjectComponent(XNameOf(ParticleSystemComponent))
+	GameObjectComponent(XNameOf(ParticleSystemComponent)),
+	spawnDeviationSpace(ParticleSpace::Self)
 {
 	XCOMP_GENERATE_CONSTRUCTOR(ParticleSystemComponent)
 }
@@ -24,11 +25,14 @@ void ParticleSystemComponent::OnRender(const DirectX::SimpleMath::Matrix& view, 
 	auto effectRes = XResourceMEffect()::GetById(effectId);
 	if (auto particleEffect = dynamic_cast<ParticleEffect*>(effectRes->GetResource()); particleEffect)
 	{
+		particleEffect->SetWorld(gameObject->transform().GetUnscaledWorld());
 		particleEffect->SetView(view);
 		particleEffect->SetProjection(proj);
 	}
 	particleSystem->Render(context, effectRes);
-
+	if (XSelectionM()->GetSelectedInspectorDrawer() == this->gameObject)
+		startBoundingBox->Draw(
+			Matrix::CreateScale(particleSystem->particleDeviation) * gameObject->transform().GetUnscaledWorld(), view, proj, Colors::Gray, nullptr, true);
 }
 
 void ParticleSystemComponent::OnStart()
@@ -40,6 +44,8 @@ void ParticleSystemComponent::OnStart()
 	effectId = resourceManager->ResourceGroup<EffectResource>::GetByName("Particle Effect")->GetId();
 
 	particleSystem->Initialize(resourceManager->GetDevice());
+
+	startBoundingBox = DirectX::GeometricPrimitive::CreateBox(resourceManager->GetDeviceContext(), Vector3::One);
 }
 
 void ParticleSystemComponent::OnAwake()
@@ -54,9 +60,15 @@ void ParticleSystemComponent::OnUpdate(float deltaTime)
 	particleSystem->Update(deltaTime, resourceManager->GetDeviceContext());
 
 	auto effectRes = XResourceMEffect()::GetById(effectId);
-	if (auto particleEffect = dynamic_cast<ParticleEffect*>(effectRes->GetResource()); particleEffect)
+
+	switch (spawnDeviationSpace)
 	{
-		particleEffect->SetWorld(gameObject->transform().GetUnscaledWorld());
+	case ParticleSpace::Local:
+		particleSystem->particleDeviation = gameObject->transform().GetScale();
+		break;
+	case ParticleSpace::Hierarchy:
+		particleSystem->particleDeviation = gameObject->transform().GetWorldScale();
+		break;
 	}
 }
 
@@ -66,12 +78,129 @@ void ParticleSystemComponent::OnGizmo(ImGuizmo::OPERATION manipulationOperation,
 
 void ParticleSystemComponent::OnInspector()
 {
+	auto availableWidth = ImGui::GetContentRegionAvail().x;
+
+	// Particle spawn per second
+	auto particlesPerSecond = particleSystem->GetparticlePerSecond();
+	if (ImGui::DragFloat("Particles Per Second", &particlesPerSecond))
+		particleSystem->SetparticlePerSecond(particlesPerSecond);
+
+	ImGui::Spacing();
+
+	// Particle lifetime
+	ImGui::DragFloat("Life Time", &particleSystem->particleLifeTime, 0.01);
+
+	ImGui::Spacing();
+
+	if (ImGui::CollapsingHeader("Velocity"))
+	{
+		ImGui::Indent();
+		// Particle initial velocity
+		ImGui::DragFloat3("Initial Velocity", (float*)&particleSystem->particleInitialVelocity, 0.1);
+
+		ImGui::DragFloat3("Initial Velocity Deviation", (float*)&particleSystem->particleInitialVelocityDeviation, 0.1);
+		ImGui::Unindent();
+	}
+
+	ImGui::Spacing();
+
+	if (ImGui::CollapsingHeader("Spawn Bound"))
+	{
+		ImGui::Indent();
+
+		// Particle spawn space scale type
+		static int particleSpawnScaleSelected = 0;
+		if (ImGui::Combo("Particle Spawn Scale Type", &particleSpawnScaleSelected, "Self\0Local\0Hierarchy\0\0"))
+		{
+			switch (particleSpawnScaleSelected)
+			{
+			case 0:
+				spawnDeviationSpace = ParticleSpace::Self;
+				break;
+			case 1:
+				spawnDeviationSpace = ParticleSpace::Local;
+				break;
+			default:
+				spawnDeviationSpace = ParticleSpace::Hierarchy;
+				break;
+			}
+		}
+
+		// Particle self spawn space size
+		if (spawnDeviationSpace == ParticleSpace::Self)
+		{
+			ImGui::DragFloat3("Particle Spawn Bound", (float*)&particleSystem->particleDeviation, 0.1);
+		}
+
+		ImGui::Unindent();
+	}
+
+	if (ImGui::CollapsingHeader("Color"))
+	{
+		ImGui::Indent();
+
+		ImGui::ColorEdit4("Initial Color", (float*)&particleSystem->particleInitialColor);
+
+		ImGui::DragFloat4("Initial Color Deviation", (float*)&particleSystem->particleInitialColorDeviation);
+
+		ImGui::Unindent();
+	}
+
+	if (ImGui::CollapsingHeader("Size"))
+	{
+		ImGui::Indent();
+
+		ImGui::DragFloat2("Initial Size", (float*)&particleSystem->particleInitialSize, 0.01);
+
+		ImGui::DragFloat2("Initial Size Deviation", (float*)&particleSystem->particleInitialSizeDeviation, 0.01);
+
+		ImGui::Unindent();
+	}
+
+	// Particle texture
+	{
+		auto resourceManager = XResourceM();
+		auto texResource = resourceManager->ResourceGroup<TextureResource>::GetById(particleSystem->textureReourceId);
+		std::string resourceName = texResource ? texResource->GetName() : "[select texture]";
+
+		ImGui::Spacing();
+
+		if (ImGui::Button(resourceName.c_str(), ImVec2(0.6f * availableWidth, 0)))
+			ImGui::OpenPopup("TextureSelection");
+
+		ImGui::SameLine();
+		ImGui::Text("Texture");
+
+		if (ImGui::BeginPopup("TextureSelection"))
+		{
+			auto models = resourceManager->ResourceGroup<TextureResource>::GetAll();
+			if (ImGui::Selectable("<none>"))
+			{
+				particleSystem->textureReourceId = -1;
+			}
+
+			int i = 0;
+			for (auto it : models)
+			{
+				ImGui::PushID(++i);
+				if (ImGui::Selectable((it->GetName() + " (" + it->GetType() + ")").c_str()))
+				{
+					particleSystem->textureReourceId = it->GetId();
+				}
+				ImGui::PopID();
+			}
+			ImGui::EndPopup();
+		}
+		ImGui::Spacing();
+
+	}
 }
 
 void ParticleSystemComponent::OnDestroy()
 {
 	particleSystem->Shutdown();
 	particleSystem.release();
+	startBoundingBox.release();
 }
 
 ParticleSystemComponent& ParticleSystemComponent::operator=(const ParticleSystemComponent& other)

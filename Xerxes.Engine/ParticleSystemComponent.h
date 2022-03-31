@@ -30,8 +30,18 @@ public:
 private:
 	friend class boost::serialization::access;
 
+	enum ParticleSpace
+	{
+		Self,
+		Local,
+		Hierarchy
+	};
+
 	std::unique_ptr<Xerxes::Engine::Graphics::ParticleSystem>			particleSystem;
 	GameResourceId effectId;
+
+	std::unique_ptr<DirectX::GeometricPrimitive> startBoundingBox;
+	ParticleSpace spawnDeviationSpace;
 
 	template<class Archive>
 	void serialize(Archive& ar, const unsigned int version)
