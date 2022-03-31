@@ -101,6 +101,11 @@ void EditorWindowGraphicResource::SetRenderTarget(ID3D11DeviceContext* deviceCon
 	return;
 }
 
+void Xerxes::Editor::Device::EditorWindowGraphicResource::ClearRenderTarget(ID3D11DeviceContext* deviceContext, ID3D11DepthStencilView* depthStencilView, DirectX::XMVECTORF32 color)
+{
+	ClearRenderTarget(deviceContext, depthStencilView, color[0], color[1], color[2], color[3]);
+}
+
 void EditorWindowGraphicResource::ClearRenderTarget(ID3D11DeviceContext* deviceContext, ID3D11DepthStencilView* depthStencilView,
 	float red, float green, float blue, float alpha)
 {

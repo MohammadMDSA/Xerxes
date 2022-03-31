@@ -148,7 +148,7 @@ void Xerxes::Editor::Editor::Render()
 
 	auto context = m_deviceResources->GetD3DDeviceContext();
 	auto depthStencil = m_deviceResources->GetDepthStencilView();
-	windowResource->ClearRenderTarget(context, depthStencil, 0.392156899f, 0.584313750f, 0.929411829f, 1);
+	windowResource->ClearRenderTarget(context, depthStencil, Colors::Black);
 	windowResource->SetRenderTarget(context, depthStencil, m_deviceResources->GetRenderTargetView());
 
 
@@ -246,16 +246,10 @@ void Xerxes::Editor::Editor::Clear()
 
 	// Set the viewport.
 	float width = sceneWindow->GetWidth(), height = sceneHeight;
-	//if (width > 0 && height > 0)
 	{
 		CD3D11_VIEWPORT viewport(0.f, 0.f, static_cast<float>(width), static_cast<float>(height));
 		context->RSSetViewports(1, &viewport);
 	}
-	/*else
-	{
-		CD3D11_VIEWPORT viewport(0.0f, 0.0f, static_cast<float>(m_outputWidth), static_cast<float>(m_outputHeight));
-		context->RSSetViewports(1, &viewport);
-	}*/
 }
 
 // Message handlers
@@ -386,6 +380,7 @@ void Xerxes::Editor::Editor::AppBarMenus()
 			if (ImGui::MenuItem("New GameObject"))
 			{
 				auto obj = GameObject::Create();
+				XSelectionM()->SetSelectedGameObject(obj);
 				obj->OnStart();
 			}
 			if (ImGui::MenuItem("Save"))
