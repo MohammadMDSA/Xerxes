@@ -90,6 +90,11 @@ void Xerxes::Engine::Graphics::Effects::ParticleEffect::Apply(ID3D11DeviceContex
 
 	if (texResource && texResource->IsLoaded())
 		context->PSSetShaderResources(0, 1, texResource->GetResourceAddress());
+	else
+	{
+		ID3D11ShaderResourceView* srvs[1] = { 0 };
+		context->PSSetShaderResources(0, 1, srvs);
+	}
 
 	context->VSSetShader(vs.Get(), nullptr, 0);
 	context->PSSetShader(ps.Get(), nullptr, 0);
