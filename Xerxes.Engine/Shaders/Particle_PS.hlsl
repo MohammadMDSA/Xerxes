@@ -21,8 +21,7 @@ float4 main(PixelInputType input) : SV_TARGET
     textureColor = shaderTexture.Sample(SampleType, input.tex);
 
     // Combine the texture color and the particle color to get the final color result.
-    //finalColor = input.color;
-    finalColor = textureColor * input.color;
+    finalColor = saturate(textureColor) * input.color;
 
     return finalColor;
 }
