@@ -27,7 +27,7 @@ DirectX::SimpleMath::Matrix Transform::GetUnscaledWorld() const
 {
 	auto unscaled = Matrix::CreateFromQuaternion(rotation);
 	if (parent)
-		return unscaled * Matrix::CreateTranslation(position) * parent->GetWorldMatrix();
+		return unscaled * Matrix::CreateTranslation(position) * parent->GetUnscaledWorld();
 	return unscaled * Matrix::CreateTranslation(position);
 }
 
