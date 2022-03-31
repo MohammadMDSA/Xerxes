@@ -20,6 +20,14 @@
 #define xmin(a,b)            (((a) < (b)) ? (a) : (b))
 #endif
 
+#ifndef XNRAND
+#define XNRAND (float)rand() / RAND_MAX
+#endif
+
+#ifndef XRAND
+#define XRAND ((float)rand() / RAND_MAX - 0.5f)
+#endif
+
 ///////////////////////////////////////
 //----------Engine Common------------//
 ///////////////////////////////////////
@@ -39,6 +47,8 @@
 #define XResourceMGeoPri() RootManager::GetInstance()->GetResourceManager()->ResourceGroup<GeometricPrimitiveResource>
 
 #define XSceneM() RootManager::GetInstance()->GetSceneManager()
+
+#define XSelectionM() RootManager::GetInstance()->GetSelectionManager()
 
 ///////////////////////////////////////
 //-----------Components--------------//
