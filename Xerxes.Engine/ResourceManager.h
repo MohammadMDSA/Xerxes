@@ -44,6 +44,9 @@ public:
 	DirectX::PrimitiveBatch<DirectX::VertexPositionColor>* GetDefaultBatch();
 
 	void LoadAllSubdirectoriesResources(std::string root);
+
+	inline DirectX::CommonStates* GetCommonStates() { return states.get(); }
+
 private:
 
 	GameResourceBase* CreateNormalMapEffect(std::string name);
@@ -66,6 +69,7 @@ private:
 	ID3D11Device* device;
 	ID3D11DeviceContext* context;
 
+	std::unique_ptr<DirectX::CommonStates> states;
 	std::unique_ptr<DirectX::PrimitiveBatch<DirectX::VertexPositionColor>> dBatch;
 
 };

@@ -17,9 +17,11 @@ public:
 
 	// Model type enums
 	static const std::string XModelResourceType_SDKMESH;
+	static const std::string XModelResourceType_CMO;
 
 
 private:
 	void LoadSDKMESHModel(ID3D11Device* device);
+	void LoadCMOModel(ID3D11Device* device);
 };
 

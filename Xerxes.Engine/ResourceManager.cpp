@@ -40,6 +40,8 @@ GameResourceBase* ResourceManager::CreateModel(std::string p)
 
 	if (extension(path) == ".sdkmesh")
 		modelResource->type = ModelResource::XModelResourceType_SDKMESH;
+	else if (extension(path) == ".cmo")
+		modelResource->type = ModelResource::XModelResourceType_CMO;
 	else
 		throw std::exception("Not supported extension");
 
@@ -79,6 +81,8 @@ ResourceManager::ResourceType ResourceManager::IsResourceSupported(std::string e
 		[](unsigned char c) { return std::tolower(c); });
 	if (extension == ".sdkmesh")
 		return ResourceType_Model;
+	if (extension == ".cmo")
+		return ResourceType_Model;
 	if (extension == ".dds")
 		return ResourceType_Texture;
 	if (extension == ".bmp")
@@ -106,6 +110,8 @@ void ResourceManager::SetDeviceContext(ID3D11DeviceContext* context)
 void ResourceManager::SetDevice(ID3D11Device* device)
 {
 	this->device = device;
+	states.reset();
+	states = std::make_unique<DirectX::CommonStates>(device);
 }
 
 ID3D11DeviceContext* ResourceManager::GetDeviceContext()
