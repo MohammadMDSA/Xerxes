@@ -86,7 +86,7 @@ void Xerxes::Engine::Graphics::Effects::ParticleEffect::Apply(ID3D11DeviceContex
 	auto cb = constantBuffer.GetBuffer();
 	context->VSSetConstantBuffers(0, 1, &cb);
 
-	auto texResource = RootManager::GetInstance()->GetResourceManager()->ResourceGroup<TextureResource>::GetById(textureId);
+	auto texResource = XResourceMTexture()::GetById(textureId);
 
 	if (texResource && texResource->IsLoaded())
 		context->PSSetShaderResources(0, 1, texResource->GetResourceAddress());
