@@ -339,5 +339,11 @@
     <FxCompile Include="Shaders\Particle_VS.hlsl">
       <Filter>Resources\Shaders</Filter>
     </FxCompile>
+    <FxCompile Include="SpecularMap_VS.hlsl">
+      <Filter>Resources\Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="SpecularMap_PS.hlsl">
+      <Filter>Resources\Shaders</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>
