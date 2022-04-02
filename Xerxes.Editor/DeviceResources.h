@@ -31,7 +31,7 @@ namespace Xerxes
                 DeviceResources(DXGI_FORMAT backBufferFormat = DXGI_FORMAT_B8G8R8A8_UNORM,
                     DXGI_FORMAT depthBufferFormat = DXGI_FORMAT_D32_FLOAT,
                     UINT backBufferCount = 2,
-                    D3D_FEATURE_LEVEL minFeatureLevel = D3D_FEATURE_LEVEL_10_0,
+                    D3D_FEATURE_LEVEL minFeatureLevel = D3D_FEATURE_LEVEL_11_1,
                     unsigned int flags = c_FlipPresent) noexcept;
                 ~DeviceResources() = default;
 

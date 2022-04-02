@@ -67,7 +67,7 @@ DeviceResources::DeviceResources(
     m_backBufferCount(backBufferCount),
     m_d3dMinFeatureLevel(minFeatureLevel),
     m_window(nullptr),
-    m_d3dFeatureLevel(D3D_FEATURE_LEVEL_9_1),
+    m_d3dFeatureLevel(D3D_FEATURE_LEVEL_12_2),
     m_outputSize{ 0, 0, 1, 1 },
     m_colorSpace(DXGI_COLOR_SPACE_RGB_FULL_G22_NONE_P709),
     m_options(flags | c_FlipPresent),
@@ -144,6 +144,9 @@ void DeviceResources::CreateDeviceResources()
     // Determine DirectX hardware feature levels this app will support.
     static const D3D_FEATURE_LEVEL s_featureLevels[] =
     {
+        D3D_FEATURE_LEVEL_12_2,
+        D3D_FEATURE_LEVEL_12_1,
+        D3D_FEATURE_LEVEL_12_0,
         D3D_FEATURE_LEVEL_11_1,
         D3D_FEATURE_LEVEL_11_0,
         D3D_FEATURE_LEVEL_10_1,
