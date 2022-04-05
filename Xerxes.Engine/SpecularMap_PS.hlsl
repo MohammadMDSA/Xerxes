@@ -1,3 +1,5 @@
+#include "Utility.hlsli"
+
 Texture2D shaderTextures[3];
 SamplerState sampleType;
 
@@ -14,9 +16,8 @@ struct PixelInputType
     float4 position : SV_Position;
     float2 tex : TEXCOORD0;
     float3 normal : NORMAL;
-    float3 tangetn : TANGENT;
-    float3 binormal : BINORMAL;
     float3 viewDirection : TEXCOORD1;
+    float3 worldPos : POSITION;
 };
 
 float4 main(PixelInputType pin) : SV_Target
@@ -30,6 +31,15 @@ float4 main(PixelInputType pin) : SV_Target
     float4 specularIntensity;
     float3 reflection;
     float4 specular;
+    float3 tangent;
+    float3 bitangent;
+    float3 normal;
+    
+    float3x3 tbn;
+    tbn = CalculateTBN(pin.worldPos, pin.normal, pin.tex);
+    tangent = tbn[0];
+    bitangent = tbn[1];
+    normal = normalize(mul(pin.normal, tbn));
     
     textureColor = shaderTextures[0].Sample(sampleType, pin.tex);
     
@@ -37,7 +47,11 @@ float4 main(PixelInputType pin) : SV_Target
     
     bumpMap = (bumpMap * 2.f) - 1.f;
     
-    bumpNormal = pin.normal + bumpMap.x * pin.tangetn + bumpMap.y * pin.binormal;
+    specularIntensity = shaderTextures[2].Sample(sampleType, pin.tex);
+    
+    float4 ambient = 0.1f * textureColor;
+    
+    bumpNormal = normal + bumpMap.x * tangent + bumpMap.y * bitangent;
     
     bumpNormal = normalize(bumpNormal);
     
@@ -49,19 +63,17 @@ float4 main(PixelInputType pin) : SV_Target
     
     color = color * textureColor;
     
-    if(lightIntensity > 0.f)
-    {
-        specularIntensity = shaderTextures[2].Sample(sampleType, pin.tex);
+    reflection = normalize(2 * lightIntensity * bumpNormal - lightDir);
         
-        reflection = normalize(2 * lightIntensity * bumpNormal - lightDir);
+    float3 halfWay = normalize(lightDir + pin.viewDirection);
         
-        specular = pow(saturate(dot(reflection, pin.viewDirection)), specularPower);
+    specular = pow(saturate(dot(bumpNormal, halfWay)), specularPower);
         
-        specular = specular * specularIntensity;
+    specular = specular * specularIntensity;
         
-        color = saturate(color + specular);
-    }
+    color = saturate(color + specular + ambient);
     
     return color;
+    //return shaderTextures[1].Sample(sampleType, pin.tex);
 
 }

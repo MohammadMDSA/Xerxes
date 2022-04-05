@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "EffectResource.h"
 #include "ParticleEffect.h"
+#include "MaterialEffect.h"
 #include "VertexPositionOffsetColorTexture.h"
 #include "Libs/imgui/imgui.h"
 
@@ -11,11 +12,13 @@ using namespace Xerxes::Engine::Graphics::VertexTypes;
 const std::string EffectResource::XEffectResourceType_Basic = "BasicEffect";
 const std::string EffectResource::XEffectResourceType_NormalMap = "NormalMapEffect";
 const std::string EffectResource::XEffectResourceType_Particle = "ParticleEffect";
+const std::string EffectResource::XEffectResourceType_Material = "MaterialEffect";
 const std::string EffectResource::XEffectVertexType_VertexPositionColor = "VertexPositionColor";
 const std::string EffectResource::XEffectVertexType_VertexPositionColorTexture = "VertexPositionColorTexture";
 const std::string EffectResource::XEffectVertexType_VertexPositionOffsetColorTexture = "VertexPositionOffsetColorTexture";
 const std::string EffectResource::XEffectVertexType_VertexPositionNormal = "VertexPositionNormal";
 const std::string EffectResource::XEffectVertexType_VertexPositionNormalTexture = "VertexPositionNormalTexture";
+const std::string EffectResource::XEffectVertexType_VertexPositionNormalColorTexture = "VertexPositionNormalColorTexture";
 
 EffectResource::EffectResource() :
 	diffuseColor(DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f)),
@@ -70,6 +73,8 @@ void EffectResource::CreateInputLayout(ID3D11Device* device)
 		DX::ThrowIfFailed(DirectX::CreateInputLayoutFromEffect<DirectX::VertexPositionColorTexture>(device, effect, inputLayout.ReleaseAndGetAddressOf()));
 	else if (vertexType == XEffectVertexType_VertexPositionOffsetColorTexture)
 		DX::ThrowIfFailed(DirectX::CreateInputLayoutFromEffect< VertexPositionOffsetColorTexture>(device, effect, inputLayout.ReleaseAndGetAddressOf()));
+	else if (vertexType == XEffectVertexType_VertexPositionNormalColorTexture)
+		DX::ThrowIfFailed(DirectX::CreateInputLayoutFromEffect< VertexPositionNormalColorTexture>(device, effect, inputLayout.ReleaseAndGetAddressOf()));
 }
 
 void EffectResource::Initialize(ID3D11DeviceContext* context)
@@ -84,6 +89,8 @@ void EffectResource::Initialize(ID3D11DeviceContext* context)
 		resource = std::make_unique<NormalMapEffect>(device);
 	else if (type == XEffectResourceType_Particle)
 		resource = std::make_unique<ParticleEffect>(device);
+	else if (type == XEffectResourceType_Material)
+		resource = std::make_unique<MaterialEffect>(device);
 	if (auto basic = dynamic_cast<BasicEffect*>(resource.get()); basic)
 	{
 		basic->SetVertexColorEnabled(vertextColorEnabled);
@@ -94,7 +101,7 @@ void EffectResource::Initialize(ID3D11DeviceContext* context)
 	{
 		light->SetLightingEnabled(true);
 		light->SetLightEnabled(0, true);
-		SetVertexType(XEffectVertexType_VertexPositionNormal);
+		//SetVertexType(XEffectVertexType_VertexPositionNormal);
 	}
 
 	CreateInputLayout(device);

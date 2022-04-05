@@ -216,6 +216,12 @@
     <ClInclude Include="VertexPositionOffsetColorTexture.h">
       <Filter>Source\Public\Graphics\VertexTypes</Filter>
     </ClInclude>
+    <ClInclude Include="Light.h">
+      <Filter>Source\Public\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="MaterialEffect.h">
+      <Filter>Source\Public\Graphics\Effects</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Xerxes.Engine.cpp">
@@ -323,9 +329,15 @@
     <ClCompile Include="VertexPositionOffsetColorTexture.cpp">
       <Filter>Source\Private\Graphics\VertexTypes</Filter>
     </ClCompile>
+    <ClCompile Include="MaterialEffect.cpp">
+      <Filter>Source\Private\Graphics\Effects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="Utility.hlsli">
+      <Filter>Resources\Shaders</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Xerxes.Engine.rc">

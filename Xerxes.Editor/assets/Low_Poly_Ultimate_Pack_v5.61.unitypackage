@@ -1,0 +1,499 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="Download File Low Poly Ultimate Pack unitypackage">
+    <meta name="keywords"    content="low, poly, ultimate, pack, unitypackage">
+
+    <script src="/cdn-cgi/apps/head/_NCc08hsY-BbVS0eGeFMYjKNiQ4.js"></script><script language="JavaScript" type="text/javascript" CHARSET="UTF-8" src="https://www1.ddownload.com/ds2/js/jquery-1.9.1.min.js"></script>
+
+    
+    <title>Download Low Poly Ultimate Pack unitypackage</title>
+    <link rel="shortcut icon" href="https://www1.ddownload.com/images/favicon.ico" type="image/x-icon"/>
+
+    <script type="text/javascript" src="https://www1.ddownload.com/ds2/js/jquery.paging.js"></script>
+    <script type="text/javascript" src="https://www1.ddownload.com/ds2/js/jquery.cookie.js"></script>
+    <script type="text/javascript" src="https://www1.ddownload.com/ds2/js/paging.js?r=2"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $("#showallarch").click(function() {
+                $(this).css('display', 'none'),
+                    $("#fileinfoarch").css('height', '100%'),
+                    $("#grad").css('display', 'none');
+            });
+        });
+    </script>
+    <script type="text/javascript">
+        (function($) {
+            $(function() {
+
+                $('ul.tabs').on('click', 'li:not(.current)', function() {
+                    var section = $(this).parents('div.section:first');
+                    var idx = $(this).index();
+
+                    $(this).addClass('current').siblings().removeClass('current');
+                    $(section).find('> div.box').eq(idx).fadeIn(150).siblings('div.box').hide();
+                    $.cookie($(section).attr('id') + 'tab', idx);
+                });
+
+                $('.section').each(function(i, e) {
+                    if(!e.id) return;
+
+                    var idx;
+                    if(idx = $.cookie(e.id + 'tab'))
+                    {
+                        $(e).find('> ul > li').eq(idx).click();
+                    }
+                });
+
+            })
+        })(jQuery)
+    </script>
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-153678577-3"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-153678577-3');
+</script>
+
+
+    <!-- Styles -->
+    <link rel="stylesheet" type="text/css" href="https://www1.ddownload.com/ds2/css/style.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://www1.ddownload.com/ds2/css/custom.min.css?v=10" />
+</head>
+<body>
+<nav class="navbar navbar-expand-lg">
+    <div class="container">
+        <a class="navbar-brand" href="/">
+            <img src="https://www1.ddownload.com/ds2/img/ddownload-white.png">
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-menu" aria-controls="main-menu" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="fad fa-bars"></i>
+        </button>
+
+        <div class="collapse navbar-collapse" id="main-menu">
+            <button class="navbar-toggler position-absolute" type="button" data-toggle="collapse" data-target="#main-menu" aria-controls="main-menu" aria-expanded="false" aria-label="Toggle navigation">
+                <i class="fad fa-times"></i>
+            </button>
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="/?op=upload_form">Upload <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/premium.html">Premium</a>
+                </li>
+                
+                    <li class="nav-item ml-lg-5 login">
+                        <a class="nav-link position-relative" href="/login.html"><i class="fad fa-sign-in position-absolute"></i> Login</a>
+                    </li>
+                    <li class="nav-item register ml-lg-3">
+                        <a class="nav-link position-relative" href="/register.html"><i class="fad fa-user-plus position-absolute"></i> Sign Up</a>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+</nav>
+<div id="container">
+    
+
+    <script src="https://www1.ddownload.com/ds2/js/countdown.js"></script>
+<style>
+	.download-page .file-info {border: 1px solid rgba(174,188,222,.2);padding:30px;}.download-page .file-info .name h4{margin-bottom:0;}
+	.download-page .file-info .icon {margin-right: 20px;}
+	.download-page .file-info .name {width:100%;padding-right:0;padding-bottom:10px;margin-bottom:10px;}
+	.download-page .file-info .name-info {flex:1;overflow:hidden;}
+	.download-page .file-info .name:after {
+		content: '';
+		height: 4px;
+		width: 100%;
+		background: rgba(35,78,182,.25);
+		display: block;
+		position: absolute;
+		left: 0;
+		right: 0;
+		bottom: 0;
+	}
+	.download-page .file-info .icon i {
+		color: #7087bf;
+	}
+	.download-page .info {
+		font-weight: bold;
+	}
+	.download-page .file-size {
+		font-size:1.1rem;
+	}
+	.download-page .downloadbtn {
+		padding: 30px 50px;
+    	font-size: 1.3rem;
+	}
+	.download-page .downloadbtn i {
+		font-size: 2rem;
+	}
+    .plan:before {
+        content: "LIMITED TIME";
+        top: -53px;
+        left: 15%;
+        transform: translateX(-50%);
+        position: absolute;
+        background: #c8252c;
+        color: #fff;
+        font-weight: 700;
+        padding: 0.6rem 0;
+        width: 75%;
+        animation: pulse 1.5s infinite;
+        font-size: 20px;
+	}
+    .plan {
+        border: 6px solid #c8252c;
+        cursor: pointer;
+        min-width:420px;
+        padding: 3.2rem 2rem 2rem 2rem;
+        box-shadow: 0 0 20px 10px rgba(200,37,44,.1);
+        position: relative;
+        background-color:#fff;
+        transition: all .15s ease;
+        text-align: center;
+    }
+    .plan:hover,
+    .plan-active {
+        transform:scale(1.05);
+    }
+    .plan-active {
+        box-shadow: 0 0 20px 10px rgba(69,114,182,.1);
+    }
+    .plan .plan-month {
+        font-size: 1.8rem;
+        text-transform: uppercase;
+        color:#153fa6;
+    }
+    .plan .plan-sale-wrapper {
+        display: block;
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+    }
+    .plan .plan-sale {
+        width: 150px;
+        height: 150px;
+        overflow: hidden;
+        position: absolute;
+        top: 0;
+        right: -10px;
+    }
+    .plan .plan-sale span {
+        position: absolute;
+        display: block;
+        line-height: 1;
+        font-weight: 700;
+        font-size: 18px;
+        width: 225px;
+        padding: 15px 0;
+        background-color: #c8252c;
+        box-shadow: 0 5px 10px rgba(0,0,0,.1);
+        color: #fff;
+        left: -25px;
+        top: 30px;
+        transform: rotate(45deg);
+    }
+    .plan .plan-sale::after {
+        position: absolute;
+        z-index: -1;
+        content: '';
+        display: block;
+        border: 5px solid #5a090c;
+        border-top-color: transparent;
+        border-right-color: transparent;
+        bottom: 0;
+        right: 0;
+    }
+    .plan .plan-price-regular {
+        margin-top: 1rem;
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #153fa6;
+    }
+    .plan .plan-price-discount {
+        display: block;
+        text-decoration: line-through;
+        margin-top: 1rem;
+        color: #8895b3;
+        font-size:1.2rem;
+    }
+    .plan .plan-price-month {
+        color: #c8252c;
+        font-size: 4rem;
+    }
+    .plan .plan-price-month sup {
+        color: #c8252c99;
+        font-size: 2.5rem;
+    }
+    .text-per-month {
+        font-size:1rem;
+    }
+    @keyframes pulse {
+        0% {
+            transform: scale(0.95);
+            box-shadow: 0 0 0 0 rgba(255, 82, 82, 0.7);
+        }
+        70% {
+            transform: scale(1);
+            box-shadow: 0 0 0 10px rgba(255, 82, 82, 0);
+        }
+        100% {
+            transform: scale(0.95);
+            box-shadow: 0 0 0 0 rgba(255, 82, 82, 0);
+        }
+    }
+    .plans-wrapper {
+        margin-bottom:0;
+    }
+    .plan-header {
+        font-family: 'Fira Sans',sans-serif;
+        color: #0f2e79;
+        margin-bottom:30px;
+    }
+    @media (max-width:690px) {
+        .plan {
+            min-width:100%;
+        }
+    }
+</style>
+<div class="container py-5 download-page">
+	<form name="F1" method="POST" action="">
+		<input type="hidden" name="op" value="download2">
+		<input type="hidden" name="id" value="myywuckg23vf">
+		<input type="hidden" name="rand" value="atocrgrmzslhflywbp7ua774gnvw6aa5si2jlxrlv4">
+		<input type="hidden" name="referer" value="">
+
+		<input type="hidden" name="method_free" value="">
+		<input type="hidden" name="method_premium" value="">
+
+		
+			<input type="hidden" id="adblock_detected" name="adblock_detected">
+			<div class="adsbox"></div>
+			<script>
+				$('#adblock_detected').val($('.adsbox').is(':visible') ? 0 : 1);
+			</script>
+		
+		<div class="row">
+			<div class="col-md-8 offset-md-2">
+				<div class="file-info d-flex align-items-center">
+					<div class="icon">
+						<i class="fad fa-file-download"></i>
+					</div>
+					<div class="name-info">
+						<div class="name position-relative">
+							<h4>Low_Poly_Ultimate_Pack_v5.61.unitypackage</h4>
+						</div>
+						<div class="info d-flex align-items-center justify-content-between">
+							<span class="file-size">80.75 MB</span>
+							<div class="report-abuse">
+								<a href="/pages/dmca.html" class="text-danger d-flex align-items-center">
+									<i class="fad fa-exclamation-triangle mr-1"></i> Report abuse
+								</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+			<div class="row mt-4">
+				<div class="col-md-8 mx-auto">
+					<div class="text-center mx-auto">
+						<script src='https://www.google.com/recaptcha/api.js'></script>
+<div class="g-recaptcha" data-sitekey="6LdJceoUAAAAAD0PnIXYfNOEtkSwCJjbL5qIwp9M"></div>
+
+					</div>
+				</div>
+			</div>
+		
+		
+			<div class="col-md-6 mx-auto mt-4">
+				<div class='alert alert-danger'>You have to wait 1 hour, 59 minutes, 56 seconds till next download<br><br>Download files instantly with <a href='https://ddownload.com/?op=payments'>Premium-account</a></div>
+			</div>
+		
+		<div class="row mt-4">
+			<div class="col-md-8 mx-auto">
+				<button type="button" id="downloadbtn" class="btn btn-primary downloadbtn d-flex align-items-center mx-auto">
+					<i class="fad fa-cloud-download-alt mr-3"></i> Download
+				</button>
+			</div>
+		</div>
+		
+			<div class="row mt-5">
+				<div class="col-md-8 mx-auto">
+					<div class="text-center mx-auto">
+						<h2 class="plan-header position-relative">Get unlimited downloads with our offer</h2>
+					</div>
+				</div>
+			</div>
+			<div class="plans-wrapper">
+                <div class="plan" data-toggle="40">
+                    <a href="/promo.html">
+                        <div class="plan-sale-wrapper">
+                            <div class="plan-sale"><span>66% OFF!</span></div>
+                        </div>
+                        <div class="plan-month" data-days="365"></div>
+                        <div class="plan-price-month"><sup>€</sup>39.99</div>
+                        <div class="plan-price-regular">Limited offer</div>
+                    </a>
+                </div>
+            </div>
+		
+	</form>
+</div>
+<script>
+	$(function(){
+        $('.plan').each(function() {
+            var months = $(this).find(".plan-month").data('days') / 30;
+            if (months == 1) {
+                $(this).find(".plan-month").text(months.toFixed(0) + " month");
+                $(this).find(".month-monthly").text("monthly");
+            } else {
+                $(this).find(".plan-month").text(months.toFixed(0) + " months");
+                $(this).find(".month-monthly").text("all "+ months.toFixed(0) + " months");
+            }
+            var permonth = $(this).find(".plan-price-regular").data('amount') / months;
+        });
+    });
+	$('#downloadbtn').click(function() {
+		this.form.submit();
+	});
+	$('#dl_bittorent').click(function(evt) {
+		evt.preventDefault();
+		document.location = "https://ddownload.com/cgi-bin/tracker.cgi?file_code=myywuckg23vf";
+	});
+	$('#comment_btn').click(function(evt) {
+		evt.preventDefault();
+		$.ajax({ url: 'https://ddownload.com/', type: "POST", data: $(this.form).serializeArray(), success: function(data)
+			{
+				$('#comments_list').append(data);
+				$(document.forms[0].cmt_text).val('');
+			}});
+	});
+	function delComment(cmt_id) {
+		var postdata = { op: 'comments', del: 1, token: 'b7c59736e8ca7bb6326d96a9107b5e33', cmt_id: cmt_id };
+		$.ajax({ url: 'https://ddownload.com/', type: "POST", data: postdata, success: function(data)
+			{
+				$('#cmt_' + cmt_id.toString()).remove();
+			}});
+	}
+	function player_start() {
+		$('#player_ads').hide();
+		$('#player_img').hide();
+		$('#player_code').css('visibility', 'visible');
+		return false;
+	}
+</script>
+
+</div>
+
+<footer class="footer p-4 position-absolute">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 mb-sm-4">
+                <div class="logo">
+                    <img src="https://www1.ddownload.com/ds2/img/ddownload_com-blue.png">
+                </div>
+                <div class="copyrights">
+                    All Rights Reserved
+                </div>
+                <div class="dropdown mt-4">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="languageDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      Language
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="languageDropdown" style="text-align:center;">
+                            <div class="dropdown-item active" style="text-transform:capitalize;">english</div>
+                                
+                            <a href="https://ddownload.com/?op=change_lang&lang=german" class="dropdown-item">
+                                <span class="langname">German</span>
+                            </a>
+                        
+                            <a href="https://ddownload.com/?op=change_lang&lang=spanish" class="dropdown-item">
+                                <span class="langname">Spanish</span>
+                            </a>
+                        
+                            <a href="https://ddownload.com/?op=change_lang&lang=french" class="dropdown-item">
+                                <span class="langname">French</span>
+                            </a>
+                        
+                            <a href="https://ddownload.com/?op=change_lang&lang=japan" class="dropdown-item">
+                                <span class="langname">Japan</span>
+                            </a>
+                        
+                            <a href="https://ddownload.com/?op=change_lang&lang=dutch" class="dropdown-item">
+                                <span class="langname">Dutch</span>
+                            </a>
+                        
+                    </div>
+                  </div>
+            </div>
+            <div class="col-sm-4">
+                <h4>Quick Links</h4>
+                <ul class="menu p-0 m-0">
+                    <li>
+                        <a href="/api">API</a>
+                    </li>
+                    <li>
+                        <a href="/news.html">News</a>
+                    </li>
+                    <li>
+                        <a href="/?op=my_subscriptions">Subscriptions</a>
+                    </li>
+                    <li>
+                        <a href="/contact.html">Imprint</a>
+                    </li>
+                    <li>
+                        <a href="https://support.ddownload.com/">Support</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-sm-4">
+                <h4>Legal</h4>
+                <ul class="menu p-0 m-0">
+                    <li>
+                        <a href="/tos.html">Terms of service</a>
+                    </li>
+                    <li>
+                        <a href="/privacy.html">Privacy</a>
+                    </li>
+                    <li>
+                        <a href="/regulations.html">Regulations of payment</a>
+                    </li>
+                    <li>
+                        <a href="/abuse.html">DMCA Abuse | ATTool</a>
+                    </li>
+                    <li>
+                        <a href="/child-pornography.html">Child Exploitation Policy</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://www1.ddownload.com/ds2/js/bootstrap.min.js" ></script>
+<script src="https://www1.ddownload.com/ds2/js/clipboard.min.js" ></script>
+<script src="https://www1.ddownload.com/ds2/js/main.js" ></script>
+
+
+ 
+</body>
+</html>

@@ -125,8 +125,10 @@
     <ClInclude Include="Libs\imgui\imstb_textedit.h" />
     <ClInclude Include="Libs\imgui\imstb_truetype.h" />
     <ClInclude Include="Libs\imgui\ImZoomSlider.h" />
+    <ClInclude Include="Light.h" />
     <ClInclude Include="LightComponent.h" />
     <ClInclude Include="LightManager.h" />
+    <ClInclude Include="MaterialEffect.h" />
     <ClInclude Include="MeshRenderer.h" />
     <ClInclude Include="ModelResource.h" />
     <ClInclude Include="ParticleEffect.h" />
@@ -167,6 +169,7 @@
     <ClCompile Include="Libs\imgui\ImSequencer.cpp" />
     <ClCompile Include="LightComponent.cpp" />
     <ClCompile Include="LightManager.cpp" />
+    <ClCompile Include="MaterialEffect.cpp" />
     <ClCompile Include="MeshRenderer.cpp" />
     <ClCompile Include="ModelResource.cpp" />
     <ClCompile Include="ParticleEffect.cpp" />
@@ -190,16 +193,18 @@
     <FxCompile Include="SpecularMap_PS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">4.0_level_9_3</ShaderModel>
     </FxCompile>
     <FxCompile Include="SpecularMap_VS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">4.0_level_9_3</ShaderModel>
     </FxCompile>
     <None Include="packages.config" />
     <FxCompile Include="Shaders\Particle_PS.hlsl">
       <FileType>Document</FileType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">4.1</ShaderModel>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">4.0_level_9_3</ShaderModel>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4.0_level_9_1</ShaderModel>
       <EnableDebuggingInformation Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</EnableDebuggingInformation>
@@ -207,11 +212,12 @@
     <FxCompile Include="Shaders\Particle_VS.hlsl">
       <FileType>Document</FileType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">4.1</ShaderModel>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">4.0_level_9_3</ShaderModel>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4.0_level_9_1</ShaderModel>
       <EnableDebuggingInformation Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</EnableDebuggingInformation>
     </FxCompile>
+    <None Include="Utility.hlsli" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Xerxes.Engine.rc" />

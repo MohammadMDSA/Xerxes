@@ -28,6 +28,7 @@ LightComponent::~LightComponent()
 
 void LightComponent::OnRender(const DirectX::SimpleMath::Matrix& view, const DirectX::SimpleMath::Matrix& proj, ID3D11DeviceContext* context)
 {
+
 }
 
 void LightComponent::OnStart()

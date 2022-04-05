@@ -251,6 +251,17 @@ void ResourceManager::AddDefaultEffects()
 		greParticle->SetSystemResource(true);
 		ResourceGroup<EffectResource>::group.insert({ greParticle->id, greParticle });
 	}
+
+	{
+		// Material effect
+		auto res = new EffectResource();
+		res->id = GetNewId();
+		res->name = "Material effect";
+		res->path = "";
+		res->type = EffectResource::XEffectResourceType_Material;
+		res->SetVertexType(EffectResource::XEffectVertexType_VertexPositionNormalTexture);
+		ResourceGroup<EffectResource>::group.insert({ res->id, res });
+	}
 }
 
 void ResourceManager::AddDefaultBatcch()

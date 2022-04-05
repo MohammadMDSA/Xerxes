@@ -32,11 +32,13 @@ void ResourceWindow::OnGUI()
 			{
 				ImGui::PushID(++index);
 				
-				if (ImGui::Selectable((model->GetName() + " (" + model->GetType() + ")").c_str(), selectedResource == model))
+				if (ImGui::Selectable(model->GetName().c_str(), selectedResource == model))
 				{
 					selectedResource = model;
 					selection->SetSelectedResource(selectedResource);
 				}
+				if (ImGui::IsItemHovered())
+					ImGui::SetTooltip((model->GetType() + " (" + std::to_string(model->GetId()) + ")").c_str());
 
 				ImGui::PopID();
 			}
@@ -50,11 +52,13 @@ void ResourceWindow::OnGUI()
 			{
 				ImGui::PushID(++index);
 
-				if (ImGui::Selectable((effect->GetName() + " (" + effect->GetType() + ")").c_str(), selectedResource == effect))
+				if (ImGui::Selectable(effect->GetName().c_str(), selectedResource == effect))
 				{
 					selectedResource = effect;
 					selection->SetSelectedResource(selectedResource);
 				}
+				if (ImGui::IsItemHovered())
+					ImGui::SetTooltip((effect->GetType() + " (" + std::to_string(effect->GetId()) + ")").c_str());
 
 				ImGui::PopID();
 			}
@@ -73,6 +77,8 @@ void ResourceWindow::OnGUI()
 					selectedResource = primitive;
 					selection->SetSelectedResource(selectedResource);
 				}
+				if (ImGui::IsItemHovered())
+					ImGui::SetTooltip((primitive->GetType() + " (" + std::to_string(primitive->GetId()) + ")").c_str());
 
 				ImGui::PopID();
 			}
@@ -91,6 +97,8 @@ void ResourceWindow::OnGUI()
 					selectedResource = texture;
 					selection->SetSelectedResource(selectedResource);
 				}
+				if (ImGui::IsItemHovered())
+					ImGui::SetTooltip((texture->GetType() + " (" + std::to_string(texture->GetId()) + ")").c_str());
 
 				ImGui::PopID();
 			}

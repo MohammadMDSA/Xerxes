@@ -45,7 +45,7 @@ ID3D11ShaderResourceView* TextureResource::GetResource()
 	return resource.Get();
 }
 
-ID3D11ShaderResourceView* const* TextureResource::GetResourceAddress()
+ID3D11ShaderResourceView** TextureResource::GetResourceAddress()
 {
 	return resource.GetAddressOf();
 }

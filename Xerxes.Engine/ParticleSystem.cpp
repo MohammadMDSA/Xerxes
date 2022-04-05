@@ -44,7 +44,7 @@ bool Xerxes::Engine::Graphics::ParticleSystem::Initialize(ID3D11Device* device)
 		return false;
 
 	states = std::make_unique<DirectX::CommonStates>(device);
-
+	
 	return true;
 }
 
@@ -56,7 +56,6 @@ void Xerxes::Engine::Graphics::ParticleSystem::Shutdown()
 	// Release the particle system
 	ShutdownParticleSystem();
 	states.release();
-	//blend.Reset();
 	//delete depthStencil;
 
 	return;

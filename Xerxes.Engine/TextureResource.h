@@ -16,7 +16,7 @@ public:
 	virtual void Shutdown() override;
 
 	virtual ID3D11ShaderResourceView* GetResource() override;
-	virtual ID3D11ShaderResourceView* const* GetResourceAddress();
+	virtual ID3D11ShaderResourceView** GetResourceAddress();
 
 	// Enums
 

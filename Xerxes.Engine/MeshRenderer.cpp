@@ -31,6 +31,7 @@ void MeshRenderer::OnRender(const DirectX::SimpleMath::Matrix& view, const Direc
 	auto resourceManager = RootManager::GetInstance()->GetResourceManager();
 	auto world = gameObject->transform().GetWorldMatrix();
 	auto lightManager = RootManager::GetInstance()->GetLightManager();
+
 	if (usingPrimitives)
 	{
 		auto effect = resourceManager->ResourceGroup<EffectResource>::GetById(effectResourceId);

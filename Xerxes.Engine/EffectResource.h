@@ -18,7 +18,9 @@ public:
 	virtual void Shutdown() override;
 
 	inline const std::string& GetVertextType() const { return vertexType; }
-	inline void SetVertexType(std::string type) { vertexType = type; }
+	inline void SetVertexType(std::string type) {
+		vertexType = type;
+	}
 
 	inline void SetVertextColorEnabled(bool enabled) { vertextColorEnabled = enabled; }
 
@@ -28,6 +30,7 @@ public:
 	static const std::string XEffectResourceType_Basic;
 	static const std::string XEffectResourceType_NormalMap;
 	static const std::string XEffectResourceType_Particle;
+	static const std::string XEffectResourceType_Material;
 
 	// Effect vertext input type enums
 	static const std::string XEffectVertexType_VertexPositionColor;
@@ -35,6 +38,7 @@ public:
 	static const std::string XEffectVertexType_VertexPositionOffsetColorTexture;
 	static const std::string XEffectVertexType_VertexPositionNormal;
 	static const std::string XEffectVertexType_VertexPositionNormalTexture;
+	static const std::string XEffectVertexType_VertexPositionNormalColorTexture;
 
 private:
 	Microsoft::WRL::ComPtr<ID3D11InputLayout> inputLayout;
