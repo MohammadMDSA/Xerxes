@@ -176,5 +176,6 @@
     <None Include="assets\soldier.sdkmesh">
       <Filter>Assets</Filter>
     </None>
+    <None Include=".gitignore" />
   </ItemGroup>
 </Project>
