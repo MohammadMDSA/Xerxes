@@ -1,5 +1,6 @@
 #pragma once
 #include "pch.h"
+#include "IInspectorDrawer.h"
 
 namespace Xerxes
 {
@@ -9,7 +10,7 @@ namespace Xerxes
 		{
 			namespace Effects
 			{
-				interface IXEffect
+				interface IXEffect : public IInspectorDrawer
 				{
 				public:
 					virtual void OnInspector() = 0;
