@@ -111,6 +111,7 @@
     <ClInclude Include="IInspectorDrawer.h" />
     <ClInclude Include="IManager.h" />
     <ClInclude Include="InputManager.h" />
+    <ClInclude Include="IXEffect.h" />
     <ClInclude Include="Libs\EnTT\entt.hpp" />
     <ClInclude Include="Libs\imgui\GraphEditor.h" />
     <ClInclude Include="Libs\imgui\imconfig.h" />

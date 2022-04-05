@@ -4,6 +4,7 @@
 #include "MaterialEffect.h"
 #include "VertexPositionOffsetColorTexture.h"
 #include "Libs/imgui/imgui.h"
+#include "IXEffect.h"
 
 using namespace DirectX;
 using namespace Xerxes::Engine::Graphics::Effects;
@@ -29,6 +30,11 @@ EffectResource::EffectResource() :
 
 void EffectResource::OnInspector()
 {
+	if (auto xeffect = dynamic_cast<Xerxes::Engine::Graphics::Effects::IXEffect*>(resource.get()); xeffect)
+	{
+		xeffect->OnInspector();
+	}
+
 	auto res = resource.get();
 	ImGui::Text("Diffuse Color:");
 	ImGui::SameLine();

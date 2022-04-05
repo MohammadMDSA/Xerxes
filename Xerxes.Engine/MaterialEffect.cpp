@@ -149,3 +149,8 @@ void XM_CALLCONV Xerxes::Engine::Graphics::Effects::MaterialEffect::SetMatrices(
 	SetView(view);
 	SetProjection(projection);
 }
+
+void Xerxes::Engine::Graphics::Effects::MaterialEffect::OnInspector()
+{
+
+}
