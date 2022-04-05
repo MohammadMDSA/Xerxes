@@ -2,6 +2,7 @@
 #include <SimpleMath.h>
 #include "GameResource.h"
 #include "ReadData.h"
+#include "IXEffect.h"
 
 using namespace DirectX;
 using namespace Microsoft::WRL;
@@ -15,7 +16,7 @@ namespace Xerxes
 			namespace Effects
 			{
 
-				class ParticleEffect : public DirectX::IEffect, DirectX::IEffectMatrices
+				class ParticleEffect : public DirectX::IEffect, DirectX::IEffectMatrices, Xerxes::Engine::Graphics::Effects::IXEffect
 				{
 				public:
 					explicit ParticleEffect(ID3D11Device* device);
@@ -33,6 +34,8 @@ namespace Xerxes
 					virtual void XM_CALLCONV SetMatrices(DirectX::FXMMATRIX world, DirectX::CXMMATRIX view, DirectX::CXMMATRIX projection) override;
 
 					void SetTexture(GameResourceId textureId);
+
+					void OnInspector() override {};
 
 				private:
 					uint32_t dirtyFlags;

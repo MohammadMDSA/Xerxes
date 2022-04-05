@@ -1,10 +1,12 @@
 #pragma once
 
 #include "GameResource.h"
+#include "IXEffect.h"
 
 using namespace DirectX;
 using namespace DirectX::SimpleMath;
 using namespace Microsoft::WRL;
+using namespace Xerxes::Engine::Graphics::Effects;
 
 namespace Xerxes
 {
@@ -15,7 +17,7 @@ namespace Xerxes
 			namespace Effects
 			{
 
-				class MaterialEffect : public IEffect, public IEffectLights, public IEffectMatrices
+				class MaterialEffect : public IEffect, public IEffectLights, public IEffectMatrices, IXEffect
 				{
 				public:
 					MaterialEffect(ID3D11Device* device);
@@ -54,6 +56,8 @@ namespace Xerxes
 					virtual void XM_CALLCONV SetProjection(FXMMATRIX value) override;
 
 					virtual void XM_CALLCONV SetMatrices(FXMMATRIX world, CXMMATRIX view, CXMMATRIX projection) override;
+
+					virtual void OnInspector() override;
 
 				private:
 					uint32_t dirtyFlags;
