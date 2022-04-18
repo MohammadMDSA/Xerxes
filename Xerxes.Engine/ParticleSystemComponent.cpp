@@ -141,7 +141,7 @@ void ParticleSystemComponent::OnInspector()
 
 		ImGui::ColorEdit4("Initial Color", (float*)&particleSystem->particleInitialColor);
 
-		ImGui::DragFloat4("Initial Color Deviation", (float*)&particleSystem->particleInitialColorDeviation);
+		ImGui::DragFloat4("Initial Color Deviation", (float*)&particleSystem->particleInitialColorDeviation, 0.01f, 0.f, 1.f);
 
 		ImGui::Unindent();
 	}
@@ -173,14 +173,14 @@ void ParticleSystemComponent::OnInspector()
 
 		if (ImGui::BeginPopup("TextureSelection"))
 		{
-			auto models = resourceManager->ResourceGroup<TextureResource>::GetAll();
+			auto textures = resourceManager->ResourceGroup<TextureResource>::GetAll();
 			if (ImGui::Selectable("<none>"))
 			{
 				particleSystem->textureReourceId = -1;
 			}
 
 			int i = 0;
-			for (auto it : models)
+			for (auto it : textures)
 			{
 				ImGui::PushID(++i);
 				if (ImGui::Selectable((it->GetName() + " (" + it->GetType() + ")").c_str()))
