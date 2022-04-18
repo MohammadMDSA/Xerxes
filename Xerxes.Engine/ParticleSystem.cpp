@@ -374,28 +374,28 @@ bool Xerxes::Engine::Graphics::ParticleSystem::UpdateBuffers(ID3D11DeviceContext
 		vertices[index].position = particleList[i].position;
 		vertices[index].offset = Vector3(-particleList[i].size.x, -particleList[i].size.y, 0.f);
 		vertices[index].textureCoordinate = Vector2(0.f, 1.f);
-		vertices[index].color = Vector4(particleList[i].color.x, particleList[i].color.y, particleList[i].color.z, 1.f);
+		vertices[index].color = particleList[i].color;
 		index++;
 
 		// Top left
 		vertices[index].position = particleList[i].position;
 		vertices[index].offset = Vector3(-particleList[i].size.x, particleList[i].size.y, 0.f);
 		vertices[index].textureCoordinate = Vector2(0.f, 0.f);
-		vertices[index].color = Vector4(particleList[i].color.x, particleList[i].color.y, particleList[i].color.z, 1.f);
+		vertices[index].color = particleList[i].color;
 		index++;
 
 		// Bottom right
 		vertices[index].position = particleList[i].position;
 		vertices[index].offset = Vector3(particleList[i].size.x, -particleList[i].size.y, 0.f);
 		vertices[index].textureCoordinate = Vector2(1.f, 1.f);
-		vertices[index].color = Vector4(particleList[i].color.x, particleList[i].color.y, particleList[i].color.z, 1.f);
+		vertices[index].color = particleList[i].color;
 		index++;
 
 		// Top right
 		vertices[index].position = particleList[i].position;
 		vertices[index].offset = Vector3(particleList[i].size.x, particleList[i].size.y, 0.f);
 		vertices[index].textureCoordinate = Vector2(1.f, 0.f);
-		vertices[index].color = Vector4(particleList[i].color.x, particleList[i].color.y, particleList[i].color.z, 1.f);
+		vertices[index].color = particleList[i].color;
 		index++;
 	}
 
