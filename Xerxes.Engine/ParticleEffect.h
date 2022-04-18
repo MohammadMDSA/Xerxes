@@ -16,7 +16,7 @@ namespace Xerxes
 			namespace Effects
 			{
 
-				class ParticleEffect : public DirectX::IEffect, DirectX::IEffectMatrices, Xerxes::Engine::Graphics::Effects::IXEffect
+				class ParticleEffect : public DirectX::IEffect, DirectX::IEffectMatrices, public Xerxes::Engine::Graphics::Effects::IXEffect
 				{
 				public:
 					explicit ParticleEffect(ID3D11Device* device);
