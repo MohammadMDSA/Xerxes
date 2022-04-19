@@ -2662,8 +2662,8 @@ namespace IMGUIZMO_NAMESPACE
             if (visible)
             {
                ImU32 col = IM_COL32(0x80, 0x80, 0x80, 0xFF);
-               col = (fmodf(fabsf(f), 10.f) < FLT_EPSILON) ? IM_COL32(0x90, 0x90, 0x90, 0xFF) : col;
-               col = (fabsf(f) < FLT_EPSILON) ? IM_COL32(0x40, 0x40, 0x40, 0xFF): col;
+               col = (fmodf(fabsf(f), 10.f) < FLT_EPSILON) ? IM_COL32(0xA0, 0xA0, 0xA0, 0xFF) : col;
+               col = (fabsf(f) < FLT_EPSILON) ? IM_COL32(0xD0, 0xD0, 0xD0, 0xFF): col;
 
                float thickness = 1.f;
                thickness = (fmodf(fabsf(f), 10.f) < FLT_EPSILON) ? 1.5f : thickness;
