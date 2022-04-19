@@ -19,34 +19,39 @@ void RootManager::Destroy()
 	instance = 0;
 }
 
-CameraManager* RootManager::GetCameraManager()
+inline CameraManager* RootManager::GetCameraManager()
 {
 	return cameraManager.get();
 }
 
-InputManager* RootManager::GetInputManager()
+inline InputManager* RootManager::GetInputManager()
 {
 	return inputManager.get();
 }
 
-ResourceManager* RootManager::GetResourceManager()
+inline ResourceManager* RootManager::GetResourceManager()
 {
 	return resourceManager.get();
 }
 
-SceneManager* RootManager::GetSceneManager()
+inline SceneManager* RootManager::GetSceneManager()
 {
 	return sceneManager.get();
 }
 
-SelectionManager* RootManager::GetSelectionManager()
+inline SelectionManager* RootManager::GetSelectionManager()
 {
 	return selectionManager.get();
 }
 
-LightManager* RootManager::GetLightManager()
+inline LightManager* RootManager::GetLightManager()
 {
 	return lightManager.get();
+}
+
+inline Renderer* RootManager::GetRenderer()
+{
+	return renderer.get();
 }
 
 void RootManager::Update(float deltaTime)
@@ -62,10 +67,12 @@ void RootManager::Init()
 	sceneManager->OnInit();
 	selectionManager->OnInit();
 	lightManager->OnInit();
+	renderer->OnInit();
 }
 
 void RootManager::Shutdown()
 {
+	renderer->OnShutdown();
 	lightManager->OnShutdown();
 	selectionManager->OnShutdown();
 	sceneManager->OnShutdown();
@@ -84,6 +91,7 @@ RootManager::RootManager()
 	sceneManager = shared_ptr<SceneManager>(new SceneManager());
 	selectionManager = shared_ptr<SelectionManager>(new SelectionManager());
 	lightManager = shared_ptr<LightManager>(new LightManager());
+	renderer = shared_ptr<Renderer>(new Renderer());
 	Init();
 }
 
