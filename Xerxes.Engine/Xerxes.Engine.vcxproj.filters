@@ -225,6 +225,9 @@
     <ClInclude Include="IXEffect.h">
       <Filter>Source\Public\Graphics\Effects</Filter>
     </ClInclude>
+    <ClInclude Include="Renderer.h">
+      <Filter>Source\Public\SubsystemManager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Xerxes.Engine.cpp">
@@ -335,10 +338,25 @@
     <ClCompile Include="MaterialEffect.cpp">
       <Filter>Source\Private\Graphics\Effects</Filter>
     </ClCompile>
+    <ClCompile Include="Renderer.cpp">
+      <Filter>Source\Private\SubsystemManager</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="Utility.hlsli">
+    <None Include="Common.hlsli">
+      <Filter>Resources\Shaders</Filter>
+    </None>
+    <None Include="Lighting.hlsli">
+      <Filter>Resources\Shaders</Filter>
+    </None>
+    <None Include="LightGrid.hlsli">
+      <Filter>Resources\Shaders</Filter>
+    </None>
+    <None Include="DeferredCommon.hlsli">
+      <Filter>Resources\Shaders</Filter>
+    </None>
+    <None Include="DeferredLight_VS.hlsl">
       <Filter>Resources\Shaders</Filter>
     </None>
   </ItemGroup>
@@ -358,6 +376,12 @@
       <Filter>Resources\Shaders</Filter>
     </FxCompile>
     <FxCompile Include="SpecularMap_PS.hlsl">
+      <Filter>Resources\Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="DeferredSurface_VS.hlsl">
+      <Filter>Resources\Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="DeferredSurface_PS.hlsl">
       <Filter>Resources\Shaders</Filter>
     </FxCompile>
   </ItemGroup>
