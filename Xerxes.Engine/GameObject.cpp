@@ -139,6 +139,10 @@ void GameObject::OnInspector()
 		editName = std::string(name);
 	}
 
+	ImGui::Spacing();
+	ImGui::Separator();
+	ImGui::Spacing();
+
 	// GameObject Transformation
 	if (ImGui::CollapsingHeader("Transform", ImGuiTreeNodeFlags_DefaultOpen))
 	{
