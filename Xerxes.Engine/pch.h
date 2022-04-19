@@ -7,9 +7,26 @@
 #ifndef PCH_H
 #define PCH_H
 
+#include <sdkddkver.h>
+
 // add headers that you want to pre-compile here
 #include "framework.h"
+
+#include <algorithm>
+#include <cmath>
+#include <cstdint>
+#include <exception>
+#include <iterator>
 #include <memory>
+#include <stdexcept>
+
+
+#include <wrl/client.h>
+
+#include <d3d11_1.h>
+#include <dxgi1_6.h>
+#include <DirectXMath.h>
+#include <DirectXColors.h>
 
 #include "BufferHelpers.h"
 #include "CommonStates.h"
@@ -31,6 +48,13 @@
 #include "VertexTypes.h"
 #include "WICTextureLoader.h"
 #include "wchar.h"
+#include "WICTextureLoader.h"
+
+#ifdef _DEBUG
+#include <dxgidebug.h>
+#endif
+
+
 namespace DX
 {
     inline void ThrowIfFailed(HRESULT hr)
