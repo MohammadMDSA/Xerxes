@@ -79,6 +79,12 @@
     <Filter Include="Source\Public\Graphics\VertexTypes">
       <UniqueIdentifier>{cf533b55-9e53-4175-829b-17e45c6ad04f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Private\Graphics\Device">
+      <UniqueIdentifier>{9bd29587-318d-4148-b10d-6a3c5e2bd29d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Public\Graphics\Device">
+      <UniqueIdentifier>{7f67ea8a-0aef-4135-88e6-95c451929787}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -228,6 +234,9 @@
     <ClInclude Include="Renderer.h">
       <Filter>Source\Public\SubsystemManager</Filter>
     </ClInclude>
+    <ClInclude Include="DeviceResources.h">
+      <Filter>Source\Public\Graphics\Device</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Xerxes.Engine.cpp">
@@ -340,6 +349,9 @@
     </ClCompile>
     <ClCompile Include="Renderer.cpp">
       <Filter>Source\Private\SubsystemManager</Filter>
+    </ClCompile>
+    <ClCompile Include="DeviceResources.cpp">
+      <Filter>Source\Private\Graphics\Device</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

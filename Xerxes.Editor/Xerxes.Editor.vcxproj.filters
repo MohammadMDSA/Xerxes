@@ -61,9 +61,6 @@
     <ClInclude Include="Libs\imgui\imgui_impl_win32.h">
       <Filter>Libs\imgui</Filter>
     </ClInclude>
-    <ClInclude Include="DeviceResources.h">
-      <Filter>Source\Public\Device</Filter>
-    </ClInclude>
     <ClInclude Include="HierarchyWindow.h">
       <Filter>Source\Public\EditorWindow</Filter>
     </ClInclude>
@@ -111,9 +108,6 @@
     </ClCompile>
     <ClCompile Include="Libs\imgui\imgui_impl_win32.cpp">
       <Filter>Libs\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="DeviceResources.cpp">
-      <Filter>Source\Private\Device</Filter>
     </ClCompile>
     <ClCompile Include="HierarchyWindow.cpp">
       <Filter>Source\Private\EditorWindow</Filter>
