@@ -2,6 +2,7 @@
 #include "SceneWindow.h"
 #include "Libs/imgui/imgui.h"
 #include "RootManager.h"
+#include "XPreprocessors.h"
 
 using namespace DirectX;
 using namespace DirectX::SimpleMath;
@@ -13,7 +14,8 @@ SceneWindow::SceneWindow(int id) :
 	moveingCamera(false),
 	camera(nullptr),
 	manipulationOperation(ImGuizmo::OPERATION::TRANSLATE),
-	manipulationMode(ImGuizmo::MODE::LOCAL)
+	manipulationMode(ImGuizmo::MODE::LOCAL),
+	cameraDistance(5.f)
 {
 	backgroundAlpha = 1.f;
 	auto resourceManager = RootManager::GetInstance()->GetResourceManager();
@@ -57,10 +59,29 @@ void SceneWindow::OnGUI()
 		ImGui::RadioButton("Rotation", (int*)&manipulationOperation, ImGuizmo::OPERATION::ROTATE);
 		ImGui::SameLine();
 		ImGui::RadioButton("Scale", (int*)&manipulationOperation, ImGuizmo::OPERATION::SCALE);
+		ImGui::SameLine();
+		ImGui::RadioButton("Universal", (int*)&manipulationMode, ImGuizmo::OPERATION::UNIVERSAL);
 
 		ImGui::EndTable();
 	}
 	ImGui::EndChild();
+
+
+	ImGuizmo::SetDrawlist();
+	auto cam = XCameraM()->GetActiveCamera();
+	auto view = cam->GetView();
+	auto view1 = cam->GetView();
+	auto proj = cam->GetProjection();
+
+	ImGuizmo::DrawGrid((float*)&view, (float*)&proj, (float*)&Matrix::Identity, 100);
+
+	auto viewManTop = GetHeight() + GetPosY() - 100;
+	auto viewManLeft = GetPosX();
+
+	ImGuizmo::ViewManipulate((float*)&view, cameraDistance, ImVec2(viewManLeft, viewManTop), ImVec2(100, 100), 0x10101010);
+
+	auto invView = view.Invert();
+	camera->SetWorld(invView);
 }
 
 int SceneWindow::GetCustomWindowFlags()
@@ -169,7 +190,7 @@ void SceneWindow::Update(float deltaTime)
 		forward.Normalize();
 		auto right = rot.Right();
 		right.Normalize();
-		auto up = rot.Up();
+		auto up = Vector3::Up;
 		up.Normalize();
 		auto direction = forward * movement.y + right * movement.x + up * movement.z;
 		direction.Normalize();
@@ -182,49 +203,4 @@ void SceneWindow::Update(float deltaTime)
 void SceneWindow::OnRender(DirectX::SimpleMath::Matrix view, DirectX::SimpleMath::Matrix proj)
 {
 
-	auto resourceManager = RootManager::GetInstance()->GetResourceManager();
-	auto context = resourceManager->GetDeviceContext();
-	auto batch = resourceManager->GetDefaultBatch();
-	auto res = resourceManager->ResourceGroup<EffectResource>::GetById(effectId);
-	auto effect = dynamic_cast<BasicEffect*>(res->GetResource());
-
-	context->OMSetDepthStencilState(states->DepthRead(), 0);
-	context->OMSetBlendState(states->Opaque(), nullptr, 0xFFFFFFFF);
-	context->RSSetState(states->CullNone());
-
-	effect->SetView(view);
-	effect->SetProjection(proj);
-	effect->SetWorld(DirectX::SimpleMath::Matrix::Identity);
-	effect->Apply(context);
-
-	context->IASetInputLayout(res->GetInputLayout());
-
-	batch->Begin();
-
-	Vector3 xaxis(1.f, 0.f, 0.f);
-	Vector3 yaxis(0.f, 0.f, 1.f);
-	Vector3 origin = Vector3::Zero;
-
-	const int count = 100;
-	DirectX::XMVECTORF32 color;
-
-	for (int i = (-count); i <= count; ++i)
-	{
-		color = (i == 0 ? Colors::White : Colors::Gray);
-		auto scale = xaxis * i;
-		VertexPositionColor v1(scale - (count * yaxis), color);
-		VertexPositionColor v2(scale + (count * yaxis), color);
-		batch->DrawLine(v1, v2);
-	}
-
-	for (int i = -count; i <= count; i++)
-	{
-		color = (i == 0 ? Colors::White : Colors::Gray);
-		auto scale = yaxis * i;
-		VertexPositionColor v1(scale - (count * xaxis), color);
-		VertexPositionColor v2(scale + (count * xaxis), color);
-		batch->DrawLine(v1, v2);
-	}
-
-	batch->End();
 }

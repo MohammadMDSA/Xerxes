@@ -26,6 +26,8 @@ namespace Xerxes
 				ImGuizmo::OPERATION		GetManipulationOperation();
 				ImGuizmo::MODE			GetManipulationMode();
 
+				inline const float& GetCameraDistance() const { return cameraDistance; }
+
 			protected:
 				// Inherited via EditorWindow
 				virtual int				GetCustomWindowFlags() override;
@@ -45,6 +47,8 @@ namespace Xerxes
 
 				ImGuizmo::OPERATION		manipulationOperation;
 				ImGuizmo::MODE			manipulationMode;
+
+				float					cameraDistance;
 			};
 
 		}
