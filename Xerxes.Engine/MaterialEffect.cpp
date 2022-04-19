@@ -3,6 +3,7 @@
 #include "ReadData.h"
 #include "RootManager.h"
 #include "XPreprocessors.h"
+#include "../x64/Debug/Output/CompiledShaders/SpecularMap_VS.h"
 
 using namespace DirectX;
 using namespace DirectX::SimpleMath;
@@ -21,7 +22,7 @@ Xerxes::Engine::Graphics::Effects::MaterialEffect::MaterialEffect(ID3D11Device* 
 	lightBuffer(device)
 {
 	vsBlob = DX::ReadData(L"SpecularMap_VS.cso");
-	DX::ThrowIfFailed(device->CreateVertexShader(vsBlob.data(), vsBlob.size(), nullptr, vs.ReleaseAndGetAddressOf()));
+	DX::ThrowIfFailed(device->CreateVertexShader(g_pSpecularMap_VS, sizeof(g_pSpecularMap_VS), nullptr, vs.ReleaseAndGetAddressOf()));
 
 	auto psBlob = DX::ReadData(L"SpecularMap_PS.cso");
 	DX::ThrowIfFailed(device->CreatePixelShader(psBlob.data(), psBlob.size(), nullptr, ps.ReleaseAndGetAddressOf()));
@@ -85,8 +86,8 @@ void __cdecl Xerxes::Engine::Graphics::Effects::MaterialEffect::Apply(ID3D11Devi
 void __cdecl Xerxes::Engine::Graphics::Effects::MaterialEffect::GetVertexShaderBytecode(void const** pShaderByteCode, size_t* pByteCodeLength)
 {
 	assert(pByteCodeLength != nullptr, && pByteCodeLength != nullptr);
-	*pShaderByteCode = vsBlob.data();
-	*pByteCodeLength = vsBlob.size();
+	*pShaderByteCode = g_pSpecularMap_VS;
+	*pByteCodeLength = sizeof(g_pSpecularMap_VS);
 }
 
 void __cdecl Xerxes::Engine::Graphics::Effects::MaterialEffect::SetLightingEnabled(bool value)
@@ -134,6 +135,8 @@ void XM_CALLCONV Xerxes::Engine::Graphics::Effects::MaterialEffect::SetWorld(FXM
 void XM_CALLCONV Xerxes::Engine::Graphics::Effects::MaterialEffect::SetView(FXMMATRIX value)
 {
 	matrixValues.view = XMMatrixTranspose(value);
+	Matrix invView = matrixValues.view.Invert();
+	matrixValues.camPos = Vector3(invView._14, invView._24, invView._34);
 	dirtyFlags |= DirtyMatrixBuffer;
 }
 
@@ -152,5 +155,9 @@ void XM_CALLCONV Xerxes::Engine::Graphics::Effects::MaterialEffect::SetMatrices(
 
 void Xerxes::Engine::Graphics::Effects::MaterialEffect::OnInspector()
 {
-
+	auto availableWidth = ImGui::GetContentRegionAvail().x;
+	
+	XDrawTextureInspect(baseTextureId, "Diffuse Texture")
+	XDrawTextureInspect(specularTextureId, "Specular Texture")
+	XDrawTextureInspect(normalTextureId, "Normal Texture")
 }

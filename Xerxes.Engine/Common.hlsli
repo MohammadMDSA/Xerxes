@@ -1,3 +1,11 @@
+#ifndef __COMMON_HLSLI__
+#define __COMMON_HLSLI__
+
+// Common (static) samplers
+SamplerState defaultSampler : register(s10);
+SamplerComparisonState shadowSampler : register(s11);
+SamplerState cubeMapSampler : register(s12);
+
 
 float3 BiasX2(float3 x)
 {
@@ -104,6 +112,13 @@ struct CommonInstancing
     float3 Normal;
 };
 
+struct Material
+{
+    float3 normal : NORMAL;
+    float4 diffuseColor : COLOR;
+    float specularIntencity;
+    float specularPower;
+};
 
 CommonInstancing ComputeCommonInstancing(float4 position, float3 normal, float4x3 itransform)
 {
@@ -114,3 +129,5 @@ CommonInstancing ComputeCommonInstancing(float4 position, float3 normal, float4x
 
     return vout;
 }
+
+#endif

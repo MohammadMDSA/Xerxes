@@ -1,4 +1,4 @@
-#include "Utility.hlsli"
+#include "Common.hlsli"
 
 Texture2D shaderTextures[3];
 SamplerState sampleType;
@@ -45,7 +45,8 @@ float4 main(PixelInputType pin) : SV_Target
     
     bumpMap = shaderTextures[1].Sample(sampleType, pin.tex);
     
-    bumpMap = (bumpMap * 2.f) - 1.f;
+    if (length(bumpMap) > 0.01f)
+        bumpMap = (bumpMap * 2.f) - 1.f;
     
     specularIntensity = shaderTextures[2].Sample(sampleType, pin.tex);
     
@@ -57,22 +58,25 @@ float4 main(PixelInputType pin) : SV_Target
     
     lightDir = -lightDirection;
     
-    lightIntensity = saturate(dot(bumpNormal, lightDir));
-    
-    color = saturate(diffuseColor * lightIntensity);
-    
-    color = color * textureColor;
-    
-    reflection = normalize(2 * lightIntensity * bumpNormal - lightDir);
+    lightIntensity = dot(bumpNormal, lightDir);
+    if(lightIntensity > 0.0)
+    {
+        lightIntensity = saturate(lightIntensity);
         
-    float3 halfWay = normalize(lightDir + pin.viewDirection);
-        
-    specular = pow(saturate(dot(bumpNormal, halfWay)), specularPower);
-        
-    specular = specular * specularIntensity;
-        
-    color = saturate(color + specular + ambient);
+        color = saturate(diffuseColor * lightIntensity);
     
+        color = color * textureColor;
+    
+        reflection = normalize(2 * lightIntensity * bumpNormal - lightDir);
+        
+        float3 halfWay = normalize(lightDir + pin.viewDirection);
+        
+        specular = pow(saturate(dot(bumpNormal, halfWay)), specularPower);
+        
+        specular = specular * specularIntensity;
+        
+        color = saturate(color + specular + ambient);
+    }
     return color;
     //return shaderTextures[1].Sample(sampleType, pin.tex);
 

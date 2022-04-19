@@ -19,41 +19,6 @@ void RootManager::Destroy()
 	instance = 0;
 }
 
-inline CameraManager* RootManager::GetCameraManager()
-{
-	return cameraManager.get();
-}
-
-inline InputManager* RootManager::GetInputManager()
-{
-	return inputManager.get();
-}
-
-inline ResourceManager* RootManager::GetResourceManager()
-{
-	return resourceManager.get();
-}
-
-inline SceneManager* RootManager::GetSceneManager()
-{
-	return sceneManager.get();
-}
-
-inline SelectionManager* RootManager::GetSelectionManager()
-{
-	return selectionManager.get();
-}
-
-inline LightManager* RootManager::GetLightManager()
-{
-	return lightManager.get();
-}
-
-inline Renderer* RootManager::GetRenderer()
-{
-	return renderer.get();
-}
-
 void RootManager::Update(float deltaTime)
 {
 	inputManager->Update();
