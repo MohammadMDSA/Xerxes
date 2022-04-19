@@ -26,24 +26,24 @@ void RootManager::Update(float deltaTime)
 
 void RootManager::Init()
 {
+	renderer->OnInit();
 	cameraManager->OnInit();
 	inputManager->OnInit();
 	resourceManager->OnInit();
 	sceneManager->OnInit();
 	selectionManager->OnInit();
 	lightManager->OnInit();
-	renderer->OnInit();
 }
 
 void RootManager::Shutdown()
 {
-	renderer->OnShutdown();
 	lightManager->OnShutdown();
 	selectionManager->OnShutdown();
 	sceneManager->OnShutdown();
 	resourceManager->OnShutdown();
 	inputManager->OnShutdown();
 	cameraManager->OnShutdown();
+	renderer->OnShutdown();
 }
 
 
