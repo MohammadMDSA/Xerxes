@@ -20,6 +20,7 @@ const std::string EffectResource::XEffectVertexType_VertexPositionOffsetColorTex
 const std::string EffectResource::XEffectVertexType_VertexPositionNormal = "VertexPositionNormal";
 const std::string EffectResource::XEffectVertexType_VertexPositionNormalTexture = "VertexPositionNormalTexture";
 const std::string EffectResource::XEffectVertexType_VertexPositionNormalColorTexture = "VertexPositionNormalColorTexture";
+const std::string EffectResource::XEffectVertexType_VertexPositionNormalTangentColorTexture = "VertexPositionNormalTangentColorTexture";
 
 EffectResource::EffectResource() :
 	diffuseColor(DirectX::SimpleMath::Vector4(1.f, 1.f, 1.f, 1.f)),
@@ -81,6 +82,8 @@ void EffectResource::CreateInputLayout(ID3D11Device* device)
 		DX::ThrowIfFailed(DirectX::CreateInputLayoutFromEffect< VertexPositionOffsetColorTexture>(device, effect, inputLayout.ReleaseAndGetAddressOf()));
 	else if (vertexType == XEffectVertexType_VertexPositionNormalColorTexture)
 		DX::ThrowIfFailed(DirectX::CreateInputLayoutFromEffect< VertexPositionNormalColorTexture>(device, effect, inputLayout.ReleaseAndGetAddressOf()));
+	else if (vertexType == XEffectVertexType_VertexPositionNormalTangentColorTexture)
+		DX::ThrowIfFailed(DirectX::CreateInputLayoutFromEffect< VertexPositionNormalTangentColorTexture>(device, effect, inputLayout.ReleaseAndGetAddressOf()));
 }
 
 void EffectResource::Initialize(ID3D11DeviceContext* context)
