@@ -39,6 +39,7 @@ public:
 	static const std::string XEffectVertexType_VertexPositionNormal;
 	static const std::string XEffectVertexType_VertexPositionNormalTexture;
 	static const std::string XEffectVertexType_VertexPositionNormalColorTexture;
+	static const std::string XEffectVertexType_VertexPositionNormalTangentColorTexture;
 
 private:
 	Microsoft::WRL::ComPtr<ID3D11InputLayout> inputLayout;
