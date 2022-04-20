@@ -109,6 +109,7 @@
     <ClInclude Include="GameObjectComponent.h" />
     <ClInclude Include="GameResource.h" />
     <ClInclude Include="GeometricPrimitiveResource.h" />
+    <ClInclude Include="IDeviceNotify.h" />
     <ClInclude Include="IInspectorDrawer.h" />
     <ClInclude Include="IManager.h" />
     <ClInclude Include="InputManager.h" />
