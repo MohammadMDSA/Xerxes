@@ -25,6 +25,7 @@ using namespace DirectX;
 using namespace DirectX::SimpleMath;
 using namespace DX;
 using namespace Xerxes;
+using namespace Xerxes::Engine::Graphics::Device;
 using namespace Xerxes::Editor::Device;
 using namespace Xerxes::Editor::Panels;
 

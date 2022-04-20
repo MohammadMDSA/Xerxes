@@ -16,6 +16,7 @@
 
 using namespace DX;
 using namespace Xerxes::Editor::Device;
+using namespace Xerxes::Engine::Graphics::Device;
 
 namespace Xerxes
 {
