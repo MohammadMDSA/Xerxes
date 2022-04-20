@@ -6,11 +6,8 @@
 #include "pch.h"
 #include "DeviceResources.h"
 
-using namespace DirectX;
+using namespace Microsoft::WRL;
 using namespace DX;
-using namespace Xerxes::Editor::Device;
-
-using Microsoft::WRL::ComPtr;
 
 #ifdef __clang__
 #pragma clang diagnostic ignored "-Wcovered-switch-default"
@@ -55,7 +52,7 @@ namespace
 }
 
 // Constructor for DeviceResources.
-DeviceResources::DeviceResources(
+Xerxes::Engine::Graphics::Device::DeviceResources::DeviceResources(
     DXGI_FORMAT backBufferFormat,
     DXGI_FORMAT depthBufferFormat,
     UINT backBufferCount,
@@ -76,7 +73,7 @@ DeviceResources::DeviceResources(
 }
 
 // Configures the Direct3D device, and stores handles to it and the device context.
-void DeviceResources::CreateDeviceResources()
+void Xerxes::Engine::Graphics::Device::DeviceResources::CreateDeviceResources()
 {
     UINT creationFlags = D3D11_CREATE_DEVICE_BGRA_SUPPORT;
 
@@ -253,7 +250,7 @@ void DeviceResources::CreateDeviceResources()
 }
 
 // These resources need to be recreated every time the window size is changed.
-void DeviceResources::CreateWindowSizeDependentResources()
+void Xerxes::Engine::Graphics::Device::DeviceResources::CreateWindowSizeDependentResources()
 {
     if (!m_window)
     {
@@ -389,7 +386,7 @@ void DeviceResources::CreateWindowSizeDependentResources()
 }
 
 // This method is called when the Win32 window is created (or re-created).
-void DeviceResources::SetWindow(HWND window, int width, int height) noexcept
+void Xerxes::Engine::Graphics::Device::DeviceResources::SetWindow(HWND window, int width, int height) noexcept
 {
     m_window = window;
 
@@ -399,7 +396,7 @@ void DeviceResources::SetWindow(HWND window, int width, int height) noexcept
 }
 
 // This method is called when the Win32 window changes size
-bool DeviceResources::WindowSizeChanged(int width, int height)
+bool Xerxes::Engine::Graphics::Device::DeviceResources::WindowSizeChanged(int width, int height)
 {
     RECT newRc;
     newRc.left = newRc.top = 0;
@@ -419,7 +416,7 @@ bool DeviceResources::WindowSizeChanged(int width, int height)
 }
 
 // Recreate all device resources and set them back to the current state.
-void DeviceResources::HandleDeviceLost()
+void Xerxes::Engine::Graphics::Device::DeviceResources::HandleDeviceLost()
 {
     if (m_deviceNotify)
     {
@@ -457,7 +454,7 @@ void DeviceResources::HandleDeviceLost()
 }
 
 // Present the contents of the swap chain to the screen.
-void DeviceResources::Present()
+void Xerxes::Engine::Graphics::Device::DeviceResources::Present()
 {
     HRESULT hr = E_FAIL;
     if (m_options & c_AllowTearing)
@@ -508,7 +505,7 @@ void DeviceResources::Present()
     }
 }
 
-void DeviceResources::CreateFactory()
+void Xerxes::Engine::Graphics::Device::DeviceResources::CreateFactory()
 {
 #if defined(_DEBUG) && (_WIN32_WINNT >= 0x0603 /*_WIN32_WINNT_WINBLUE*/)
     bool debugDXGI = false;
@@ -542,7 +539,7 @@ void DeviceResources::CreateFactory()
 
 // This method acquires the first available hardware adapter.
 // If no such adapter can be found, *ppAdapter will be set to nullptr.
-void DeviceResources::GetHardwareAdapter(IDXGIAdapter1** ppAdapter)
+void Xerxes::Engine::Graphics::Device::DeviceResources::GetHardwareAdapter(IDXGIAdapter1** ppAdapter)
 {
     *ppAdapter = nullptr;
 
@@ -609,7 +606,7 @@ void DeviceResources::GetHardwareAdapter(IDXGIAdapter1** ppAdapter)
 }
 
 // Sets the color space for the swap chain in order to handle HDR output.
-void DeviceResources::UpdateColorSpace()
+void Xerxes::Engine::Graphics::Device::DeviceResources::UpdateColorSpace()
 {
     DXGI_COLOR_SPACE_TYPE colorSpace = DXGI_COLOR_SPACE_RGB_FULL_G22_NONE_P709;
 

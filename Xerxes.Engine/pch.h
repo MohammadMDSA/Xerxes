@@ -20,7 +20,6 @@
 #include <memory>
 #include <stdexcept>
 
-
 #include <wrl/client.h>
 
 #include <d3d11_1.h>
@@ -49,6 +48,8 @@
 #include "WICTextureLoader.h"
 #include "wchar.h"
 #include "WICTextureLoader.h"
+
+#include <unordered_set>
 
 #ifdef _DEBUG
 #include <dxgidebug.h>
