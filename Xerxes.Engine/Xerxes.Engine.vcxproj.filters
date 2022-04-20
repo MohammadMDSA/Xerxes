@@ -237,6 +237,9 @@
     <ClInclude Include="DeviceResources.h">
       <Filter>Source\Public\Graphics\Device</Filter>
     </ClInclude>
+    <ClInclude Include="IDeviceNotify.h">
+      <Filter>Source\Public\Graphics\Device</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Xerxes.Engine.cpp">
