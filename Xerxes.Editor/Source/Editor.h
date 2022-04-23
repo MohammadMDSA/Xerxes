@@ -9,13 +9,11 @@
 #include "SceneWindow.h"
 #include "InspectorWindow.h"
 #include "RootManager.h"
-#include "DeviceResources.h"
 #include "HierarchyWindow.h"
 #include "ResourceWindow.h"
-#include "EditorWindowGraphicResource.h"
+#include "GraphicRenderTarget.h"
 
 using namespace DX;
-using namespace Xerxes::Editor::Device;
 using namespace Xerxes::Engine::Graphics::Device;
 
 namespace Xerxes
@@ -47,7 +45,7 @@ namespace Xerxes
 
             // IDeviceNotify
             void OnDeviceLost() override;
-            void OnDeviceRestored() override;
+            void OnDeviceRestored(ID3D11DeviceContext* context, ID3D11Device* device) override;
 
             // Messages
             void OnActivated();
@@ -64,8 +62,7 @@ namespace Xerxes
 
             void Update(StepTimer const& timer);
             void Render();
-
-            void Clear();
+            void RenderGUI();
 
             void CreateDeviceDependentResources();
             void CreateWindowSizeDependentResources();
@@ -80,11 +77,6 @@ namespace Xerxes
             HWND                                            m_window;
             int                                             m_outputWidth;
             int                                             m_outputHeight;
-            int                                             sceneWidth;
-            int                                             sceneHeight;
-
-            // Device resources.
-            std::unique_ptr<DeviceResources>                m_deviceResources;
 
             // Rendering loop timer.
             StepTimer                                       m_timer;
@@ -101,8 +93,6 @@ namespace Xerxes
             Panels::InspectorWindow* inspectorWindow;
             Panels::HierarchyWindow* hierarchyWindow;
             Panels::ResourceWindow* resourceWindow;
-
-            Device::EditorWindowGraphicResource* windowResource;
 
         };
     }

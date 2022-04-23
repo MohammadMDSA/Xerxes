@@ -28,12 +28,6 @@
     <Filter Include="Source\Public\Utils">
       <UniqueIdentifier>{90abb588-4e72-4775-b802-5979c5f414a9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\Private\SubsystemManager">
-      <UniqueIdentifier>{6391b841-3474-4da0-87de-bb0ab94ff31a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source\Public\SubsystemManager">
-      <UniqueIdentifier>{fcbedd7d-09f6-444a-b241-fc35ccf7ec61}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Libs\ImGuizmo">
       <UniqueIdentifier>{add183bc-7b51-4179-9fde-1cad2e4c9d99}</UniqueIdentifier>
     </Filter>
@@ -85,6 +79,12 @@
     <Filter Include="Source\Public\Graphics\Device">
       <UniqueIdentifier>{7f67ea8a-0aef-4135-88e6-95c451929787}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Public\SubsystemManagers">
+      <UniqueIdentifier>{fcbedd7d-09f6-444a-b241-fc35ccf7ec61}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Private\SubsystemManagers">
+      <UniqueIdentifier>{6391b841-3474-4da0-87de-bb0ab94ff31a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -112,13 +112,13 @@
       <Filter>Libs\imgui</Filter>
     </ClInclude>
     <ClInclude Include="CameraManager.h">
-      <Filter>Source\Public\SubsystemManager</Filter>
+      <Filter>Source\Public\SubsystemManagers</Filter>
     </ClInclude>
     <ClInclude Include="RootManager.h">
-      <Filter>Source\Public\SubsystemManager</Filter>
+      <Filter>Source\Public\SubsystemManagers</Filter>
     </ClInclude>
     <ClInclude Include="InputManager.h">
-      <Filter>Source\Public\SubsystemManager</Filter>
+      <Filter>Source\Public\SubsystemManagers</Filter>
     </ClInclude>
     <ClInclude Include="Libs\imgui\ImZoomSlider.h">
       <Filter>Libs\ImGuizmo</Filter>
@@ -139,7 +139,7 @@
       <Filter>Libs\ImGuizmo</Filter>
     </ClInclude>
     <ClInclude Include="ResourceManager.h">
-      <Filter>Source\Public\SubsystemManager</Filter>
+      <Filter>Source\Public\SubsystemManagers</Filter>
     </ClInclude>
     <ClInclude Include="GameObjectComponent.h">
       <Filter>Source\Public\GameObjectComponent</Filter>
@@ -148,13 +148,13 @@
       <Filter>Source\Public\GameObjectComponent</Filter>
     </ClInclude>
     <ClInclude Include="IManager.h">
-      <Filter>Source\Public\SubsystemManager</Filter>
+      <Filter>Source\Public\SubsystemManagers</Filter>
     </ClInclude>
     <ClInclude Include="Libs\imgui\imgui_stdlib.h">
       <Filter>Libs\imgui</Filter>
     </ClInclude>
     <ClInclude Include="SceneManager.h">
-      <Filter>Source\Public\SubsystemManager</Filter>
+      <Filter>Source\Public\SubsystemManagers</Filter>
     </ClInclude>
     <ClInclude Include="Camera.h">
       <Filter>Source\Public\Core</Filter>
@@ -187,7 +187,7 @@
       <Filter>Source\Public\GameResources</Filter>
     </ClInclude>
     <ClInclude Include="SelectionManager.h">
-      <Filter>Source\Public\SubsystemManager</Filter>
+      <Filter>Source\Public\SubsystemManagers</Filter>
     </ClInclude>
     <ClInclude Include="IInspectorDrawer.h">
       <Filter>Source\Public\Core</Filter>
@@ -196,7 +196,7 @@
       <Filter>Source\Public\GameObjectComponent</Filter>
     </ClInclude>
     <ClInclude Include="LightManager.h">
-      <Filter>Source\Public\SubsystemManager</Filter>
+      <Filter>Source\Public\SubsystemManagers</Filter>
     </ClInclude>
     <ClInclude Include="Scene.h">
       <Filter>Source\Public\Core</Filter>
@@ -232,12 +232,12 @@
       <Filter>Source\Public\Graphics\Effects</Filter>
     </ClInclude>
     <ClInclude Include="Renderer.h">
-      <Filter>Source\Public\SubsystemManager</Filter>
-    </ClInclude>
-    <ClInclude Include="DeviceResources.h">
-      <Filter>Source\Public\Graphics\Device</Filter>
+      <Filter>Source\Public\SubsystemManagers</Filter>
     </ClInclude>
     <ClInclude Include="IDeviceNotify.h">
+      <Filter>Source\Public\Graphics\Device</Filter>
+    </ClInclude>
+    <ClInclude Include="GraphicRenderTarget.h">
       <Filter>Source\Public\Graphics\Device</Filter>
     </ClInclude>
   </ItemGroup>
@@ -264,13 +264,13 @@
       <Filter>Libs\imgui</Filter>
     </ClCompile>
     <ClCompile Include="CameraManager.cpp">
-      <Filter>Source\Private\SubsystemManager</Filter>
+      <Filter>Source\Private\SubsystemManagers</Filter>
     </ClCompile>
     <ClCompile Include="RootManager.cpp">
-      <Filter>Source\Private\SubsystemManager</Filter>
+      <Filter>Source\Private\SubsystemManagers</Filter>
     </ClCompile>
     <ClCompile Include="InputManager.cpp">
-      <Filter>Source\Private\SubsystemManager</Filter>
+      <Filter>Source\Private\SubsystemManagers</Filter>
     </ClCompile>
     <ClCompile Include="Libs\imgui\ImSequencer.cpp">
       <Filter>Libs\ImGuizmo</Filter>
@@ -288,7 +288,7 @@
       <Filter>Libs\ImGuizmo</Filter>
     </ClCompile>
     <ClCompile Include="ResourceManager.cpp">
-      <Filter>Source\Private\SubsystemManager</Filter>
+      <Filter>Source\Private\SubsystemManagers</Filter>
     </ClCompile>
     <ClCompile Include="GameObjectComponent.cpp">
       <Filter>Source\Private\GameObjectComponent</Filter>
@@ -300,7 +300,7 @@
       <Filter>Libs\imgui</Filter>
     </ClCompile>
     <ClCompile Include="SceneManager.cpp">
-      <Filter>Source\Private\SubsystemManager</Filter>
+      <Filter>Source\Private\SubsystemManagers</Filter>
     </ClCompile>
     <ClCompile Include="Camera.cpp">
       <Filter>Source\Private\Core</Filter>
@@ -324,13 +324,13 @@
       <Filter>Source\Private\GameResources</Filter>
     </ClCompile>
     <ClCompile Include="SelectionManager.cpp">
-      <Filter>Source\Private\SubsystemManager</Filter>
+      <Filter>Source\Private\SubsystemManagers</Filter>
     </ClCompile>
     <ClCompile Include="LightComponent.cpp">
       <Filter>Source\Private\GameObjectComponent</Filter>
     </ClCompile>
     <ClCompile Include="LightManager.cpp">
-      <Filter>Source\Private\SubsystemManager</Filter>
+      <Filter>Source\Private\SubsystemManagers</Filter>
     </ClCompile>
     <ClCompile Include="Scene.cpp">
       <Filter>Source\Private\Core</Filter>
@@ -351,9 +351,9 @@
       <Filter>Source\Private\Graphics\Effects</Filter>
     </ClCompile>
     <ClCompile Include="Renderer.cpp">
-      <Filter>Source\Private\SubsystemManager</Filter>
+      <Filter>Source\Private\SubsystemManagers</Filter>
     </ClCompile>
-    <ClCompile Include="DeviceResources.cpp">
+    <ClCompile Include="GraphicRenderTarget.cpp">
       <Filter>Source\Private\Graphics\Device</Filter>
     </ClCompile>
   </ItemGroup>

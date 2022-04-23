@@ -73,8 +73,6 @@ void SceneWindow::OnGUI()
 	auto view1 = cam->GetView();
 	auto proj = cam->GetProjection();
 
-	ImGuizmo::DrawGrid((float*)&view, (float*)&proj, (float*)&Matrix::Identity, 100);
-
 	auto viewManTop = GetHeight() + GetPosY() - 100;
 	auto viewManLeft = GetPosX();
 
@@ -202,5 +200,63 @@ void SceneWindow::Update(float deltaTime)
 
 void SceneWindow::OnRender(DirectX::SimpleMath::Matrix view, DirectX::SimpleMath::Matrix proj)
 {
+	auto resourceManager = RootManager::GetInstance()->GetResourceManager();
+	auto context = resourceManager->GetDeviceContext();
+	auto batch = resourceManager->GetDefaultBatch();
+	auto res = resourceManager->ResourceGroup<EffectResource>::GetById(effectId);
+	auto effect = dynamic_cast<BasicEffect*>(res->GetResource());
 
+	context->OMSetDepthStencilState(states->DepthRead(), 0);
+	context->OMSetBlendState(states->Opaque(), nullptr, 0xFFFFFFFF);
+	context->RSSetState(states->CullNone());
+
+	effect->SetView(view);
+	effect->SetProjection(proj);
+	effect->SetWorld(DirectX::SimpleMath::Matrix::Identity);
+	effect->Apply(context);
+
+	context->IASetInputLayout(res->GetInputLayout());
+
+	batch->Begin();
+
+	Vector3 xaxis(1.f, 0.f, 0.f);
+	Vector3 yaxis(0.f, 0.f, 1.f);
+	Vector3 origin = Vector3::Zero;
+
+	const int count = 100;
+	DirectX::XMVECTOR color;
+
+	auto darkGray = Color(0.3f, 0.3f, 0.3f);
+
+	for (int i = (-count); i <= count; ++i)
+	{
+		if (i == 0)
+			color = Colors::White;
+		else if (i % 10 == 0)
+			color = Colors::Gray;
+		else
+			color = darkGray;
+
+		auto scale = xaxis * i;
+		VertexPositionColor v1(scale - (count * yaxis), color);
+		VertexPositionColor v2(scale + (count * yaxis), color);
+		batch->DrawLine(v1, v2);
+	}
+
+	for (int i = -count; i <= count; i++)
+	{
+		if (i == 0)
+			color = Colors::White;
+		else if (i % 10 == 0)
+			color = Colors::Gray;
+		else
+			color = darkGray;
+
+		auto scale = yaxis * i;
+		VertexPositionColor v1(scale - (count * xaxis), color);
+		VertexPositionColor v2(scale + (count * xaxis), color);
+		batch->DrawLine(v1, v2);
+	}
+
+	batch->End();
 }

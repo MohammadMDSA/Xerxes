@@ -102,13 +102,13 @@
   <ItemGroup>
     <ClInclude Include="Camera.h" />
     <ClInclude Include="CameraManager.h" />
-    <ClInclude Include="DeviceResources.h" />
     <ClInclude Include="EffectResource.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GameObjectComponent.h" />
     <ClInclude Include="GameResource.h" />
     <ClInclude Include="GeometricPrimitiveResource.h" />
+    <ClInclude Include="GraphicRenderTarget.h" />
     <ClInclude Include="IDeviceNotify.h" />
     <ClInclude Include="IInspectorDrawer.h" />
     <ClInclude Include="IManager.h" />
@@ -155,11 +155,11 @@
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CameraManager.cpp" />
-    <ClCompile Include="DeviceResources.cpp" />
     <ClCompile Include="EffectResource.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GameObjectComponent.cpp" />
     <ClCompile Include="GeometricPrimitiveResource.cpp" />
+    <ClCompile Include="GraphicRenderTarget.cpp" />
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="Libs\imgui\GraphEditor.cpp" />
     <ClCompile Include="Libs\imgui\ImCurveEdit.cpp" />

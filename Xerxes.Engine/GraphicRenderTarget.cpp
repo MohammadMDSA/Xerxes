@@ -1,18 +1,19 @@
 #include "pch.h"
-#include "EditorWindowGraphicResource.h"
+#include "GraphicRenderTarget.h"
 
-using namespace Xerxes::Editor::Device;
-
-
-EditorWindowGraphicResource::EditorWindowGraphicResource()
+Xerxes::Engine::Graphics::Device::GraphicRenderTarget::GraphicRenderTarget()
 {
 	m_windowRenderTargetTexture.Reset();
 	m_windowRenderTargetView.Reset();
 	m_windowShaderResourceView.Reset();
+	m_depthStencil.Reset();
+	m_d3dDepthStencilView.Reset();
 }
 
-void EditorWindowGraphicResource::Initialize(ID3D11Device* device, int textureWidth, int textureHeight)
+void Xerxes::Engine::Graphics::Device::GraphicRenderTarget::Initialize(ID3D11Device* device, int textureWidth, int textureHeight)
 {
+	textureWidth = max(textureWidth, 2);
+	textureHeight = max(textureHeight, 2);
 	D3D11_TEXTURE2D_DESC textureDesc;
 	HRESULT result;
 	D3D11_RENDER_TARGET_VIEW_DESC renderTargetViewDesc;
@@ -84,14 +85,14 @@ void EditorWindowGraphicResource::Initialize(ID3D11Device* device, int textureWi
 
 }
 
-void EditorWindowGraphicResource::Shutdown()
+void Xerxes::Engine::Graphics::Device::GraphicRenderTarget::Shutdown()
 {
 	m_windowRenderTargetTexture.Reset();
 	m_windowRenderTargetView.Reset();
 	m_windowShaderResourceView.Reset();
 }
 
-void EditorWindowGraphicResource::SetRenderTarget(ID3D11DeviceContext* deviceContext, ID3D11DepthStencilView* depthStencilView, ID3D11RenderTargetView* rtv)
+void Xerxes::Engine::Graphics::Device::GraphicRenderTarget::SetRenderTarget(ID3D11DeviceContext* deviceContext, ID3D11DepthStencilView* depthStencilView, ID3D11RenderTargetView* rtv)
 {
 	// Bind the render target view and depth stencil buffer to the output render pipeline.
 	deviceContext->OMSetRenderTargets(1, m_windowRenderTargetView.GetAddressOf(), m_d3dDepthStencilView.Get());
@@ -101,12 +102,12 @@ void EditorWindowGraphicResource::SetRenderTarget(ID3D11DeviceContext* deviceCon
 	return;
 }
 
-void Xerxes::Editor::Device::EditorWindowGraphicResource::ClearRenderTarget(ID3D11DeviceContext* deviceContext, ID3D11DepthStencilView* depthStencilView, DirectX::XMVECTORF32 color)
+void Xerxes::Engine::Graphics::Device::GraphicRenderTarget::ClearRenderTarget(ID3D11DeviceContext* deviceContext, ID3D11DepthStencilView* depthStencilView, DirectX::XMVECTORF32 color)
 {
 	ClearRenderTarget(deviceContext, depthStencilView, color[0], color[1], color[2], color[3]);
 }
 
-void EditorWindowGraphicResource::ClearRenderTarget(ID3D11DeviceContext* deviceContext, ID3D11DepthStencilView* depthStencilView,
+void Xerxes::Engine::Graphics::Device::GraphicRenderTarget::ClearRenderTarget(ID3D11DeviceContext* deviceContext, ID3D11DepthStencilView* depthStencilView,
 	float red, float green, float blue, float alpha)
 {
 	float color[4];
@@ -126,7 +127,7 @@ void EditorWindowGraphicResource::ClearRenderTarget(ID3D11DeviceContext* deviceC
 	return;
 }
 
-ID3D11ShaderResourceView* EditorWindowGraphicResource::GetShaderResourceView()
+ID3D11ShaderResourceView* Xerxes::Engine::Graphics::Device::GraphicRenderTarget::GetShaderResourceView()
 {
 	return m_windowShaderResourceView.Get();
 }

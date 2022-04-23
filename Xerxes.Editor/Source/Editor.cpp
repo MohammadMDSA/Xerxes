@@ -26,7 +26,6 @@ using namespace DirectX::SimpleMath;
 using namespace DX;
 using namespace Xerxes;
 using namespace Xerxes::Engine::Graphics::Device;
-using namespace Xerxes::Editor::Device;
 using namespace Xerxes::Editor::Panels;
 
 using Microsoft::WRL::ComPtr;
@@ -37,13 +36,8 @@ Xerxes::Editor::Editor::Editor() noexcept :
 	m_outputHeight(900),
 	m_imguiActive(false),
 	showDemo(true),
-	rootManager(nullptr),
-	sceneWidth(1),
-	sceneHeight(1)
+	rootManager(nullptr)
 {
-	m_deviceResources = std::make_unique<DeviceResources>();
-	m_deviceResources->RegisterDeviceNotify(this);
-	windowResource = new EditorWindowGraphicResource();
 }
 
 Xerxes::Editor::Editor::~Editor()
@@ -60,14 +54,11 @@ void Xerxes::Editor::Editor::Initialize(HWND window, int width, int height)
 	m_outputWidth = std::max(width, 1);
 	m_outputHeight = std::max(height, 1);
 
-	m_deviceResources->SetWindow(window, m_outputWidth, m_outputHeight);
+	auto renderer = XRenderer();
 
-
-	m_deviceResources->CreateDeviceResources();
-	CreateDeviceDependentResources();
-
-	m_deviceResources->CreateWindowSizeDependentResources();
-	CreateWindowSizeDependentResources();
+	renderer->RegisterDeviceNotify(this);
+	renderer->SetWindow(window, width, height);
+	renderer->CreateResource();
 
 	// TODO: Change the timer settings if you want something other than the default variable timestep mode.
 	// e.g. for 60 FPS fixed timestep update logic, call:
@@ -98,8 +89,6 @@ void Xerxes::Editor::Editor::Initialize(HWND window, int width, int height)
 	camera->SetPosition(2, 2, 2);
 	sceneWindow->SetCamera(rootManager->GetCameraManager()->GetActiveCamera());
 
-	GetDefaultSize(sceneWidth, sceneHeight);
-
 }
 
 // Executes the basic game loop.
@@ -126,12 +115,16 @@ void Xerxes::Editor::Editor::Update(StepTimer const& timer)
 	// Handling layout
 	int newSceneWidth = xmax(sceneWindow->GetWidth(), 1);
 	int newSceneHeight = xmax(sceneWindow->GetHeight(), 1);
+	int sceneWidth, sceneHeight;
+
+	auto renderer = XRenderer();
+	renderer->GetRenderDimansion(sceneWidth, sceneHeight);
 	if (newSceneWidth != sceneWidth || newSceneHeight != sceneHeight)
 	{
 		sceneHeight = newSceneHeight;
 		sceneWidth = newSceneWidth;
 		RootManager::GetInstance()->GetCameraManager()->SetOutputSize(sceneWidth, sceneHeight);
-		windowResource->Initialize(RootManager::GetInstance()->GetResourceManager()->GetDevice(), sceneWidth, sceneHeight);
+		renderer->SetRenderDimansion(sceneWidth, sceneHeight);
 	}
 	elapsedTime;
 }
@@ -144,29 +137,25 @@ void Xerxes::Editor::Editor::Render()
 	{
 		return;
 	}
-
-
-
-	auto context = m_deviceResources->GetD3DDeviceContext();
-	auto depthStencil = m_deviceResources->GetDepthStencilView();
-	windowResource->ClearRenderTarget(context, depthStencil, Colors::Black);
-	windowResource->SetRenderTarget(context, depthStencil, m_deviceResources->GetRenderTargetView());
-
-
-	m_deviceResources->PIXBeginEvent(L"Render");
-	auto camera = sceneWindow->GetCamera();
-
+	
+	auto camera = XCameraM()->GetActiveCamera();
 	auto view = camera->GetView();
 	auto proj = camera->GetProjection();
-	auto sceneManager = rootManager->GetSceneManager();
 
-	sceneManager->OnRender(view, proj);
+	auto renderer = XRenderer();
+	renderer->Render();
+
 	sceneWindow->OnRender(view, proj);
 	
-	m_deviceResources->PIXEndEvent();
+	RenderGUI();
+	
+	renderer->Clear();
+	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
+	renderer->Present();
+}
 
-
-
+void Xerxes::Editor::Editor::RenderGUI()
+{
 	// Start the Dear ImGui frame
 	ImGui_ImplDX11_NewFrame();
 	ImGui_ImplWin32_NewFrame();
@@ -180,16 +169,19 @@ void Xerxes::Editor::Editor::Render()
 	auto selected = selectionManager->GetSelectedInspectorDrawer();
 
 	sceneWindow->BeginWindow();
-	
+
 	// Drawing scene texture
 	auto curPos = ImGui::GetCursorPos();
-	ImGui::Image((void*)windowResource->GetShaderResourceView(), ImVec2(sceneWidth, sceneHeight));
+
+	int sceneWidth, sceneHeight;
+	XRenderer()->GetRenderDimansion(sceneWidth, sceneHeight);
+	ImGui::Image((void*)XRenderer()->GetViewTexture(), ImVec2(sceneWidth, sceneHeight));
 	ImGui::SetCursorPos(curPos);
 
 	// Drawing scene gizmo
 	auto min = ImGui::GetWindowContentRegionMin();
 	ImGuizmo::SetRect(sceneWindow->GetPosX() + min.x, sceneWindow->GetPosY() + min.y, sceneWidth, sceneHeight);
-	sceneManager->OnGizmo(sceneWindow->GetManipulationOperation(), sceneWindow->GetManipulationMode());
+	XSceneM()->OnGizmo(sceneWindow->GetManipulationOperation(), sceneWindow->GetManipulationMode());
 
 
 	sceneWindow->EndWindow();
@@ -212,6 +204,8 @@ void Xerxes::Editor::Editor::Render()
 
 
 	ImGui::Begin("Camera Inspector", &showCameraInspector);
+
+	auto camera = XCameraM()->GetActiveCamera();
 	camera->OnGui();
 
 	ImGui::End();
@@ -227,30 +221,6 @@ void Xerxes::Editor::Editor::Render()
 		ImGui::UpdatePlatformWindows();
 		ImGui::RenderPlatformWindowsDefault();
 	}*/
-	Clear();
-	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
-	m_deviceResources->Present();
-}
-
-// Helper method to clear the back buffers.
-void Xerxes::Editor::Editor::Clear()
-{
-	auto context = m_deviceResources->GetD3DDeviceContext();
-	auto renderTarget = m_deviceResources->GetRenderTargetView();
-	auto depthStencil = m_deviceResources->GetDepthStencilView();
-
-	// Clear the views.
-	context->ClearRenderTargetView(renderTarget, Colors::CornflowerBlue);
-	context->ClearDepthStencilView(depthStencil, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
-
-	context->OMSetRenderTargets(1, &renderTarget, depthStencil);
-
-	// Set the viewport.
-	float width = sceneWindow->GetWidth(), height = sceneHeight;
-	{
-		CD3D11_VIEWPORT viewport(0.f, 0.f, static_cast<float>(width), static_cast<float>(height));
-		context->RSSetViewports(1, &viewport);
-	}
 }
 
 // Message handlers
@@ -278,13 +248,11 @@ void Xerxes::Editor::Editor::OnResuming()
 
 void Xerxes::Editor::Editor::OnWindowMoved()
 {
-	auto r = m_deviceResources->GetOutputSize();
-	m_deviceResources->WindowSizeChanged(r.right, r.bottom);
 }
 
 void Xerxes::Editor::Editor::OnWindowSizeChanged(int width, int height)
 {
-	if (!m_deviceResources->WindowSizeChanged(width, height))
+	if (!XRenderer()->SetOutputSize(width, height))
 		return;
 	m_outputWidth = std::max(width, 1);
 	m_outputHeight = std::max(height, 1);
@@ -310,7 +278,7 @@ void Xerxes::Editor::Editor::OnDeviceLost()
 
 }
 
-void Xerxes::Editor::Editor::OnDeviceRestored()
+void Xerxes::Editor::Editor::OnDeviceRestored(ID3D11DeviceContext* context, ID3D11Device* device)
 {
 	CreateDeviceDependentResources();
 	CreateWindowSizeDependentResources();
@@ -318,20 +286,11 @@ void Xerxes::Editor::Editor::OnDeviceRestored()
 
 void Xerxes::Editor::Editor::CreateDeviceDependentResources()
 {
-	auto device = m_deviceResources->GetD3DDevice();
-
-	device;
 }
 
 void Xerxes::Editor::Editor::CreateWindowSizeDependentResources()
 {
 	InitializeImgui();
-	auto context = m_deviceResources->GetD3DDeviceContext();
-	auto device = m_deviceResources->GetD3DDevice();
-	RootManager::GetInstance()->GetResourceManager()->SetDevice(device);
-	RootManager::GetInstance()->GetResourceManager()->SetDeviceContext(context);
-
-	windowResource->Initialize(device, sceneWidth, sceneHeight);
 }
 
 void Xerxes::Editor::Editor::InitializeImgui()
@@ -356,9 +315,10 @@ void Xerxes::Editor::Editor::InitializeImgui()
 
 	io.ConfigWindowsMoveFromTitleBarOnly = true;
 
+	auto renderer = XRenderer();
 	// Setup Platform/Renderer backends
 	ImGui_ImplWin32_Init(m_window);
-	ImGui_ImplDX11_Init(m_deviceResources->GetD3DDevice(), m_deviceResources->GetD3DDeviceContext());
+	ImGui_ImplDX11_Init(renderer->GetDevice(), renderer->GetDeviceContext());
 
 	clear_color[0] = 0.45f;
 

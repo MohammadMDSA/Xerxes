@@ -26,12 +26,6 @@
     <Filter Include="Libs\imgui">
       <UniqueIdentifier>{6675d9d5-6d8e-4b82-ab94-9b82347630a9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\Private\Device">
-      <UniqueIdentifier>{b1c5c8cc-7b27-4b13-b557-6ff28a61914e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source\Public\Device">
-      <UniqueIdentifier>{cee99838-291b-4e23-a843-0da5a50db687}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Libs\ImGuiFileDialog">
       <UniqueIdentifier>{97ebed97-fb12-4abd-b1d8-9496105c1d1f}</UniqueIdentifier>
     </Filter>
@@ -82,9 +76,6 @@
     <ClInclude Include="ResourceWindow.h">
       <Filter>Source\Public\EditorWindow</Filter>
     </ClInclude>
-    <ClInclude Include="EditorWindowGraphicResource.h">
-      <Filter>Source\Public\Device</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Editor.cpp">
@@ -117,9 +108,6 @@
     </ClCompile>
     <ClCompile Include="ResourceWindow.cpp">
       <Filter>Source\Private\EditorWindow</Filter>
-    </ClCompile>
-    <ClCompile Include="EditorWindowGraphicResource.cpp">
-      <Filter>Source\Private\Device</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

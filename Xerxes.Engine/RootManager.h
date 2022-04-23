@@ -10,7 +10,7 @@
 #include "XPreprocessors.h"
 #include "Renderer.h"
 
-using namespace Xerxes::Engine::SubsystemManager;
+using namespace Xerxes::Engine::SubsystemManagers;
 
 class RootManager
 {
@@ -18,13 +18,13 @@ public:
 	static RootManager*						GetInstance();
 	static void								Destroy();
 
-	inline CameraManager*					GetCameraManager();
-	inline InputManager*					GetInputManager();
-	inline ResourceManager*					GetResourceManager();
-	inline SceneManager*					GetSceneManager();
-	inline SelectionManager*				GetSelectionManager();
-	inline LightManager*					GetLightManager();
-	inline Renderer*						GetRenderer();
+	inline CameraManager*					GetCameraManager() { return cameraManager.get(); }
+	inline InputManager*					GetInputManager() { return inputManager.get(); }
+	inline ResourceManager*					GetResourceManager() { return resourceManager.get(); }
+	inline SceneManager*					GetSceneManager() { return sceneManager.get(); }
+	inline SelectionManager*				GetSelectionManager() { return selectionManager.get(); }
+	inline LightManager*					GetLightManager() { return lightManager.get(); }
+	inline Xerxes::Engine::SubsystemManagers::Renderer*						GetRenderer() { return renderer.get(); }
 
 	void									Update(float deltaTime);
 
@@ -38,7 +38,7 @@ private:
 	std::shared_ptr<SceneManager>			sceneManager;
 	std::shared_ptr<SelectionManager>		selectionManager;
 	std::shared_ptr<LightManager>			lightManager;
-	std::shared_ptr<Renderer>				renderer;
+	std::shared_ptr<Xerxes::Engine::SubsystemManagers::Renderer>				renderer;
 	
 	RootManager(RootManager const&) {};
 	RootManager&							operator=(RootManager const&) {};

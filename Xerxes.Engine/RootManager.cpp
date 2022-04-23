@@ -68,6 +68,8 @@ void RootManager::Init()
 	sceneManager->OnInit();
 	selectionManager->OnInit();
 	lightManager->OnInit();
+
+	renderer->RegisterDeviceNotify(resourceManager.get());
 }
 
 void RootManager::Shutdown()

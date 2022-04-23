@@ -50,7 +50,7 @@
 
 #define XSelectionM() RootManager::GetInstance()->GetSelectionManager()
 
-#define XRenderer() RootManager::GetInstance()->GetRenderer();
+#define XRenderer() RootManager::GetInstance()->GetRenderer()
 
 ///////////////////////////////////////
 //-----------Components--------------//

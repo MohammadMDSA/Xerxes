@@ -10,8 +10,11 @@
 #include "ModelResource.h"
 #include "EffectResource.h"
 #include "GeometricPrimitiveResource.h"
+#include "IDeviceNotify.h"
 
-class ResourceManager : public IManager, public ResourceGroup<EffectResource>, public ResourceGroup<ModelResource>, public ResourceGroup<TextureResource>, public ResourceGroup<GeometricPrimitiveResource>
+using namespace Xerxes::Engine::Graphics::Device;
+
+class ResourceManager : public IManager, public ResourceGroup<EffectResource>, public ResourceGroup<ModelResource>, public ResourceGroup<TextureResource>, public ResourceGroup<GeometricPrimitiveResource>, public IDeviceNotify
 {
 public:
 
@@ -46,6 +49,11 @@ public:
 	void LoadAllSubdirectoriesResources(std::string root);
 
 	inline DirectX::CommonStates* GetCommonStates() { return states.get(); }
+
+	// Inherited via IDeviceNotify
+	virtual void OnDeviceLost() override;
+
+	virtual void OnDeviceRestored(ID3D11DeviceContext* context, ID3D11Device* device) override;
 
 private:
 

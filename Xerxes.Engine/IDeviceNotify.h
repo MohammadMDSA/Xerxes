@@ -12,7 +12,7 @@ namespace Xerxes
                 interface IDeviceNotify
                 {
                     virtual void OnDeviceLost() = 0;
-                    virtual void OnDeviceRestored() = 0;
+                    virtual void OnDeviceRestored(ID3D11DeviceContext* context, ID3D11Device* device) = 0;
 
                 protected:
                     ~IDeviceNotify() = default;
