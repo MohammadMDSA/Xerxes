@@ -130,9 +130,9 @@ void ResourceManager::InitializeResources()
 	{
 		AddDefaultGeometricPrimitives();
 		AddDefaultEffects();
-		AddDefaultBatcch();
 		createdDefaultResources = true;
 	}
+	AddDefaultBatcch();
 	for (auto& it : ResourceGroup<ModelResource>::group)
 	{
 		it.second->Initialize(context);;
@@ -266,12 +266,24 @@ void ResourceManager::AddDefaultEffects()
 
 void ResourceManager::AddDefaultBatcch()
 {
+	if (dBatch)
+		dBatch.reset();
 	dBatch = std::make_unique<PrimitiveBatch<VertexPositionColor>>(context);
 }
 
 void ResourceManager::LoadAllSubdirectoriesResources(std::string root)
 {
 	LoadAllDirectoryResources(path(root));
+}
+
+void ResourceManager::OnDeviceLost()
+{
+}
+
+void ResourceManager::OnDeviceRestored(ID3D11DeviceContext* context, ID3D11Device* device)
+{
+	SetDevice(device);
+	SetDeviceContext(context);
 }
 
 void ResourceManager::LoadAllDirectoryResources(path path)

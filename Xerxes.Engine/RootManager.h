@@ -10,7 +10,7 @@
 #include "XPreprocessors.h"
 #include "Renderer.h"
 
-using namespace Xerxes::Engine::SubsystemManager;
+using namespace Xerxes::Engine::SubsystemManagers;
 
 class RootManager
 {
@@ -24,7 +24,7 @@ public:
 	inline SceneManager*					GetSceneManager() { return sceneManager.get(); }
 	inline SelectionManager*				GetSelectionManager() { return selectionManager.get(); }
 	inline LightManager*					GetLightManager() { return lightManager.get(); }
-	inline Renderer*						GetRenderer() { return renderer.get(); }
+	inline Xerxes::Engine::SubsystemManagers::Renderer*						GetRenderer() { return renderer.get(); }
 
 	void									Update(float deltaTime);
 
@@ -38,7 +38,7 @@ private:
 	std::shared_ptr<SceneManager>			sceneManager;
 	std::shared_ptr<SelectionManager>		selectionManager;
 	std::shared_ptr<LightManager>			lightManager;
-	std::shared_ptr<Renderer>				renderer;
+	std::shared_ptr<Xerxes::Engine::SubsystemManagers::Renderer>				renderer;
 	
 	RootManager(RootManager const&) {};
 	RootManager&							operator=(RootManager const&) {};
