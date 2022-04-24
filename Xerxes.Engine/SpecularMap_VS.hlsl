@@ -3,6 +3,7 @@ cbuffer MatrixBuffer
     matrix world;
     matrix view;
     matrix proj;
+    float3 cameraPos;
 };
 
 struct VertexInputType
@@ -25,7 +26,6 @@ PixelInputType main(VertexInputType vin)
 {
     PixelInputType output;
     float4 worldPosition;
-    float3 cameraPosition;
     
     vin.position.w = 1.f;
     
@@ -37,9 +37,7 @@ PixelInputType main(VertexInputType vin)
     
     output.normal = normalize(mul(vin.normal, (float3x3) world));
     
-    cameraPosition = view._41_42_43;
-    
-    output.viewDirection = normalize(cameraPosition - worldPosition.xyz);
+    output.viewDirection = normalize(cameraPos - worldPosition.xyz);
     
     output.worldPos = worldPosition.xyz;
     

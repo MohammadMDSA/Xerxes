@@ -17,7 +17,7 @@ namespace Xerxes
 			namespace Effects
 			{
 
-				class MaterialEffect : public IEffect, public IEffectLights, public IEffectMatrices, IXEffect
+				class MaterialEffect : public IEffect, public IEffectLights, public IEffectMatrices, public IXEffect
 				{
 				public:
 					MaterialEffect(ID3D11Device* device);
@@ -64,9 +64,10 @@ namespace Xerxes
 
 					struct __declspec(align(16)) MatrixConstants
 					{
-						XMMATRIX		world;
-						XMMATRIX		view;
-						XMMATRIX		proj;
+						Matrix		world;
+						Matrix		view;
+						Matrix		proj;
+						Vector3		camPos;
 					} matrixValues;
 
 					struct __declspec(align(16)) LightConstants
