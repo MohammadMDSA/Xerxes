@@ -60,7 +60,7 @@ void SceneWindow::OnGUI()
 		ImGui::SameLine();
 		ImGui::RadioButton("Scale", (int*)&manipulationOperation, ImGuizmo::OPERATION::SCALE);
 		ImGui::SameLine();
-		ImGui::RadioButton("Universal", (int*)&manipulationMode, ImGuizmo::OPERATION::UNIVERSAL);
+		ImGui::RadioButton("Universal", (int*)&manipulationOperation, ImGuizmo::OPERATION::UNIVERSAL);
 
 		ImGui::EndTable();
 	}
