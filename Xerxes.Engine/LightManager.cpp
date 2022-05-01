@@ -30,13 +30,13 @@ void LightManager::ApplyToEffect(DirectX::IEffectLights* effect)
 		effect->EnableDefaultLighting();
 		return;
 	}
-	auto color = light->GetColor();
+	auto color = light->get_color();
 	effect->SetLightingEnabled(true);
 	effect->SetLightEnabled(0, true);
 	effect->SetLightDiffuseColor(0, color);
 	effect->SetLightDirection(0, light->GetDirection());
 	effect->SetLightSpecularColor(0, color);
-	effect->SetAmbientLightColor(color * light->GetAmbientIntencity());
+	effect->SetAmbientLightColor(color * light->get_ambientIntencity());
 }
 
 void LightManager::OnInit()
