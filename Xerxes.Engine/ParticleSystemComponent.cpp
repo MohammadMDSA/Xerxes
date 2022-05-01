@@ -212,7 +212,6 @@ void ParticleSystemComponent::OnDestroy()
 
 ParticleSystemComponent& ParticleSystemComponent::operator=(const ParticleSystemComponent& other)
 {
-	this->gameObject = other.gameObject;
 	this->effectId = other.effectId;
 	return *this;
 }

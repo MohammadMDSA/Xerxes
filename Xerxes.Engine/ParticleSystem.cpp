@@ -123,8 +123,6 @@ void Xerxes::Engine::Graphics::ParticleSystem::SetTextureId(GameResourceId id)
 
 bool Xerxes::Engine::Graphics::ParticleSystem::InitializeParticleSystem()
 {
-	int i;
-
 	// Set the maximum number of particles allowed in the particle system
 	maxParticles = 5000;
 
