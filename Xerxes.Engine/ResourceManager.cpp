@@ -8,8 +8,7 @@ using namespace boost::filesystem;
 using namespace DirectX;
 
 ResourceManager::ResourceManager() :
-	createdDefaultResources(0),
-	lastId(-1)
+	createdDefaultResources(0)
 {
 }
 
@@ -34,7 +33,6 @@ GameResourceBase* ResourceManager::CreateModel(std::string p)
 		throw std::exception("File not found");
 
 	auto modelResource = new ModelResource();
-	modelResource->id = GetNewId();
 	modelResource->name = std::string("model_") + path.filename().string();
 	modelResource->path = path;
 
@@ -45,7 +43,7 @@ GameResourceBase* ResourceManager::CreateModel(std::string p)
 	else
 		throw std::exception("Not supported extension");
 
-	ResourceGroup<ModelResource>::group.insert({ modelResource->id, modelResource });
+	ResourceGroup<ModelResource>::group.insert({ modelResource->get_id(), modelResource });
 	return modelResource;
 
 }
@@ -60,7 +58,6 @@ GameResourceBase* ResourceManager::CreateTexture(std::string path)
 {
 	auto pPath = boost::filesystem::path(path);
 	auto resource = new TextureResource();
-	resource->id = GetNewId();
 	resource->path = path;
 	resource->name = pPath.filename().string();
 	auto ext = extension(path);
@@ -71,7 +68,7 @@ GameResourceBase* ResourceManager::CreateTexture(std::string path)
 	else
 		throw std::exception(("Not supported texture extension: " + ext).c_str());
 
-	ResourceGroup<TextureResource>::group.insert({ resource->id, resource });
+	ResourceGroup<TextureResource>::group.insert({ resource->get_id(), resource });
 	return resource;
 }
 
@@ -93,11 +90,10 @@ ResourceManager::ResourceType ResourceManager::IsResourceSupported(std::string e
 GameResourceBase* ResourceManager::CreateNormalMapEffect(std::string name)
 {
 	auto resource = new EffectResource();
-	resource->id = GetNewId();
 	resource->path = "";
 	resource->name = name;
 	resource->type = EffectResource::XEffectResourceType_NormalMap;
-	ResourceGroup<EffectResource>::group.insert({ resource->id, resource });
+	ResourceGroup<EffectResource>::group.insert({ resource->get_id(), resource });
 	return resource;
 }
 
@@ -151,14 +147,8 @@ void ResourceManager::InitializeResources()
 	}
 }
 
-int ResourceManager::GetNewId()
-{
-	return lastId++;
-}
-
 void ResourceManager::OnInit()
 {
-	lastId = 0;
 	context = nullptr;
 	device = nullptr;
 }
@@ -166,7 +156,6 @@ void ResourceManager::OnInit()
 GeometricPrimitiveResource* ResourceManager::AddPrimitive(std::string name)
 {
 	auto gr = new GeometricPrimitiveResource();
-	gr->id = GetNewId();
 	gr->name = name;
 	gr->path = "";
 	gr->type = "GeometricPrimitive";
@@ -177,40 +166,40 @@ GeometricPrimitiveResource* ResourceManager::AddPrimitive(std::string name)
 void ResourceManager::AddDefaultGeometricPrimitives()
 {
 	auto grBox = AddPrimitive("Box");
-	ResourceGroup<GeometricPrimitiveResource>::group.insert({ grBox->id, grBox });
+	ResourceGroup<GeometricPrimitiveResource>::group.insert({ grBox->get_id(), grBox});
 
 	auto grCone = AddPrimitive("Cone");
-	ResourceGroup<GeometricPrimitiveResource>::group.insert({ grCone->id, grCone });
+	ResourceGroup<GeometricPrimitiveResource>::group.insert({ grCone->get_id(), grCone });
 
 	auto grCube = AddPrimitive("Cube");
-	ResourceGroup<GeometricPrimitiveResource>::group.insert({ grCube->id, grCube });
+	ResourceGroup<GeometricPrimitiveResource>::group.insert({ grCube->get_id(), grCube });
 
 	auto grCylinder = AddPrimitive("Cylinder");
-	ResourceGroup<GeometricPrimitiveResource>::group.insert({ grCylinder->id, grCylinder });
+	ResourceGroup<GeometricPrimitiveResource>::group.insert({ grCylinder->get_id(), grCylinder });
 
 	auto grDodecahedron = AddPrimitive("Dodecahedron");
-	ResourceGroup<GeometricPrimitiveResource>::group.insert({ grDodecahedron->id, grDodecahedron });
+	ResourceGroup<GeometricPrimitiveResource>::group.insert({ grDodecahedron->get_id(), grDodecahedron });
 
 	auto grGeoSphere = AddPrimitive("GeoSphere");
-	ResourceGroup<GeometricPrimitiveResource>::group.insert({ grGeoSphere->id, grGeoSphere });
+	ResourceGroup<GeometricPrimitiveResource>::group.insert({ grGeoSphere->get_id(), grGeoSphere });
 
 	auto grIcosahedron = AddPrimitive("Icosahedron");
-	ResourceGroup<GeometricPrimitiveResource>::group.insert({ grIcosahedron->id, grIcosahedron });
+	ResourceGroup<GeometricPrimitiveResource>::group.insert({ grIcosahedron->get_id(), grIcosahedron });
 
 	auto grOctahedron = AddPrimitive("Octahedron");
-	ResourceGroup<GeometricPrimitiveResource>::group.insert({ grOctahedron->id, grOctahedron });
+	ResourceGroup<GeometricPrimitiveResource>::group.insert({ grOctahedron->get_id(), grOctahedron });
 
 	auto grSphere = AddPrimitive("Sphere");
-	ResourceGroup<GeometricPrimitiveResource>::group.insert({ grSphere->id, grSphere });
+	ResourceGroup<GeometricPrimitiveResource>::group.insert({ grSphere->get_id(), grSphere });
 
 	auto grTeapot = AddPrimitive("Teapot");
-	ResourceGroup<GeometricPrimitiveResource>::group.insert({ grTeapot->id, grTeapot });
+	ResourceGroup<GeometricPrimitiveResource>::group.insert({ grTeapot->get_id(), grTeapot });
 
 	auto grTetrahedron = AddPrimitive("Tetrahedron");
-	ResourceGroup<GeometricPrimitiveResource>::group.insert({ grTetrahedron->id, grTetrahedron });
+	ResourceGroup<GeometricPrimitiveResource>::group.insert({ grTetrahedron->get_id(), grTetrahedron });
 
 	auto grTorus = AddPrimitive("Torus");
-	ResourceGroup<GeometricPrimitiveResource>::group.insert({ grTorus->id, grTorus });
+	ResourceGroup<GeometricPrimitiveResource>::group.insert({ grTorus->get_id(), grTorus });
 }
 
 void ResourceManager::AddDefaultEffects()
@@ -219,48 +208,44 @@ void ResourceManager::AddDefaultEffects()
 		// Default shape effect
 		auto gr = new EffectResource();
 		gr->isDefault = true;
-		gr->id = GetNewId();
 		gr->name = "Default Effect";
 		gr->path = "";
 		gr->type = EffectResource::XEffectResourceType_Basic;
-		ResourceGroup<EffectResource>::group.insert({ gr->id, gr });
+		ResourceGroup<EffectResource>::group.insert({ gr->get_id(), gr });
 	}
 
 	{
 		// Default position color effect
 		auto gre = new EffectResource();
-		gre->id = GetNewId();
 		gre->name = "Position Color Effect";
 		gre->path = "";
 		gre->type = EffectResource::XEffectResourceType_Basic;
 		gre->SetVertexType(EffectResource::XEffectVertexType_VertexPositionColor);
 		gre->SetVertextColorEnabled(true);
 		gre->SetSystemResource(true);
-		ResourceGroup<EffectResource>::group.insert({ gre->id, gre });
+		ResourceGroup<EffectResource>::group.insert({ gre->get_id(), gre });
 	}
 
 	{
 		// Particle effect
 		auto greParticle = new EffectResource();
-		greParticle->id = GetNewId();
 		greParticle->name = "Particle Effect";
 		greParticle->path = "";
 		greParticle->type = EffectResource::XEffectResourceType_Particle;
 		greParticle->SetVertexType(EffectResource::XEffectVertexType_VertexPositionOffsetColorTexture);
 		greParticle->SetVertextColorEnabled(true);
 		greParticle->SetSystemResource(true);
-		ResourceGroup<EffectResource>::group.insert({ greParticle->id, greParticle });
+		ResourceGroup<EffectResource>::group.insert({ greParticle->get_id(), greParticle });
 	}
 
 	{
 		// Material effect
 		auto res = new EffectResource();
-		res->id = GetNewId();
 		res->name = "Material effect";
 		res->path = "";
 		res->type = EffectResource::XEffectResourceType_Material;
 		res->SetVertexType(EffectResource::XEffectVertexType_VertexPositionNormalTexture);
-		ResourceGroup<EffectResource>::group.insert({ res->id, res });
+		ResourceGroup<EffectResource>::group.insert({ res->get_id(), res });
 	}
 }
 

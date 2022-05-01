@@ -3,17 +3,26 @@
 #include <string>
 #include "RootManager.h"
 #include "GeometricPrimitiveResource.h"
+#include <boost/serialization/export.hpp>
 
 using namespace DirectX;
 using namespace std;
+using namespace boost::uuids;
 
 XCOMP_GENERATE_DEFINITION(MeshRenderer)
+RTTR_REGISTRATION
+{
+	XRegisterClassCns(MeshRenderer)
+		XRegisterProperty(meshResourceId, MeshRenderer)
+		XRegisterProperty(usingPrimitives, MeshRenderer)
+		XRegisterProperty(effectResourceId, MeshRenderer);
+}
 
 MeshRenderer::MeshRenderer() :
-	GameObjectComponent(XNameOf(MeshRenderer)),
-	meshResourceId(-1),
+	GameObjectComponent(),
+	meshResourceId(uuid()),
 	usingPrimitives(true),
-	effectResourceId(-1)
+	effectResourceId(uuid())
 {
 	XCOMP_GENERATE_CONSTRUCTOR(MeshRenderer)
 }
@@ -123,7 +132,7 @@ void MeshRenderer::OnInspector()
 		auto models = resourceManager->ResourceGroup<ModelResource>::GetAll();
 		if (ImGui::Selectable("<none>"))
 		{
-			meshResourceId = -1;
+			meshResourceId = uuid();
 		}
 
 		int i = 0;
@@ -132,7 +141,7 @@ void MeshRenderer::OnInspector()
 			ImGui::PushID(++i);
 			if (ImGui::Selectable((it->GetName() + " (" + it->GetType() + ")").c_str()))
 			{
-				meshResourceId = it->GetId();
+				meshResourceId = it->get_id();
 				usingPrimitives = false;
 			}
 			ImGui::PopID();
@@ -143,7 +152,7 @@ void MeshRenderer::OnInspector()
 			ImGui::PushID(++i);
 			if (ImGui::Selectable((it->GetName() + " (" + it->GetType() + ")").c_str()))
 			{
-				meshResourceId = it->GetId();
+				meshResourceId = it->get_id();
 				usingPrimitives = true;
 			}
 			ImGui::PopID();
@@ -162,7 +171,7 @@ void MeshRenderer::OnInspector()
 		auto effects = resourceManager->ResourceGroup<EffectResource>::GetAll();
 		if (ImGui::Selectable("<none>"))
 		{
-			effectResourceId = -1;
+			effectResourceId = uuid();
 		}
 
 		int i = 0;
@@ -171,7 +180,7 @@ void MeshRenderer::OnInspector()
 			ImGui::PushID(++i);
 			if (ImGui::Selectable((it->GetName() + " (" + it->GetType() + ")").c_str()))
 			{
-				effectResourceId = it->GetId();
+				effectResourceId = it->get_id();
 			}
 			ImGui::PopID();
 		}
@@ -184,14 +193,13 @@ void MeshRenderer::OnDestroy()
 	states.release();
 }
 
-void MeshRenderer::SetModelResourceId(int id)
+void MeshRenderer::SetModelResourceId(GameResourceId id)
 {
 	this->meshResourceId = id;
 }
 
 MeshRenderer& MeshRenderer::operator=(const MeshRenderer& other)
 {
-	this->name = other.name;
 	this->gameObject = other.gameObject;
 	this->meshResourceId = other.meshResourceId;
 	this->usingPrimitives = other.usingPrimitives;

@@ -84,9 +84,9 @@ namespace Xerxes
 					ComPtr<ID3D11VertexShader>			vs;
 					ComPtr<ID3D11PixelShader>			ps;
 
-					GameResourceId						baseTextureId = 28;
-					GameResourceId						normalTextureId = 16;
-					GameResourceId						specularTextureId = 26;
+					GameResourceId						baseTextureId;
+					GameResourceId						normalTextureId;
+					GameResourceId						specularTextureId;
 
 					std::vector<uint8_t>				vsBlob;
 

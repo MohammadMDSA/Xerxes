@@ -60,7 +60,6 @@ private:
 	GameResourceBase* CreateNormalMapEffect(std::string name);
 	GameResourceBase* CreateBasicEffect(std::string name);
 
-	int GetNewId();
 	GeometricPrimitiveResource* AddPrimitive(std::string name);
 	
 	void AddDefaultGeometricPrimitives();
@@ -71,7 +70,6 @@ private:
 
 	ResourceType IsResourceSupported(std::string extension);
 
-	int lastId;
 	bool createdDefaultResources;
 
 	ID3D11Device* device;

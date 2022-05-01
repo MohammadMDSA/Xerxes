@@ -1,6 +1,8 @@
 #pragma once
-
 #include "GameResource.h"
+
+#include <boost/uuid/uuid.hpp>
+#include <boost/functional/hash/hash.hpp>
 
 template<class T>
 class ResourceGroup
@@ -41,10 +43,11 @@ public:
 			if (resource->GetName() == name)
 				return res.second;
 		}
+
 		return nullptr;
 	}
 
 private:
 	friend class ResourceManager;
-	std::unordered_map<GameResourceId, T*> group;
+	std::unordered_map<GameResourceId, T*, boost::hash<boost::uuids::uuid>> group;
 };

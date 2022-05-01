@@ -2,13 +2,20 @@
 #include "ParticleSystemComponent.h"
 #include "ParticleEffect.h"
 #include "RootManager.h"
+#include <boost/serialization/export.hpp>
 
 using namespace Xerxes::Engine::Graphics::Effects;
+using namespace boost::uuids;
 
 XCOMP_GENERATE_DEFINITION(ParticleSystemComponent)
 
+RTTR_REGISTRATION
+{
+
+}
+
 ParticleSystemComponent::ParticleSystemComponent() :
-	GameObjectComponent(XNameOf(ParticleSystemComponent)),
+	GameObjectComponent(),
 	spawnDeviationSpace(ParticleSpace::Self)
 {
 	XCOMP_GENERATE_CONSTRUCTOR(ParticleSystemComponent)
@@ -40,8 +47,8 @@ void ParticleSystemComponent::OnStart()
 	auto resourceManager = XResourceM();
 	particleSystem = std::make_unique<Xerxes::Engine::Graphics::ParticleSystem>();
 	auto textureResource = resourceManager->ResourceGroup<TextureResource>::GetByName("star.dds");
-	particleSystem->SetTextureId(textureResource->GetId());
-	effectId = resourceManager->ResourceGroup<EffectResource>::GetByName("Particle Effect")->GetId();
+	particleSystem->SetTextureId(textureResource->get_id());
+	effectId = resourceManager->ResourceGroup<EffectResource>::GetByName("Particle Effect")->get_id();
 
 	particleSystem->Initialize(resourceManager->GetDevice());
 
@@ -176,7 +183,7 @@ void ParticleSystemComponent::OnInspector()
 			auto textures = resourceManager->ResourceGroup<TextureResource>::GetAll();
 			if (ImGui::Selectable("<none>"))
 			{
-				particleSystem->textureReourceId = -1;
+				particleSystem->textureReourceId = uuid();
 			}
 
 			int i = 0;
@@ -185,7 +192,7 @@ void ParticleSystemComponent::OnInspector()
 				ImGui::PushID(++i);
 				if (ImGui::Selectable((it->GetName() + " (" + it->GetType() + ")").c_str()))
 				{
-					particleSystem->textureReourceId = it->GetId();
+					particleSystem->textureReourceId = it->get_id();
 				}
 				ImGui::PopID();
 			}
@@ -205,7 +212,6 @@ void ParticleSystemComponent::OnDestroy()
 
 ParticleSystemComponent& ParticleSystemComponent::operator=(const ParticleSystemComponent& other)
 {
-	this->name = other.name;
 	this->gameObject = other.gameObject;
 	this->effectId = other.effectId;
 	return *this;

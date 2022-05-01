@@ -16,7 +16,7 @@
 		auto textures = resourceManager->ResourceGroup<TextureResource>::GetAll(); \
 		if (ImGui::Selectable("<none>")) \
 		{ \
-			fidName = -1; \
+			fidName = boost::uuids::uuid(); \
 		} \
 		int i = 0;\
 		for (auto it : textures) \
@@ -24,7 +24,7 @@
 			ImGui::PushID(++i); \
 			if (ImGui::Selectable((it->GetName() + " (" + it->GetType() + ")").c_str())) \
 			{ \
-				fidName = it->GetId(); \
+				fidName = it->get_id(); \
 			} \
 			ImGui::PopID(); \
 		} \

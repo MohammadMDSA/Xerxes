@@ -9,7 +9,7 @@ using namespace DirectX::SimpleMath;
 using namespace Xerxes::Engine::Graphics::Effects;
 
 Xerxes::Engine::Graphics::ParticleSystem::ParticleSystem() :
-	textureReourceId(-1),
+	textureReourceId(uuid()),
 	particleList(nullptr),
 	vertices(nullptr),
 	vertexBuffer(nullptr),

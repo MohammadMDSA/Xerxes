@@ -1,24 +1,28 @@
 #pragma once
-#include "boost/filesystem.hpp"
 #include "IInspectorDrawer.h"
+#include "XReference.h"
+
+#include <boost/filesystem.hpp>
+#include <boost/uuid/uuid.hpp>
 
 #ifndef GAME_RESOURCE_ID_TYPE
 #    include <cstdint>
-#    define GAME_RESOURCE_ID_TYPE std::int32_t
+#    define GAME_RESOURCE_ID_TYPE boost::uuids::uuid;
 #endif
 
-using GameResourceIdType = GAME_RESOURCE_ID_TYPE;
+using namespace boost::uuids;
+using namespace Xerxes::Engine::Core::Reference;
+using GameResourceIdType = boost::uuids::uuid;
 
 typedef GameResourceIdType GameResourceId;
 
-struct GameResourceBase : public IInspectorDrawer
+struct GameResourceBase : public XReference, public IInspectorDrawer
 {
 public:
-	GameResourceId			GetId() { return id; }
-	const std::string		GetName() const { return name; }
-	bool					IsLoaded() { return loaded; }
-	const boost::filesystem::path& GetPath() const { return path; }
-	const std::string		GetType() const { return type; }
+	inline const std::string	GetName() const { return name; }
+	inline bool				IsLoaded() { return loaded; }
+	inline const boost::filesystem::path& GetPath() const { return path; }
+	inline const std::string	GetType() const { return type; }
 	inline bool				IsSystemResource() { return systemResource; }
 	inline void				SetSystemResource(bool val) { systemResource = val; }
 
@@ -27,7 +31,6 @@ public:
 	virtual void			Shutdown() = 0;
 
 protected:
-	GameResourceId			id;
 	std::string				name;
 	std::string				type;
 	bool					loaded = false;

@@ -6,7 +6,7 @@
 
 class MeshRenderer : public GameObjectComponent
 {
-	XCOMP_GENERATE_BODY()
+	XCOMP(MeshRenderer)
 public:
 	MeshRenderer();
 	MeshRenderer(const MeshRenderer& other);
@@ -21,16 +21,16 @@ public:
 	virtual void OnInspector() override;
 	virtual void OnDestroy() override;
 
-	void SetModelResourceId(int id);
+	void SetModelResourceId(GameResourceId id);
 
 	MeshRenderer& operator=(const MeshRenderer& other);
 private:
 	friend class boost::serialization::access;
 
 	std::unique_ptr<DirectX::CommonStates> states;
-	int meshResourceId;
-	bool usingPrimitives;
-	int effectResourceId;
+	XProperty(GameResourceId, meshResourceId)
+	XProperty(bool, usingPrimitives)
+	XProperty(GameResourceId, effectResourceId)
 
 	void RenderPrimitive();
 	void RenderModel();
@@ -38,7 +38,11 @@ private:
 	template<class Archive>
 	void serialize(Archive& ar, const unsigned int version)
 	{
-		ar& boost::serialization::base_object<GameObjectComponent>(*this);
+		boost::serialization::void_cast_register<MeshRenderer, GameObjectComponent>(
+			static_cast<MeshRenderer*>(NULL),
+			static_cast<GameObjectComponent*>(NULL)
+			);
+		//ar& boost::serialization::base_object<GameObjectComponent>(*this);
 		ar& meshResourceId;
 		ar& usingPrimitives;
 		ar& effectResourceId;
