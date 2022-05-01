@@ -55,6 +55,13 @@
 #include <dxgidebug.h>
 #endif
 
+#include "boost/uuid/uuid.hpp"
+#include "boost/uuid/uuid_io.hpp"
+#include "boost/uuid/random_generator.hpp"
+#include <rttr/registration.h>
+#include <rttr/registration.h>
+#include <rttr/registration_friend.h>
+#include <rttr/rttr_enable.h>
 
 namespace DX
 {
