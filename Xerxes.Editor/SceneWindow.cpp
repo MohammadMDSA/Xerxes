@@ -22,7 +22,7 @@ SceneWindow::SceneWindow(int id) :
 	auto device = resourceManager->GetDevice();
 
 	states = std::make_unique<DirectX::CommonStates>(device);
-	effectId = resourceManager->ResourceGroup<EffectResource>::GetByName("Position Color Effect")->GetId();
+	effectId = resourceManager->ResourceGroup<EffectResource>::GetByName("Position Color Effect")->get_id();
 	SetDimansion(800, 600);
 }
 

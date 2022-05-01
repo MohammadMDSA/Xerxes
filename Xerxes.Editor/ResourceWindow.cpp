@@ -38,7 +38,7 @@ void ResourceWindow::OnGUI()
 					selection->SetSelectedResource(selectedResource);
 				}
 				if (ImGui::IsItemHovered())
-					ImGui::SetTooltip((model->GetType() + " (" + std::to_string(model->GetId()) + ")").c_str());
+					ImGui::SetTooltip((model->GetType() + " (" + boost::uuids::to_string(model->get_id()) + ")").c_str());
 
 				ImGui::PopID();
 			}
@@ -58,7 +58,7 @@ void ResourceWindow::OnGUI()
 					selection->SetSelectedResource(selectedResource);
 				}
 				if (ImGui::IsItemHovered())
-					ImGui::SetTooltip((effect->GetType() + " (" + std::to_string(effect->GetId()) + ")").c_str());
+					ImGui::SetTooltip((effect->GetType() + " (" + boost::uuids::to_string(effect->get_id()) + ")").c_str());
 
 				ImGui::PopID();
 			}
@@ -78,7 +78,7 @@ void ResourceWindow::OnGUI()
 					selection->SetSelectedResource(selectedResource);
 				}
 				if (ImGui::IsItemHovered())
-					ImGui::SetTooltip((primitive->GetType() + " (" + std::to_string(primitive->GetId()) + ")").c_str());
+					ImGui::SetTooltip((primitive->GetType() + " (" + boost::uuids::to_string(primitive->get_id()) + ")").c_str());
 
 				ImGui::PopID();
 			}
@@ -98,7 +98,7 @@ void ResourceWindow::OnGUI()
 					selection->SetSelectedResource(selectedResource);
 				}
 				if (ImGui::IsItemHovered())
-					ImGui::SetTooltip((texture->GetType() + " (" + std::to_string(texture->GetId()) + ")").c_str());
+					ImGui::SetTooltip((texture->GetType() + " (" + boost::uuids::to_string(texture->get_id()) + ")").c_str());
 
 				ImGui::PopID();
 			}

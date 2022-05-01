@@ -1,9 +1,10 @@
 #pragma once
 #include "EditorWindow.h"
 #include "Camera.h"
+#include "GameResource.h"
+
 #include "Libs/imgui/imgui.h"
 #include "Libs/imgui/ImGuizmo.h"
-
 
 namespace Xerxes
 {
@@ -42,7 +43,7 @@ namespace Xerxes
 				const float				PAN_GAIN = 6.f;
 
 				bool					moveingCamera;
-				int						effectId;
+				GameResourceId			effectId;
 				std::unique_ptr<DirectX::CommonStates> states;
 
 				ImGuizmo::OPERATION		manipulationOperation;
