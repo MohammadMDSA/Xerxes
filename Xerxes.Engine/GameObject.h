@@ -1,12 +1,16 @@
 #pragma once
 
-#include "Transform.h"
 #include <memory>
-#include "IInspectorDrawer.h"
 
+#include "Transform.h"
+#include "IInspectorDrawer.h"
 #include "GameObjectComponent.h"
 #include "Scene.h"
 #include "XPreprocessors.h"
+#include "XReference.h"
+#include "MeshRenderer.h"
+#include "LightComponent.h"
+#include "ParticleSystemComponent.h"
 
 #include "Libs/imgui/imgui.h"
 #include "Libs/imgui/ImGuizmo.h"
@@ -14,15 +18,12 @@
 #include "boost/serialization/access.hpp"
 #include "boost/serialization/split_member.hpp"
 
-#include "MeshRenderer.h"
-#include "LightComponent.h"
-#include "ParticleSystemComponent.h"
-
 class RootManager;
 
-
-class GameObject : public IInspectorDrawer
+class GameObject : public XReference, public IInspectorDrawer
 {
+	XClass(GameObject, XReference)
+
 public:
 
 	Transform& transform() const;
@@ -64,6 +65,8 @@ public:
 
 	void					SetTransform(const Transform& trans);
 
+	inline void				Destroy() { GameObject::Destroy(this); }
+
 	static GameObject*		Create();
 	static void				Destroy(GameObject* obj);
 
@@ -71,6 +74,7 @@ private:
 	friend class boost::serialization::access;
 	friend struct std::default_delete<GameObject>;
 	friend class Scene;
+	RTTR_REGISTRATION_FRIEND
 
 	GameObject() = default;
 	GameObject(Scene* scene);
@@ -106,12 +110,18 @@ private:
 		auto components = GetComponents();
 		ar & components.size();
 
+		/*ar.template register_type<MeshRenderer>();
+		ar.template register_type<LightComponent>();*/
+
 		for (auto comp : components)
 		{
 			const auto cname = comp->GetName();
 			ar& cname;
-			ar& (*comp);
-			if (cname == XNameOf(LightComponent))
+			std::string ff;
+			//ff << boost::pfr::io(comp);
+			ar& comp;
+			//ar& (*comp);
+			/*if (cname == XNameOf(LightComponent))
 			{
 				ar& dynamic_cast<LightComponent*>(comp);
 			}
@@ -122,7 +132,7 @@ private:
 			else if (cname == XNameOf(ParticleSystemComponent))
 			{
 				ar& dynamic_cast<ParticleSystemComponent*>(comp);
-			}
+			}*/
 		}
 	}
 	template<class Archive>
@@ -153,9 +163,9 @@ private:
 			}
 			else if (cname == XNameOf(MeshRenderer))
 			{
-				MeshRenderer msh;
+				MeshRenderer* msh;
 				ar& msh;
-				AttachCopiedComponent<MeshRenderer>(msh);
+				AttachCopiedComponent<MeshRenderer>(*msh);
 			}
 			else if (cname == XNameOf(ParticleSystemComponent))
 			{

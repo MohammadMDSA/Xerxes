@@ -6,9 +6,21 @@
 #include "Libs/imgui/imgui_stdlib.h"
 #include "MeshRenderer.h"
 
+#include <rttr/type.h>
+
 using namespace DirectX;
 using namespace std;
 using namespace entt::literals;
+
+RTTR_REGISTRATION
+{
+	rttr::registration::class_<GameObject>(XNameOf(GameObject))
+		.property("name", &GameObject::name)
+		.property("isAwake", &GameObject::isAwake)
+		.property("isStarted", &GameObject::isStarted)
+		.property("destroyed", &GameObject::destroyed)
+		.method("Create", &GameObject::Create);
+}
 
 GameObject::GameObject(Scene* scn) :
 	name("GameObject"),
@@ -93,15 +105,15 @@ void GameObject::OnDestroy()
 	std::vector<GameObjectComponent*> result;
 	auto reg = &scene->registry;
 	auto handle = entt::handle(*reg, entityId);
-	handle.visit([this, &result](entt::id_type compTypeId, const auto& storage)
+	handle.visit([this](entt::id_type compTypeId, const auto& storage)
 		{
 			switch (compTypeId)
 			{
 			case entt::type_hash<LightComponent>():
-				result.push_back(&scene->registry.get<LightComponent>(entityId));
+				scene->registry.get<LightComponent>(entityId).OnDestroy();
 				break;
 			case entt::type_hash<MeshRenderer>():
-				result.push_back(&scene->registry.get<MeshRenderer>(entityId));
+				scene->registry.get<MeshRenderer>(entityId).OnDestroy();
 				break;
 			default:
 				break;
@@ -204,6 +216,7 @@ void GameObject::OnInspector()
 	{
 		ImGui::Text("Components");
 		ImGui::Separator();
+		
 		if (!scene->registry.try_get<MeshRenderer>(entityId))
 			if (ImGui::Selectable("Mesh Renderer"))
 			{
