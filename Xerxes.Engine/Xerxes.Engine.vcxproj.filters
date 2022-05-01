@@ -85,6 +85,15 @@
     <Filter Include="Source\Private\SubsystemManagers">
       <UniqueIdentifier>{6391b841-3474-4da0-87de-bb0ab94ff31a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Public\Utils\Serialization">
+      <UniqueIdentifier>{d5991acf-8848-4f98-8299-a8e0dd2827c9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Public\Core\Reference">
+      <UniqueIdentifier>{c6c90720-a3d1-4b46-9989-6d39f1e8d317}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Private\Core\Reference">
+      <UniqueIdentifier>{460ff2b9-d554-43c0-b51d-58338935585d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -240,6 +249,21 @@
     <ClInclude Include="GraphicRenderTarget.h">
       <Filter>Source\Public\Graphics\Device</Filter>
     </ClInclude>
+    <ClInclude Include="TypeSerialization.h">
+      <Filter>Source\Public\Utils\Serialization</Filter>
+    </ClInclude>
+    <ClInclude Include="RttrJsonSerialize.h">
+      <Filter>Source\Public\Utils\Serialization</Filter>
+    </ClInclude>
+    <ClInclude Include="Ref.h">
+      <Filter>Source\Public\Core\Reference</Filter>
+    </ClInclude>
+    <ClInclude Include="XObject.h">
+      <Filter>Source\Public\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="XReference.h">
+      <Filter>Source\Public\Core\Reference</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Xerxes.Engine.cpp">
@@ -355,6 +379,15 @@
     </ClCompile>
     <ClCompile Include="GraphicRenderTarget.cpp">
       <Filter>Source\Private\Graphics\Device</Filter>
+    </ClCompile>
+    <ClCompile Include="Ref.cpp">
+      <Filter>Source\Private\Core\Reference</Filter>
+    </ClCompile>
+    <ClCompile Include="XObject.cpp">
+      <Filter>Source\Private\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="XReference.cpp">
+      <Filter>Source\Private\Core\Reference</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
