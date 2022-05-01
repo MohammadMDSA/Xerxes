@@ -4,6 +4,9 @@
 #include "VertexPositionOffsetColorTexture.h"
 #include "XPreprocessors.h"
 
+#include <boost/serialization/access.hpp>
+#include <boost/serialization/export.hpp>
+
 #define SwapParticles(i, j) \
 particleList[i].position = particleList[j].position; \
 particleList[i].color = particleList[j].color; \
@@ -82,6 +85,8 @@ namespace Xerxes
 				void						SetTextureId(GameResourceId id);
 
 			private:
+				friend class boost::serialization::access;
+				
 				struct ParticleType
 				{
 					Vector3 position;
@@ -105,6 +110,11 @@ namespace Xerxes
 				bool						UpdateBuffers(ID3D11DeviceContext* context);
 				
 				void						RenderBuffers(ID3D11DeviceContext* context);
+
+				template<class Archive>
+				void serialize(Archive& ar, const unsigned int version)
+				{
+				}
 
 				DirectX::SimpleMath::Vector3 particleDeviation;
 

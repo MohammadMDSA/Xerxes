@@ -1,12 +1,17 @@
 #pragma once
 #include "GameObjectComponent.h"
 #include "boost/serialization/access.hpp"
+#include "Libs/rttr/inc/rttr/registration.h"
+#include <rttr/type.h>
+#include <rttr/property.h>
+#include "TypeSerialization.h"
 
+using namespace rttr;
 using namespace entt::literals;
 
 class LightComponent : public GameObjectComponent
 {
-	XCOMP_GENERATE_BODY()
+	XCOMP(LightComponent)
 
 public:
 	LightComponent();
@@ -22,26 +27,25 @@ public:
 	virtual void OnInspector() override;
 	virtual void OnDestroy() override;
 
-	const DirectX::SimpleMath::Vector3&	GetColor() const;
 	const DirectX::SimpleMath::Vector3&	GetDirection() const;
-	const float& GetAmbientIntencity() const;
 
-	void SetColor(DirectX::SimpleMath::Vector3 color);
-	void SetAmbientIntencity(float intencity);
+	LightComponent& operator=(const LightComponent& other);
 
 private:
 	friend class boost::serialization::access;
-
-	DirectX::SimpleMath::Vector3	color;
-	float							ambientIntencity;
+	
+	XProperty(DirectX::SimpleMath::Vector3, color)
+	XProperty(float, ambientIntencity)
 
 	template<class Archive>
 	void serialize(Archive& ar, const unsigned int version)
 	{
-		ar& boost::serialization::base_object<GameObjectComponent>(*this);
-		ar& color.x;
-		ar& color.y;
-		ar& color.z;
+		boost::serialization::void_cast_register<LightComponent, GameObjectComponent>(
+			static_cast<LightComponent*>(NULL),
+			static_cast<GameObjectComponent*>(NULL)
+			);
+
+		ar& color;
 		ar& ambientIntencity;
 	}
 

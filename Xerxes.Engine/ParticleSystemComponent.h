@@ -9,7 +9,7 @@ using namespace entt::literals;
 
 class ParticleSystemComponent : public GameObjectComponent
 {
-	XCOMP_GENERATE_BODY()
+	XCOMP(ParticleSystemComponent)
 public:
 	ParticleSystemComponent();
 	ParticleSystemComponent(const ParticleSystemComponent& other);
@@ -46,8 +46,11 @@ private:
 	template<class Archive>
 	void serialize(Archive& ar, const unsigned int version)
 	{
-		ar& boost::serialization::base_object<GameObjectComponent>(*this);
-		
+		boost::serialization::void_cast_register<ParticleSystemComponent, GameObjectComponent>(
+			static_cast<ParticleSystemComponent*>(NULL),
+			static_cast<GameObjectComponent*>(NULL)
+			);
+		//ar& boost::serialization::base_object<GameObjectComponent>(*this);
 		ar& effectId;
 	}
 

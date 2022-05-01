@@ -200,7 +200,6 @@ void MeshRenderer::SetModelResourceId(GameResourceId id)
 
 MeshRenderer& MeshRenderer::operator=(const MeshRenderer& other)
 {
-	this->gameObject = other.gameObject;
 	this->meshResourceId = other.meshResourceId;
 	this->usingPrimitives = other.usingPrimitives;
 	this->effectResourceId = other.effectResourceId;

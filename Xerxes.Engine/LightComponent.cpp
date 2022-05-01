@@ -1,16 +1,24 @@
 #include "pch.h"
 #include "LightComponent.h"
 #include "RootManager.h"
+#include <boost/serialization/export.hpp>
 
 using namespace DirectX;
 using namespace entt::literals;
 
 XCOMP_GENERATE_DEFINITION(LightComponent)
 
+RTTR_REGISTRATION
+{
+	rttr::registration::class_<LightComponent>(XNameOf(LightComponent))
+		.constructor<>()
+		XRegisterProperty(color, LightComponent);
+}
+
 LightComponent::LightComponent() :
-	GameObjectComponent(XNameOf(LightComponent)),
+	GameObjectComponent(),
 	color(Colors::White),
-	ambientIntencity(.2)
+	ambientIntencity(.2f)
 {
 	XCOMP_GENERATE_CONSTRUCTOR(LightComponent)
 	RootManager::GetInstance()->GetLightManager()->SetDirectionalLight(this);
@@ -19,6 +27,7 @@ LightComponent::LightComponent() :
 LightComponent::LightComponent(const LightComponent& other) :
 	GameObjectComponent(other)
 {
+	this->gameObject = other.gameObject;
 	this->color = other.color;
 }
 
@@ -53,16 +62,11 @@ void LightComponent::OnInspector()
 	ImGui::SameLine();
 	ImGui::ColorEdit3("Color", (float*)&color, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoLabel | ImGuiColorEditFlags_NoAlpha);
 
-	ImGui::DragFloat("Intencity", &ambientIntencity, 0.01, 0, 1);
+	ImGui::DragFloat("Intencity", &ambientIntencity, 0.01f, 0.f, 1.f);
 }
 
 void LightComponent::OnDestroy()
 {
-}
-
-const DirectX::SimpleMath::Vector3& LightComponent::GetColor() const
-{
-	return color;
 }
 
 const DirectX::SimpleMath::Vector3& LightComponent::GetDirection() const
@@ -70,17 +74,9 @@ const DirectX::SimpleMath::Vector3& LightComponent::GetDirection() const
 	return gameObject->transform().Forward();
 }
 
-const float& LightComponent::GetAmbientIntencity() const
+LightComponent& LightComponent::operator=(const LightComponent& other)
 {
-	return this->ambientIntencity;
-}
-
-void LightComponent::SetColor(DirectX::SimpleMath::Vector3 color)
-{
-	this->color = color;
-}
-
-void LightComponent::SetAmbientIntencity(float intencity)
-{
-	this->ambientIntencity = intencity;
+	this->gameObject = other.gameObject;
+	this->color = other.color;
+	return *this;
 }
