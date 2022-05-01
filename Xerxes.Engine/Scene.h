@@ -6,7 +6,6 @@
 
 #include "boost/serialization/access.hpp"
 #include "boost/serialization/split_member.hpp"
-#include "cereal/archives/json.hpp"
 
 class Scene
 {
