@@ -19,11 +19,11 @@ Xerxes::Engine::Graphics::ParticleSystem::ParticleSystem() :
 	particleInitialVelocity(0.f, 1.f, 0.f),
 	particleInitialVelocityDeviation(0.2f),
 	particleDeviation(2.f),
-	particlePerSecond(70),
+	particlePerSecond(70.f),
 	particleLifeTime(1.f),
 	particleInitialColor(0.f, 0.f, 0.f, 1.f),
 	particleInitialColorDeviation(1.f, 1.f, 1.f, 0.f),
-	particleInitialSize(0.2),
+	particleInitialSize(0.2f),
 	particleInitialSizeDeviation(0.f)
 {
 

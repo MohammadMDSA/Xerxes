@@ -99,7 +99,7 @@ const DirectX::SimpleMath::Quaternion& Transform::GetRotation() const
 	return rotation;
 }
 
-const DirectX::SimpleMath::Quaternion& Transform::GetWorldRotation() const
+const DirectX::SimpleMath::Quaternion Transform::GetWorldRotation() const
 {
 	if (!parent)
 		return rotation;
@@ -215,17 +215,17 @@ void Transform::SetScale(float x, float y, float z, bool updateWorld)
 }
 
 
-const DirectX::SimpleMath::Vector3& Transform::Forward() const
+const DirectX::SimpleMath::Vector3 Transform::Forward() const
 {
 	return world.Forward();
 }
 
-const DirectX::SimpleMath::Vector3& Transform::Right() const
+const DirectX::SimpleMath::Vector3 Transform::Right() const
 {
 	return world.Right();
 }
 
-const DirectX::SimpleMath::Vector3& Transform::Up() const
+const DirectX::SimpleMath::Vector3 Transform::Up() const
 {
 	return world.Up();
 }

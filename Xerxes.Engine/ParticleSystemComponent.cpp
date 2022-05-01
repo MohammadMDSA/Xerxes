@@ -95,7 +95,7 @@ void ParticleSystemComponent::OnInspector()
 	ImGui::Spacing();
 
 	// Particle lifetime
-	ImGui::DragFloat("Life Time", &particleSystem->particleLifeTime, 0.01);
+	ImGui::DragFloat("Life Time", &particleSystem->particleLifeTime, 0.01f);
 
 	ImGui::Spacing();
 
@@ -103,9 +103,9 @@ void ParticleSystemComponent::OnInspector()
 	{
 		ImGui::Indent();
 		// Particle initial velocity
-		ImGui::DragFloat3("Initial Velocity", (float*)&particleSystem->particleInitialVelocity, 0.1);
+		ImGui::DragFloat3("Initial Velocity", (float*)&particleSystem->particleInitialVelocity, 0.1f);
 
-		ImGui::DragFloat3("Initial Velocity Deviation", (float*)&particleSystem->particleInitialVelocityDeviation, 0.1);
+		ImGui::DragFloat3("Initial Velocity Deviation", (float*)&particleSystem->particleInitialVelocityDeviation, 0.1f);
 		ImGui::Unindent();
 	}
 
@@ -136,7 +136,7 @@ void ParticleSystemComponent::OnInspector()
 		// Particle self spawn space size
 		if (spawnDeviationSpace == ParticleSpace::Self)
 		{
-			ImGui::DragFloat3("Particle Spawn Bound", (float*)&particleSystem->particleDeviation, 0.1);
+			ImGui::DragFloat3("Particle Spawn Bound", (float*)&particleSystem->particleDeviation, 0.1f);
 		}
 
 		ImGui::Unindent();
@@ -157,9 +157,9 @@ void ParticleSystemComponent::OnInspector()
 	{
 		ImGui::Indent();
 
-		ImGui::DragFloat2("Initial Size", (float*)&particleSystem->particleInitialSize, 0.01);
+		ImGui::DragFloat2("Initial Size", (float*)&particleSystem->particleInitialSize, 0.01f);
 
-		ImGui::DragFloat2("Initial Size Deviation", (float*)&particleSystem->particleInitialSizeDeviation, 0.01);
+		ImGui::DragFloat2("Initial Size Deviation", (float*)&particleSystem->particleInitialSizeDeviation, 0.01f);
 
 		ImGui::Unindent();
 	}
