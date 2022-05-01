@@ -82,11 +82,11 @@ XRegisterClass(name) \
 
 #define XClassTop(name) \
 public: \
-RTTR_ENABLE(name)
+RTTR_ENABLE()
 
 #define XClass(name, parent) \
 public: \
-RTTR_ENABLE(name, parent) \
+RTTR_ENABLE(parent) \
 private: \
 RTTR_REGISTRATION_FRIEND
 

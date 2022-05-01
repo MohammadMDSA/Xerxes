@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "GraphicRenderTarget.h"
+#include "XPreprocessors.h"
 
 Xerxes::Engine::Graphics::Device::GraphicRenderTarget::GraphicRenderTarget()
 {
@@ -12,8 +13,8 @@ Xerxes::Engine::Graphics::Device::GraphicRenderTarget::GraphicRenderTarget()
 
 void Xerxes::Engine::Graphics::Device::GraphicRenderTarget::Initialize(ID3D11Device* device, int textureWidth, int textureHeight)
 {
-	textureWidth = max(textureWidth, 2);
-	textureHeight = max(textureHeight, 2);
+	textureWidth = xmax(textureWidth, 2);
+	textureHeight = xmax(textureHeight, 2);
 	D3D11_TEXTURE2D_DESC textureDesc;
 	HRESULT result;
 	D3D11_RENDER_TARGET_VIEW_DESC renderTargetViewDesc;

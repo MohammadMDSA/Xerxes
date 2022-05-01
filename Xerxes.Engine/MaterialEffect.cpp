@@ -85,7 +85,7 @@ void __cdecl Xerxes::Engine::Graphics::Effects::MaterialEffect::Apply(ID3D11Devi
 
 void __cdecl Xerxes::Engine::Graphics::Effects::MaterialEffect::GetVertexShaderBytecode(void const** pShaderByteCode, size_t* pByteCodeLength)
 {
-	assert(pByteCodeLength != nullptr, && pByteCodeLength != nullptr);
+	assert(pByteCodeLength != nullptr && pByteCodeLength != nullptr);
 	*pShaderByteCode = g_pSpecularMap_VS;
 	*pByteCodeLength = sizeof(g_pSpecularMap_VS);
 }
