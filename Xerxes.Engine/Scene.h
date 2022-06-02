@@ -35,10 +35,10 @@ private:
 
 		std::stringstream storage;
 		{
-			cereal::JSONOutputArchive output(storage);
+			/*cereal::JSONOutputArchive output(storage);
 
 			entt::snapshot{ registry }
-			.entities(output);
+			.entities(output);*/
 		}
 
 		ar& storage.str();
@@ -64,10 +64,10 @@ private:
 
 		std::stringstream storage(serializedRegistry);
 		{
-			cereal::JSONInputArchive input(storage);
+			/*cereal::JSONInputArchive input(storage);
 
 			entt::snapshot_loader{ registry }
-			.entities(input);
+			.entities(input);*/
 		}
 
 		int size;

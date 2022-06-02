@@ -63,6 +63,8 @@
 #include <rttr/registration_friend.h>
 #include <rttr/rttr_enable.h>
 
+#include "Types.h"
+
 namespace DX
 {
     inline void ThrowIfFailed(HRESULT hr)
