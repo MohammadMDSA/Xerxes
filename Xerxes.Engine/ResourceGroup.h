@@ -3,6 +3,9 @@
 
 #include <boost/uuid/uuid.hpp>
 #include <boost/functional/hash/hash.hpp>
+#include "Types.h"
+
+using namespace Xerxes::Engine;
 
 template<class T>
 class ResourceGroup
@@ -49,5 +52,5 @@ public:
 
 private:
 	friend class ResourceManager;
-	std::unordered_map<GameResourceId, T*, boost::hash<boost::uuids::uuid>> group;
+	std::unordered_map<GameResourceId, T*, boost::hash<GameResourceId>> group;
 };

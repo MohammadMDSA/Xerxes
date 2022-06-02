@@ -2,9 +2,12 @@
 #include "EditorWindow.h"
 #include "Camera.h"
 #include "GameResource.h"
+#include "Types.h"
 
 #include "Libs/imgui/imgui.h"
 #include "Libs/imgui/ImGuizmo.h"
+
+using namespace Xerxes::Engine;
 
 namespace Xerxes
 {

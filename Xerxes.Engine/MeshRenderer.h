@@ -3,6 +3,11 @@
 #include "ResourceManager.h"
 #include <string>
 #include "boost/serialization/access.hpp"
+#include "Types.h"
+#include "TypeSerialization.h"
+
+using namespace Xerxes::Engine;
+using namespace boost::serialization;
 
 class MeshRenderer : public GameObjectComponent
 {
@@ -42,7 +47,6 @@ private:
 			static_cast<MeshRenderer*>(NULL),
 			static_cast<GameObjectComponent*>(NULL)
 			);
-		//ar& boost::serialization::base_object<GameObjectComponent>(*this);
 		ar& meshResourceId;
 		ar& usingPrimitives;
 		ar& effectResourceId;

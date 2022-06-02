@@ -1,14 +1,15 @@
 #pragma once
 #include "SimpleMath.h"
-
-#include <boost/uuid/uuid_serialize.hpp>
+#include "Types.h"
 
 using namespace DirectX::SimpleMath;
+using namespace Xerxes::Engine;
 
 namespace boost
 {
 	namespace serialization
 	{
+
 		template<class Archive>
 		inline void serialize(
 			Archive& ar,

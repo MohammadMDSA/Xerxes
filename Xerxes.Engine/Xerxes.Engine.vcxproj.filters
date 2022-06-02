@@ -264,6 +264,9 @@
     <ClInclude Include="XReference.h">
       <Filter>Source\Public\Core\Reference</Filter>
     </ClInclude>
+    <ClInclude Include="Types.h">
+      <Filter>Source\Public\Core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Xerxes.Engine.cpp">
@@ -409,11 +412,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="Xerxes.Engine.rc">
-      <Filter>Resources</Filter>
-    </ResourceCompile>
-  </ItemGroup>
-  <ItemGroup>
     <FxCompile Include="Shaders\Particle_PS.hlsl">
       <Filter>Resources\Shaders</Filter>
     </FxCompile>
@@ -432,5 +430,10 @@
     <FxCompile Include="DeferredSurface_PS.hlsl">
       <Filter>Resources\Shaders</Filter>
     </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Xerxes.Engine.rc">
+      <Filter>Resources\Shaders</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>

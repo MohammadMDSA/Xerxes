@@ -1,6 +1,8 @@
 #pragma once
 #include "XObject.h"
+#include "Types.h"
 
+using namespace Xerxes::Engine;
 using namespace Xerxes::Engine::Core;
 
 namespace Xerxes
@@ -24,7 +26,7 @@ namespace Xerxes
 				private:
 					std::unordered_set<XObject*> referencers;
 
-					XProperty_R(boost::uuids::uuid, id)
+					XProperty_R(XID, id)
 				};
 
 			}

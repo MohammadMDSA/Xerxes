@@ -66,6 +66,7 @@
       <DisableSpecificWarnings>%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <EnableModules>false</EnableModules>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -141,6 +142,7 @@
     <ClInclude Include="pch.h" />
     <ClInclude Include="ReadData.h" />
     <ClInclude Include="Ref.h" />
+    <ClInclude Include="Types.h" />
     <ClInclude Include="XReference.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="resource.h" />
