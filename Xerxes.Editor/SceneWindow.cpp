@@ -227,13 +227,14 @@ void SceneWindow::OnRender(DirectX::SimpleMath::Matrix view, DirectX::SimpleMath
 	DirectX::XMVECTOR color;
 
 	auto darkGray = Color(0.3f, 0.3f, 0.3f);
+	auto gray = Color(0.7f, 0.7f, 0.7f);
 
 	for (int i = (-count); i <= count; ++i)
 	{
 		if (i == 0)
 			color = Colors::White;
 		else if (i % 10 == 0)
-			color = Colors::Gray;
+			color = gray;
 		else
 			color = darkGray;
 
@@ -248,7 +249,7 @@ void SceneWindow::OnRender(DirectX::SimpleMath::Matrix view, DirectX::SimpleMath
 		if (i == 0)
 			color = Colors::White;
 		else if (i % 10 == 0)
-			color = Colors::Gray;
+			color = gray;
 		else
 			color = darkGray;
 
