@@ -5,6 +5,11 @@
 
 using namespace DirectX::SimpleMath;
 
+RTTR_REGISTRATION
+{
+
+}
+
 Camera::Camera() :
 	nearPlane(0.001f),
 	farPlane(100.f),

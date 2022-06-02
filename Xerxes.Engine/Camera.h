@@ -1,8 +1,12 @@
 #pragma once
 #include "Transform.h"
+#include "XObject.h"
 
-class Camera
+using namespace Xerxes::Engine::Core;
+
+class Camera : public XObject
 {
+	XClass(Camera, XObject)
 public:
 	void							SetOutputSize(const float& width, const float& height);
 	void							SetIsPerspective(bool isPerspective);

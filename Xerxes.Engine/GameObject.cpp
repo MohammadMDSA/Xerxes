@@ -19,6 +19,8 @@ RTTR_REGISTRATION
 		.property("isAwake", &GameObject::isAwake)
 		.property("isStarted", &GameObject::isStarted)
 		.property("destroyed", &GameObject::destroyed)
+		.property("entityId", &GameObject::entityId)
+		.property("scene", &GameObject::scene)
 		.method("Create", &GameObject::Create);
 }
 
