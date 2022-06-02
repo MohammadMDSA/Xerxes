@@ -35,7 +35,7 @@ Xerxes::Editor::Editor::Editor() noexcept :
 	m_outputWidth(1500),
 	m_outputHeight(900),
 	m_imguiActive(false),
-	showDemo(true),
+	showDemo(false),
 	rootManager(nullptr)
 {
 }
@@ -113,8 +113,8 @@ void Xerxes::Editor::Editor::Update(StepTimer const& timer)
 	XSceneM()->Update(elapsedTime);
 
 	// Handling layout
-	int newSceneWidth = xmax(sceneWindow->GetWidth(), 1);
-	int newSceneHeight = xmax(sceneWindow->GetHeight(), 1);
+	int newSceneWidth = xmax((int)sceneWindow->GetWidth(), 1);
+	int newSceneHeight = xmax((int)sceneWindow->GetHeight(), 1);
 	int sceneWidth, sceneHeight;
 
 	auto renderer = XRenderer();
