@@ -853,7 +853,7 @@ void Xerxes::Engine::SubsystemManagers::Renderer::Render()
 {
 	auto context = deviceResource->GetD3DDeviceContext();
 	auto depthStencil = deviceResource->GetDepthStencilView();
-	renderTarget->ClearRenderTarget(context, depthStencil, Colors::Black);
+	renderTarget->ClearRenderTarget(context, depthStencil, Colors::CornflowerBlue);
 	renderTarget->SetRenderTarget(context, depthStencil, deviceResource->GetRenderTargetView());
 
 
