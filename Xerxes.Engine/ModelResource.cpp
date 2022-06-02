@@ -31,6 +31,7 @@ void ModelResource::LoadCMOModel(ID3D11Device* device)
 {
 	auto effectFactory = std::make_unique<DirectX::EffectFactory>(device);
 	effectFactory->SetDirectory(path.parent_path().wstring().c_str());
+	effectFactory->EnableNormalMapEffect(true);
 	resource = DirectX::Model::CreateFromCMO(
 		device,
 		path.wstring().c_str(),
@@ -43,6 +44,7 @@ void ModelResource::LoadSDKMESHModel(ID3D11Device* device)
 {
 	auto effectFactory = std::make_unique<DirectX::EffectFactory>(device);
 	effectFactory->SetDirectory(path.parent_path().wstring().c_str());
+	effectFactory->EnableNormalMapEffect(true);
 	resource = DirectX::Model::CreateFromSDKMESH(
 		device,
 		path.wstring().c_str(),
