@@ -108,7 +108,7 @@ private:
 		ar & trans;
 
 		auto components = GetComponents();
-		ar & components.size();
+		ar& components.size();
 
 		/*ar.template register_type<MeshRenderer>();
 		ar.template register_type<LightComponent>();*/
@@ -155,7 +155,7 @@ private:
 		{
 			std::string cname;
 			ar& cname;
-			if (cname == XNameOf(LightComponent))
+			/*if (cname == XNameOf(LightComponent))
 			{
 				LightComponent cmp;
 				ar& cmp;
@@ -172,7 +172,9 @@ private:
 				ParticleSystemComponent cmp;
 				ar& cmp;
 				AttachCopiedComponent<ParticleSystemComponent>(cmp);
-			}
+			}*/
+			GameObjectComponent* cmp;
+			ar& cmp;
 		}
 	}
 	BOOST_SERIALIZATION_SPLIT_MEMBER()

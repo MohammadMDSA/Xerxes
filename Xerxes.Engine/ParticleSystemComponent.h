@@ -6,6 +6,7 @@
 #include "boost/serialization/access.hpp"
 
 using namespace entt::literals;
+using namespace Xerxes::Engine;
 
 class ParticleSystemComponent : public GameObjectComponent
 {
@@ -50,7 +51,6 @@ private:
 			static_cast<ParticleSystemComponent*>(NULL),
 			static_cast<GameObjectComponent*>(NULL)
 			);
-		//ar& boost::serialization::base_object<GameObjectComponent>(*this);
 		ar& effectId;
 	}
 
